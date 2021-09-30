@@ -3,6 +3,12 @@ export interface IAppEnvironment {
   APP: {
     PORT: number;
   };
+  SECURE?: {
+    TOKEN: {
+      SECRET_KEY: string;
+      EXPIRED_TIME: number;
+    };
+  };
   DATABASE?: {
     MONGODB?: {
       USERNAME: string;

@@ -11,11 +11,7 @@ const swaggerDefinition = {
   basePath: '/api/v1', // the basepath of your endpoint
   components: {
     securitySchemes: {
-      bearerAuth: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-      },
+      bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
     },
   },
   // security: [{ bearerAuth: [] }],

@@ -1,21 +1,19 @@
 import { green } from 'chalk';
 import { Express } from 'express';
 import { sync } from 'glob';
-import path from 'path';
+import { join } from 'path';
 import { success } from 'signale';
 import swaggerUi from 'swagger-ui-express';
-
 import { AppConst } from '../common/consts';
 import swaggerConfig from './swagger.config';
 
 export const routeConfig = async (app: Express): Promise<void> => {
   app.get('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerConfig));
-  const routes = sync(path.join(__dirname, '../api/**/**.route.ts'));
+  const routes = sync(join(__dirname, '../api/**/**.route.{js,ts}'));
   app.use(
     `/${AppConst.API_PREFIX}/${AppConst.API_VERSION}`,
     routes.map(
-      (route) =>
-        require(route.replace(path.join(__dirname, '..'), '..')).default
+      (route) => require(route.replace(join(__dirname, '..'), '..')).default
     )
   );
 

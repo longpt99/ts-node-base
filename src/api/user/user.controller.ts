@@ -1,23 +1,31 @@
-import { Response } from 'express';
-import * as userService from './user.service';
+import { Request, Response } from 'express';
+import { IUser } from './user.schema';
+import UserService from './user.service';
 
-export async function create(req, res: Response) {
-  return userService.create().then((data) => res.success(data));
-  // .catch((err) => res.error(err));
-}
+export default class UserController {
+  private userService: UserService;
 
-export async function list() {
-  return userService.list();
-}
+  constructor() {
+    this.userService = new UserService();
+  }
 
-export async function getById() {
-  return userService.getById();
-}
+  async create(req: Request, res: Response): Promise<any> {
+    return res.result(this.userService.create(req.body));
+  }
 
-export async function updateById() {
-  return userService.updateById();
-}
+  async list(req: Request, res: Response): Promise<IUser[]> {
+    return res.result(this.userService.list());
+  }
 
-export async function deleteById() {
-  return userService.deleteById();
+  async getById(req: Request, res: Response) {
+    return res.result(this.userService.getById());
+  }
+
+  async updateById(req: Request, res: Response): Promise<IUser> {
+    return res.result(this.userService.getById());
+  }
+
+  async deleteById(req: Request, res: Response): Promise<IUser[]> {
+    return res.result(this.userService.list());
+  }
 }
