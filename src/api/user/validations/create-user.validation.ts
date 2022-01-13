@@ -1,4 +1,4 @@
-export const CreateUserDto = {
+export const CreateUserValidation = {
   type: 'object',
   properties: {
     email: { type: 'string' },

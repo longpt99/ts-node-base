@@ -9,18 +9,9 @@ const app = express();
 bootstrapConfig();
 // databaseConnect();
 expressConfig(app);
-
 app.get('/', (req, res) => {
   res.send('Hello');
 });
-
-app.use((req, res, next) => {
-  res.on('finish', () => {
-    console.log(`Responded with status ${res.statusCode}`);
-  });
-  next();
-});
-
 routeConfig(app);
 
 app.listen(APP_CONFIG.APP.PORT, () => {

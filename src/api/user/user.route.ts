@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { validationMiddleware } from '../../common/middlewares';
-import { CreateUserDto } from './dtos';
+import { CreateUserValidation } from './validations';
 import UserController from './user.controller';
 
 const router = Router();
@@ -10,7 +10,7 @@ router.get('/user', userController.list.bind(userController));
 
 router.post(
   '/user',
-  validationMiddleware(CreateUserDto),
+  validationMiddleware(CreateUserValidation),
   userController.create.bind(userController)
 );
 

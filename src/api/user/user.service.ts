@@ -1,5 +1,5 @@
 import { ErrorHandler } from '../../common/error';
-import { signToken, TokenUtil } from '../../utils';
+import { TokenUtil } from '../../utils';
 import { UserRepository } from './user.repository';
 import { IUser } from './user.schema';
 

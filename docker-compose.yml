@@ -1,16 +1,25 @@
 version: '3'
 
 services:
-  nodejs-app:
+  nodeserver:
     build:
-      context: ./.docker
-      dockerfile: ./nodejsdockerfile
-    container_name: nodejsserver
-    hostname: nodejsserver
+      context: ./
+      dockerfile: ./.docker/node/Dockerfile
     ports:
       - '8080:8080'
-    networks:
-      - example-net
-networks:
-  example-net:
-    external: true
+    container_name: nodeserver
+    hostname: nodeserver
+    # networks:
+    #   - example-net
+  nginx:
+    restart: always
+    build:
+      context: ./
+      dockerfile: ./.docker/nginx/Dockerfile
+    ports:
+      - '80:80'
+    container_name: nginx
+    hostname: nginx
+# networks:
+#   example-net:
+#     external: true
