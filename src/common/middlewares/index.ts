@@ -1,2 +1,1 @@
-export { validationMiddleware } from './validation.middleware';
-export { responseTimeMiddleware } from './response-time.middleware';
+export { validationMiddleware as validate } from './validation.middleware';

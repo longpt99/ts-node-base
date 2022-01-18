@@ -6,9 +6,12 @@ export class TokenUtil {
 
   async decodeToken() {}
 
-  async signToken(payload): Promise<string> {
-    return sign(payload, APP_CONFIG.SECURE.TOKEN.SECRET_KEY, {
-      expiresIn: APP_CONFIG.SECURE.TOKEN.EXPIRED_TIME,
+  static async signToken(payload: any): Promise<string> {
+    console.log(APP_CONFIG.SECURE.JWT.EXPIRED_TIME);
+    console.log(payload);
+
+    return sign({ email: payload.email }, APP_CONFIG.SECURE.JWT.SECRET_KEY, {
+      expiresIn: APP_CONFIG.SECURE.JWT.EXPIRED_TIME,
     });
   }
 

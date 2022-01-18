@@ -13,8 +13,12 @@ export class MongooseRepository<TModel extends Document> {
 
   async findOne(params): Promise<TModel> {
     return this.TSchema.findOne(params.conditions).projection(
-      params.projection
+      params.projections
     );
+  }
+
+  async detailByConditions(params): Promise<TModel> {
+    return this.TSchema.findOne(params.conditions, params.projections).exec();
   }
 
   async list(params): Promise<TModel[]> {
@@ -31,5 +35,9 @@ export class MongooseRepository<TModel extends Document> {
 
   async deleteMany(params): Promise<any> {
     return this.TSchema.deleteMany(params.conditions);
+  }
+
+  async countByConditions(conditions) {
+    return this.TSchema.countDocuments(conditions);
   }
 }

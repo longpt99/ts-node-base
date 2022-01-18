@@ -6,9 +6,9 @@ export const ENV: IAppEnvironment = {
     PORT: 8080,
   },
   SECURE: {
-    TOKEN: {
-      EXPIRED_TIME: 1500,
-      SECRET_KEY: 'local#123456a@A',
+    JWT: {
+      EXPIRED_TIME: 30 * 60,
+      SECRET_KEY: 'local-access-token#123456a@A',
     },
   },
   DATABASE: {

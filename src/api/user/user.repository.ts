@@ -1,8 +1,11 @@
 import { MongooseRepository } from '../../common/extensions';
-import { IUser, User } from './user.schema';
+import { IUser } from './user.interface';
+import { User } from './user.schema';
 
-export class UserRepository extends MongooseRepository<IUser> {
+class UserRepository extends MongooseRepository<IUser> {
   constructor() {
     super(User);
   }
 }
+
+export default new UserRepository();

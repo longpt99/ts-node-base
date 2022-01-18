@@ -7,7 +7,7 @@ import { databaseConnect } from './config/databases/database';
 
 const app = express();
 bootstrapConfig();
-// databaseConnect();
+databaseConnect();
 expressConfig(app);
 app.get('/', (req, res) => {
   res.send('Hello');
