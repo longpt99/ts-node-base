@@ -4,7 +4,7 @@ export interface IAppEnvironment {
     PORT: number;
   };
   SECURE?: {
-    TOKEN: {
+    JWT: {
       SECRET_KEY: string;
       EXPIRED_TIME: number;
     };

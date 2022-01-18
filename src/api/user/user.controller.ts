@@ -1,31 +1,34 @@
 import { Request, Response } from 'express';
-import { IUser } from './user.schema';
-import UserService from './user.service';
+import { IUser } from './user.interface';
+import userService from './user.service';
 
-export default class UserController {
-  private userService: UserService;
+class UserController {
+  constructor() {}
 
-  constructor() {
-    this.userService = new UserService();
-  }
-
+  //#region Admin section
   async create(req: Request, res: Response): Promise<any> {
-    return res.result(this.userService.create(req.body));
+    return res.result(userService.create(req.body));
   }
 
   async list(req: Request, res: Response): Promise<IUser[]> {
-    return res.result(this.userService.list());
+    return res.result(userService.list());
   }
 
   async getById(req: Request, res: Response) {
-    return res.result(this.userService.getById());
+    return res.result(userService.getById());
   }
 
   async updateById(req: Request, res: Response): Promise<IUser> {
-    return res.result(this.userService.getById());
+    return res.result(userService.getById());
   }
 
   async deleteById(req: Request, res: Response): Promise<IUser[]> {
-    return res.result(this.userService.list());
+    return res.result(userService.list());
   }
+  //#endregion Admin section
+
+  //#region User section
+  //#end region User section
 }
+
+export default new UserController();

@@ -1,22 +1,27 @@
-import { validationMiddleware } from '../../common/middlewares';
-import { CreateUserValidation } from './validations';
-import UserController from './user.controller';
 import { route, router } from '../../common';
+import { validate } from '../../common/middlewares';
+import userController from './user.controller';
+import { UserValidation } from './user.validation';
 
-const userController = new UserController();
+//#region Admin section
+route.get('/admin/user', [userController.create]);
 
-route.get('/user', userController.list.bind(userController));
+route.post('/admin/user', [userController.create]);
 
-route.post(
-  '/user',
-  validationMiddleware(CreateUserValidation),
-  userController.create.bind(userController)
-);
+route.get('/admin/user/:id', [userController.getById]);
 
-route.get('/user/:id', userController.getById.bind(userController));
+route.patch('/admin/user/:id', [userController.create]);
 
-route.patch('/user/:id', userController.create.bind(userController));
+route.delete('/admin/user/:id', [userController.create]);
+//#endregion Admin section
 
-route.delete('/user/:id', userController.create.bind(userController));
+//#region User section
+route.get('/user/profile', [userController.list]);
+
+route.patch('/user/profile/:id', [
+  validate(UserValidation.createUser),
+  userController.create,
+]);
+//#endregion User section
 
 export default router;
