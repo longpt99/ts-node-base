@@ -1,2 +1,5 @@
 node_modules
 dist
+newrelic_agent.log
+.vscode
+/coverage

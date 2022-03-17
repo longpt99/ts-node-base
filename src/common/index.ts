@@ -1,1 +1,1 @@
-export { Route as route, router } from './router';
+export { Index as router, expressRouter } from './router';

@@ -1,35 +1,74 @@
-import { green } from 'chalk';
-import { connect, connection } from 'mongoose';
-import { await as sAwait, error, success } from 'signale';
+import { ConnectionOptions, createConnection } from 'typeorm';
 import APP_CONFIG from '../app.config';
+import 'reflect-metadata';
+import { join } from 'path';
+import { green } from 'chalk';
+import { success, error } from 'signale';
 
-function connectMongoDB() {
-  // const connectionUri = `mongodb://${APP_CONFIG.DATABASE.MONGODB.USERNAME}:${APP_CONFIG.DATABASE.MONGODB.PASSWORD}@${APP_CONFIG.DATABASE.MONGODB.HOST}:${APP_CONFIG.DATABASE.MONGODB.PORT}/${APP_CONFIG.DATABASE.MONGODB.NAME}`;
-  // const connectionUri = `mongodb://${APP_CONFIG.DATABASE.MONGODB.HOST}
-  // :${APP_CONFIG.DATABASE.MONGODB.PORT}/${APP_CONFIG.DATABASE.MONGODB.NAME}`;
-  const connectionUri = 'mongodb://localhost:27017/ts-node-base';
-  connect(connectionUri);
-  connection.on('error', (err) => {
-    error('Could not connect to Mongodb: ', err);
-  });
+// function connectMongoDB() {
+//   // const connectionUri = `mongodb://${APP_CONFIG.ENV.DATABASE.MONGODB.USERNAME}:${APP_CONFIG.ENV.DATABASE.MONGODB.PASSWORD}@${APP_CONFIG.ENV.DATABASE.MONGODB.HOST}:${APP_CONFIG.ENV.DATABASE.MONGODB.PORT}/${APP_CONFIG.ENV.DATABASE.MONGODB.NAME}`;
+//   // const connectionUri = `mongodb://${APP_CONFIG.ENV.DATABASE.MONGODB.HOST}
+//   // :${APP_CONFIG.ENV.DATABASE.MONGODB.PORT}/${APP_CONFIG.ENV.DATABASE.MONGODB.NAME}`;
+//   const connectionUri = 'mongodb://localhost:27017/ts-node-base';
+//   connect(connectionUri);
+//   connection.on('error', (err) => {
+//     error('Could not connect to Mongodb: ', err);
+//   });
 
-  connection.on('disconnected', () => {
-    error('Database has lost connection...');
-  });
+//   connection.on('disconnected', () => {
+//     error('Database has lost connection...');
+//   });
 
-  connection.on('connected', () => {
-    success(
-      green(
-        `[Mongodb] "${APP_CONFIG.DATABASE.MONGODB.NAME}" has connected successfully!`
-      )
-    );
-  });
+//   connection.on('connected', () => {
+//     success(
+//       green(
+//         `[Mongodb] "${APP_CONFIG.ENV.DATABASE.MONGODB.NAME}" has connected successfully!`
+//       )
+//     );
+//   });
 
-  connection.on('reconnected', () => {
-    sAwait('Db has reconnected!');
-  });
+//   connection.on('reconnected', () => {
+//     sAwait('Db has reconnected!');
+//   });
+// }
+
+function connectPostgresqlDb(app) {
+  const databaseOptions: ConnectionOptions = {
+    type: 'postgres',
+    host: APP_CONFIG.ENV.DATABASE.POSTGRES.HOST,
+    port: APP_CONFIG.ENV.DATABASE.POSTGRES.PORT,
+    username: APP_CONFIG.ENV.DATABASE.POSTGRES.USERNAME,
+    password: APP_CONFIG.ENV.DATABASE.POSTGRES.PASSWORD,
+    database: APP_CONFIG.ENV.DATABASE.POSTGRES.NAME,
+    synchronize: true,
+    entities: [join(__dirname, '../../api/**/*.entity.{js,ts}')],
+    logging: false,
+
+    // connectTimeoutMS: 20000,
+    // maxQueryExecutionTime: 20000,
+    // logNotifications: true,
+  };
+  createConnection(databaseOptions)
+    .then((connection) => {
+      if (connection.isConnected) {
+        success(
+          green(
+            `[Database] "${APP_CONFIG.ENV.DATABASE.POSTGRES.NAME}" has connected successfully!`
+          )
+        );
+        app.start();
+      } else {
+        error('Database has lost connection...');
+      }
+    })
+    .catch((err) => {
+      error('Database connection error');
+      console.log(err);
+      process.exit(1);
+    });
 }
 
-export const databaseConnect = () => {
-  connectMongoDB();
+export const databaseConnect = (app) => {
+  // connectMongoDB();
+  connectPostgresqlDb(app);
 };

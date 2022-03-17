@@ -15,6 +15,14 @@ class AuthController {
     return res.result(authService.login(req.body));
   }
 
+  async loginFacebook(req: Request, res: Response) {
+    return res.result(authService.loginFacebook(req.query));
+  }
+
+  async loginGoogle(req: Request, res: Response) {
+    return res.result(authService.loginGoogle(req.query));
+  }
+
   async register(req: Request, res: Response) {
     return res.result(authService.register(req.body));
   }

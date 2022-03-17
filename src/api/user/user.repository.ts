@@ -1,11 +1,6 @@
-import { MongooseRepository } from '../../common/extensions';
-import { IUser } from './user.interface';
-import { User } from './user.schema';
+import { EntityRepository } from 'typeorm';
+import { BaseRepository } from '../../common/extensions';
+import { User } from './user.entity';
 
-class UserRepository extends MongooseRepository<IUser> {
-  constructor() {
-    super(User);
-  }
-}
-
-export default new UserRepository();
+@EntityRepository(User)
+export class UserRepository extends BaseRepository<User> {}

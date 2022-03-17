@@ -6,7 +6,8 @@ export class AppObject {
 
   static readonly COMMON_STATUS = {
     ACTIVE: 'active',
-    IN_ACTIVE: 'inactive',
+    INACTIVE: 'inactive',
     DELETED: 'deleted',
+    UNVERIFIED: 'unverified',
   };
 }

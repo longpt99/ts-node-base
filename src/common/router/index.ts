@@ -1,37 +1,46 @@
 import { Router } from 'express';
+import { RouteOptions } from './router.interface';
 
-export const router = Router();
+export const expressRouter = Router();
 
-export class Route {
-  public static get(path, fn, options?): Route {
-    return Route.route('get', path, fn, options);
+export class Index {
+  public static get(path: string, fn: any[], options?: RouteOptions): Index {
+    return Index.router('get', path, fn, options);
   }
 
-  public static post(path, fn, options?): Route {
-    return Route.route('post', path, fn, options);
+  public static post(path: string, fn: any[], options?: RouteOptions): Index {
+    return Index.router('post', path, fn, options);
   }
 
-  public static put(path, fn, options?): Route {
-    return Route.route('put', path, fn, options);
+  public static put(path: string, fn: any[], options?: RouteOptions): Index {
+    return Index.router('put', path, fn, options);
   }
 
-  public static patch(path, fn, options?): Route {
-    return Route.route('patch', path, fn, options);
+  public static patch(path: string, fn: any[], options?: RouteOptions): Index {
+    return Index.router('patch', path, fn, options);
   }
 
-  public static delete(path, fn, options?): Route {
-    return Route.route('delete', path, fn, options);
+  public static delete(path: string, fn: any[], options?: RouteOptions): Index {
+    return Index.router('delete', path, fn, options);
   }
 
-  public static route(
+  public static router(
     method: 'get' | 'post' | 'put' | 'delete' | 'patch',
     path: string,
-    fn,
-    options
-  ): Route {
+    fn: any[],
+    options?: RouteOptions
+  ): Index {
     if (options) {
-      console.log('Route opts');
+      if (options.allowAnonymous) {
+        console.log('Verify token base');
+        // fn.unshift('token');
+      } else {
+        if (options.roles) {
+          console.log('Role');
+        }
+        // fn.unshift('token');
+      }
     }
-    return router[method](path, fn);
+    return expressRouter[method](path, fn);
   }
 }

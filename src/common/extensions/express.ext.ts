@@ -1,5 +1,6 @@
-import express from 'express';
+import express, { Response } from 'express';
 import { ErrorHandler } from '../error';
+import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 
 /**
  * @method result
@@ -11,18 +12,13 @@ express.response.result = async function (data) {
 
   try {
     const result = await data;
-    res.status(200).json(result);
+    return res.status(200).json(result);
   } catch (error) {
-    console.log(error);
-    res.status(error.status || 400).json({
-      message: error.message,
-      stack: error.stack,
-      status: error.status,
-    });
+    return handleError(error, res);
   }
 };
 
-express.response.success = function (data) {
+express.response.success = async function (data) {
   const res = _this(this);
   res.status(200).json(data);
 };
@@ -32,17 +28,68 @@ express.response.success = function (data) {
  * @description Custom response success
  * @param error
  */
-express.response.error = function (error: ErrorHandler) {
-  const res = _this(this);
-  console.log(error);
+// express.response.error = async function (error: ErrorHandler) {
+//   const res = _this(this);
+//   console.log('huhkhk');
 
-  res.status(error.status || 400).json({
-    message: error.message,
+//   console.log(error);
+//   console.log(123);
+
+//   console.log(error.status);
+
+//   let status = error.status ?? StatusCodes.BAD_REQUEST;
+//   if (error instanceof ErrorHandler) {
+//     console.log(error.stack);
+//     status = StatusCodes.INTERNAL_SERVER_ERROR;
+//     error.message = getReasonPhrase(status);
+//   }
+
+//   res.status(status).json({
+//     message: error.message ?? getReasonPhrase(status),
+//     stack: error.stack,
+//     status: error.status,
+//     errors: error.errors,
+//   });
+// };
+
+async function handleError(error: any, res: Response) {
+  console.log('huhkhk');
+
+  console.log(error.response);
+  console.log(123);
+
+  console.log(error.status);
+
+  let status = error.status ?? StatusCodes.BAD_REQUEST;
+  console.log(123, status, StatusCodes.BAD_REQUEST);
+
+  if (error instanceof ErrorHandler) {
+    console.log(error.stack);
+    status = StatusCodes.INTERNAL_SERVER_ERROR;
+    error.message = getReasonPhrase(status);
+  }
+
+  console.log({
+    message:
+      (error.response &&
+        (JSON.parse(error.response.body) as any)?.error?.message) ??
+      error.message ??
+      getReasonPhrase(status),
     stack: error.stack,
-    status: error.status,
+    status: status,
     errors: error.errors,
   });
-};
+
+  return res.status(status).json({
+    message:
+      (error.response && JSON.parse(error.response.body).error.message) ??
+      error.message ??
+      getReasonPhrase(status),
+    stack: error.stack,
+    status: status,
+    errors: error.errors,
+  });
+}
 
 function _this(val: express.Response) {
   return val;

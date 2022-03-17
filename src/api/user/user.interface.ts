@@ -1,5 +1,3 @@
-import { Document } from 'mongoose';
-
 export interface IUser extends Document {
   _id: string;
   phoneNumber: {
@@ -14,4 +12,16 @@ export interface IUser extends Document {
   salt: string;
   status: string;
   comparePassword: (password: string) => Promise<boolean>;
+}
+
+export interface UserModel {
+  dialCode: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  dateOfBirth: string;
+  password: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

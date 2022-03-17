@@ -1,11 +1,12 @@
-import { IAppEnvironment } from '../../common/interfaces';
+import { AppEnvironment } from '../../common/interfaces';
 
-export const ENV: IAppEnvironment = {
+export const ENV: AppEnvironment = {
   NAME: 'local',
   APP: {
     PORT: 8080,
   },
   SECURE: {
+    PASSWORD_SECRET_KEY: 'passwordsecretkey#123456a@A',
     JWT: {
       EXPIRED_TIME: 30 * 60,
       SECRET_KEY: 'local-access-token#123456a@A',
@@ -18,6 +19,25 @@ export const ENV: IAppEnvironment = {
       HOST: 'localhost',
       PORT: 27017,
       NAME: 'ts-node-base',
+    },
+    POSTGRES: {
+      USERNAME: 'postgres',
+      PASSWORD: 'postgres',
+      HOST: 'localhost',
+      PORT: 5432,
+      NAME: 'ts-node-base-local',
+    },
+  },
+  OAUTH2: {
+    GOOGLE: {
+      CLIENT_ID:
+        '873379095237-sq8rsuemift9rl903frqmn82gr2q4l22.apps.googleusercontent.com',
+      CLIENT_SECRET: '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',
+    },
+    FACEBOOK: {
+      CLIENT_ID:
+        '873379095237-sq8rsuemift9rl903frqmn82gr2q4l22.apps.googleusercontent.com',
+      CLIENT_SECRET: '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',
     },
   },
 };

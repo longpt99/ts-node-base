@@ -1,5 +1,5 @@
 import { green } from 'chalk';
-import { Express } from 'express';
+import { Application } from 'express';
 import { sync } from 'glob';
 import { join } from 'path';
 import { success } from 'signale';
@@ -7,7 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import { AppConst } from '../common/consts';
 import swaggerConfig from './swagger.config';
 
-export const routeConfig = async (app: Express): Promise<void> => {
+export const routeConfig = async (app: Application): Promise<void> => {
   app.use(
     '/api-docs',
     swaggerUi.serve,
@@ -22,7 +22,7 @@ export const routeConfig = async (app: Express): Promise<void> => {
   );
 
   // Route registered
-  const routeRegistered = [];
+  const routeRegistered: Application[] = [];
   app._router.stack.forEach((layer) => {
     if (layer.route) {
       // routes registered directly on the app
@@ -37,7 +37,7 @@ export const routeConfig = async (app: Express): Promise<void> => {
   routeRegistered.forEach((route) =>
     success(
       green(
-        `Router ${route.stack[0].method.toUpperCase()}: "/${
+        `[Router] ${route.stack[0].method.toUpperCase()}: "/${
           AppConst.API_PREFIX
         }/${AppConst.API_VERSION}${route.path}" has been registered!`
       )

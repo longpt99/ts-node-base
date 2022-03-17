@@ -1,27 +1,27 @@
-import { route, router } from '../../common';
+import { expressRouter, router } from '../../common';
 import { validate } from '../../common/middlewares';
 import userController from './user.controller';
 import { UserValidation } from './user.validation';
 
 //#region Admin section
-route.get('/admin/user', [userController.create]);
+router.post('/admin/users', [userController.create]);
 
-route.post('/admin/user', [userController.create]);
+router.get('/admin/users', [userController.create]);
 
-route.get('/admin/user/:id', [userController.getById]);
+router.get('/admin/users/:id', [userController.getById]);
 
-route.patch('/admin/user/:id', [userController.create]);
+router.patch('/admin/users/:id', [userController.create]);
 
-route.delete('/admin/user/:id', [userController.create]);
+router.delete('/admin/users/:id', [userController.create]);
 //#endregion Admin section
 
 //#region User section
-route.get('/user/profile', [userController.list]);
+router.get('/user/profile', [userController.list]);
 
-route.patch('/user/profile/:id', [
+router.patch('/user/profile/:id', [
   validate(UserValidation.createUser),
   userController.create,
 ]);
 //#endregion User section
 
-export default router;
+export default expressRouter;
