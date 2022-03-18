@@ -4,6 +4,8 @@ import 'reflect-metadata';
 import { join } from 'path';
 import { green } from 'chalk';
 import { success, error } from 'signale';
+import { Application } from 'express';
+import { IServer } from '../../app';
 
 // function connectMongoDB() {
 //   // const connectionUri = `mongodb://${APP_CONFIG.ENV.DATABASE.MONGODB.USERNAME}:${APP_CONFIG.ENV.DATABASE.MONGODB.PASSWORD}@${APP_CONFIG.ENV.DATABASE.MONGODB.HOST}:${APP_CONFIG.ENV.DATABASE.MONGODB.PORT}/${APP_CONFIG.ENV.DATABASE.MONGODB.NAME}`;
@@ -32,7 +34,43 @@ import { success, error } from 'signale';
 //   });
 // }
 
-function connectPostgresqlDb(app) {
+// function connectPostgresqlDb(app: IServer) {
+//   const databaseOptions: ConnectionOptions = {
+//     type: 'postgres',
+//     host: APP_CONFIG.ENV.DATABASE.POSTGRES.HOST,
+//     port: APP_CONFIG.ENV.DATABASE.POSTGRES.PORT,
+//     username: APP_CONFIG.ENV.DATABASE.POSTGRES.USERNAME,
+//     password: APP_CONFIG.ENV.DATABASE.POSTGRES.PASSWORD,
+//     database: APP_CONFIG.ENV.DATABASE.POSTGRES.NAME,
+//     synchronize: true,
+//     entities: [join(__dirname, '../../api/**/*.entity.{js,ts}')],
+//     logging: false,
+
+//     // connectTimeoutMS: 20000,
+//     // maxQueryExecutionTime: 20000,
+//     // logNotifications: true,
+//   };
+//   createConnection(databaseOptions)
+//     .then((connection) => {
+//       if (connection.isConnected) {
+//         success(
+//           green(
+//             `[Database] "${APP_CONFIG.ENV.DATABASE.POSTGRES.NAME}" has connected successfully!`
+//           )
+//         );
+//         app.start();
+//       } else {
+//         error('Database has lost connection...');
+//       }
+//     })
+//     .catch((err) => {
+//       error('Database connection error');
+//       console.log(err);
+//       process.exit(1);
+//     });
+// }
+
+export const databaseConfig = (app: IServer) => {
   const databaseOptions: ConnectionOptions = {
     type: 'postgres',
     host: APP_CONFIG.ENV.DATABASE.POSTGRES.HOST,
@@ -66,9 +104,4 @@ function connectPostgresqlDb(app) {
       console.log(err);
       process.exit(1);
     });
-}
-
-export const databaseConnect = (app) => {
-  // connectMongoDB();
-  connectPostgresqlDb(app);
 };

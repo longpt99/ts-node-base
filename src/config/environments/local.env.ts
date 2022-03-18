@@ -25,7 +25,7 @@ export const ENV: AppEnvironment = {
       PASSWORD: 'postgres',
       HOST: 'localhost',
       PORT: 5432,
-      NAME: 'ts-node-base-local',
+      NAME: 'postgres',
     },
   },
   OAUTH2: {
