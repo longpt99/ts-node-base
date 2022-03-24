@@ -7,9 +7,13 @@ export const ENV: AppEnvironment = {
   },
   SECURE: {
     PASSWORD_SECRET_KEY: 'passwordsecretkey#123456a@A',
-    JWT: {
+    JWT_ACCESS_TOKEN: {
       EXPIRED_TIME: 30 * 60,
       SECRET_KEY: 'local-access-token#123456a@A',
+    },
+    JWT_REFRESH_TOKEN: {
+      EXPIRED_TIME: 30 * 60,
+      SECRET_KEY: 'local-refresh-token#123456a@A',
     },
   },
   DATABASE: {
