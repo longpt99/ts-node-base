@@ -5,7 +5,11 @@ export interface AppEnvironment {
   };
   SECURE: {
     PASSWORD_SECRET_KEY: string;
-    JWT: {
+    JWT_ACCESS_TOKEN: {
+      SECRET_KEY: string;
+      EXPIRED_TIME: number;
+    };
+    JWT_REFRESH_TOKEN: {
       SECRET_KEY: string;
       EXPIRED_TIME: number;
     };

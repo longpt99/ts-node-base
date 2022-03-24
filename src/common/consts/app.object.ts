@@ -10,4 +10,8 @@ export class AppObject {
     DELETED: 'deleted',
     UNVERIFIED: 'unverified',
   };
+
+  static readonly TOKEN_CONFIG = {
+    TYPE: 'Bearer',
+  };
 }
