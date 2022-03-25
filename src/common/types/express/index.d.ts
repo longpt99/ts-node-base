@@ -1,9 +1,10 @@
 import express from 'express';
+import { TokenModel } from '../../interfaces';
 
 declare global {
   namespace Express {
     interface Request {
-      user;
+      user: TokenModel;
     }
 
     interface Response {

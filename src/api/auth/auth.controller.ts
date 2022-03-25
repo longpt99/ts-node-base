@@ -12,7 +12,7 @@ class AuthController {
 
   //#region User section
   async login(req: Request, res: Response) {
-    return res.result(authService.login(req.body));
+    return res.result(authService.login({ body: req.body, res: res }));
   }
 
   async loginFacebook(req: Request, res: Response) {
@@ -25,6 +25,10 @@ class AuthController {
 
   async register(req: Request, res: Response) {
     return res.result(authService.register(req.body));
+  }
+
+  async logout(req: Request, res: Response) {
+    return res.result(authService.logout(res));
   }
   //#endregion User section
 }

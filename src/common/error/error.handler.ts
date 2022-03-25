@@ -13,5 +13,6 @@ export class ErrorHandler extends Error {
     this.status = params.status;
     this.errors = params.errors;
     this.code = params.code;
+    Object.setPrototypeOf(this, ErrorHandler.prototype);
   }
 }

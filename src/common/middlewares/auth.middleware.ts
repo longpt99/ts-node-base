@@ -2,6 +2,7 @@ import { NextFunction, Request } from 'express';
 import tokenUtil from '../../utils/token.util';
 import { AppObject } from '../consts';
 import { ErrorHandler } from '../error';
+import { TokenModel } from '../interfaces';
 
 export async function authMiddleware(
   req: Request,
@@ -17,13 +18,18 @@ export async function authMiddleware(
 
     const [tokenType, accessToken] = token.split(' ');
     if (tokenType !== AppObject.TOKEN_CONFIG.TYPE) {
-      throw new ErrorHandler({ message: 'unauthorized', status: 401 });
+      throw new ErrorHandler({
+        message: 'unauthorized tokenType',
+        status: 401,
+      });
     }
 
     // Check xsrf token from header
+    console.log(req.signedCookies);
+
     const xsrfToken = req.headers['x-xsrf-token'] as string;
     if (!xsrfToken) {
-      throw new ErrorHandler({ message: 'unauthorized', status: 401 });
+      throw new ErrorHandler({ message: 'unauthorized xsrf', status: 401 });
     }
 
     // verify token with secret key and xsrf token
@@ -31,10 +37,9 @@ export async function authMiddleware(
       accessToken: accessToken,
       xsrfToken: xsrfToken,
     });
-    req.user = user;
+    req.user = user as TokenModel;
     return next();
   } catch (error) {
-    console.log(error);
     if (error.name === 'TokenExpiredError') {
       throw new ErrorHandler({
         message: 'unauthorized',
@@ -42,9 +47,6 @@ export async function authMiddleware(
         code: 'TOKEN_EXPIRED',
       });
     }
-
-    if (error instanceof ErrorHandler) {
-      return next(error);
-    }
+    return next(error);
   }
 }
