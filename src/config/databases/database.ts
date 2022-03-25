@@ -1,11 +1,20 @@
-import { ConnectionOptions, createConnection } from 'typeorm';
-import APP_CONFIG from '../app.config';
-import 'reflect-metadata';
-import { join } from 'path';
 import { green } from 'chalk';
-import { success, error } from 'signale';
-import { Application } from 'express';
+import { join } from 'path';
+import { createClient } from 'redis';
+import 'reflect-metadata';
+import { error, success } from 'signale';
+import { ConnectionOptions, createConnection } from 'typeorm';
 import { IServer } from '../../app';
+import APP_CONFIG from '../app.config';
+
+export const client = createClient({
+  socket: {
+    host: APP_CONFIG.ENV.DATABASE.REDIS.HOST,
+    port: APP_CONFIG.ENV.DATABASE.REDIS.PORT,
+  },
+  password: APP_CONFIG.ENV.DATABASE.REDIS.PASSWORD,
+  database: APP_CONFIG.ENV.DATABASE.REDIS.DATABASE,
+});
 
 // function connectMongoDB() {
 //   // const connectionUri = `mongodb://${APP_CONFIG.ENV.DATABASE.MONGODB.USERNAME}:${APP_CONFIG.ENV.DATABASE.MONGODB.PASSWORD}@${APP_CONFIG.ENV.DATABASE.MONGODB.HOST}:${APP_CONFIG.ENV.DATABASE.MONGODB.PORT}/${APP_CONFIG.ENV.DATABASE.MONGODB.NAME}`;
@@ -70,6 +79,19 @@ import { IServer } from '../../app';
 //     });
 // }
 
+async function connectRedis() {
+  client.on('error', (err) => {
+    console.log('Redis Client Error', err);
+    process.exit();
+  });
+
+  client.on('connect', (err) =>
+    success(green(`[Database][Redis] Database has connected successfully!`))
+  );
+
+  await client.connect();
+}
+
 export const databaseConfig = (app: IServer) => {
   const databaseOptions: ConnectionOptions = {
     type: 'postgres',
@@ -91,9 +113,10 @@ export const databaseConfig = (app: IServer) => {
       if (connection.isConnected) {
         success(
           green(
-            `[Database] "${APP_CONFIG.ENV.DATABASE.POSTGRES.NAME}" has connected successfully!`
+            `[Database][Postgres] "${APP_CONFIG.ENV.DATABASE.POSTGRES.NAME}" has connected successfully!`
           )
         );
+        connectRedis();
         app.start();
       } else {
         error('Database has lost connection...');
@@ -102,6 +125,6 @@ export const databaseConfig = (app: IServer) => {
     .catch((err) => {
       error('Database connection error');
       console.log(err);
-      process.exit(1);
+      process.exit();
     });
 };

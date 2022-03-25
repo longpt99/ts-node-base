@@ -4,6 +4,7 @@ export interface AppEnvironment {
     PORT: number;
   };
   SECURE: {
+    COOKIE_SECRET_KEY: string;
     PASSWORD_SECRET_KEY: string;
     JWT_ACCESS_TOKEN: {
       SECRET_KEY: string;
@@ -29,12 +30,11 @@ export interface AppEnvironment {
       PORT: number;
       NAME: string;
     };
-    REDIS?: {
+    REDIS: {
       HOST: string;
       PORT: number;
       PASSWORD: string;
-      DB: number;
-      KEY_PREFIX: string;
+      DATABASE: number;
     };
   };
   OAUTH2: {

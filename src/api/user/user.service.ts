@@ -1,5 +1,7 @@
 import { getCustomRepository } from 'typeorm';
+import { AppObject } from '../../common/consts';
 import { ErrorHandler } from '../../common/error';
+import { ParamsCommonList } from '../../common/interfaces';
 import { FacebookData } from '../auth/auth.interface';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
@@ -10,15 +12,23 @@ class UserService {
     this.userRepository = getCustomRepository(UserRepository);
   }
 
-  async detailByConditions(params: any): Promise<User> {
-    return this.userRepository.findOne(params);
+  async detailByConditions(params: ParamsCommonList): Promise<User> {
+    return this.userRepository.detailByConditions(params);
   }
 
-  async getUserByConditions(params: any): Promise<User> {
+  async getUserByConditions(params: ParamsCommonList): Promise<User> {
     const userFound = await this.detailByConditions(params);
 
     if (!userFound) {
       throw new ErrorHandler({ message: 'userNotFound' });
+    }
+
+    if (userFound.status === AppObject.COMMON_STATUS.UNVERIFIED) {
+      throw new ErrorHandler({ message: 'accountUnverified' });
+    }
+
+    if (userFound.status === AppObject.COMMON_STATUS.INACTIVE) {
+      throw new ErrorHandler({ message: 'accountInactive' });
     }
 
     return userFound;
@@ -26,7 +36,7 @@ class UserService {
 
   async getUserByFacebookId(data: FacebookData): Promise<User> {
     const userFound = await this.detailByConditions({
-      where: { facebookId: data.id },
+      conditions: { facebookId: data.id },
     });
 
     if (!userFound) {
@@ -55,6 +65,10 @@ class UserService {
   async getById() {}
 
   async list() {}
+
+  async getProfile(userId) {
+    return this.getUserByConditions({ conditions: { id: userId } });
+  }
 }
 
 export default new UserService();

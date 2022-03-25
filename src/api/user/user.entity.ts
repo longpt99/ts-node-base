@@ -46,10 +46,10 @@ export class User {
   })
   status: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   facebookId: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   googleId: string;
 
   @CreateDateColumn()
@@ -73,5 +73,15 @@ export class User {
         .toLowerCase()}`;
       this.fullName = `${this.firstName} ${this.lastName}`;
     }
+  }
+
+  async comparePassword(password: string): Promise<boolean> {
+    return (
+      password ===
+      StringUtil.decrypt(
+        this.password,
+        APP_CONFIG.ENV.SECURE.PASSWORD_SECRET_KEY
+      )
+    );
   }
 }

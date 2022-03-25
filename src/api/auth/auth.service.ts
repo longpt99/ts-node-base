@@ -1,29 +1,25 @@
+import { Response } from 'express';
 import got from 'got';
+import { utils } from 'mocha';
+import { AppObject } from '../../common/consts';
 import { ErrorHandler } from '../../common/error';
+import tokenUtil, { COOKIE_OPTIONS } from '../../utils/token.util';
 import userService from '../user/user.service';
 import { FacebookData } from './auth.interface';
 class AuthService {
   constructor() {}
 
-  async login(params) {
-    // const userFound = await userRepository.detailByConditions({
-    //   conditions: {
-    //     email: params.email,
-    //     status: { $ne: AppObject.COMMON_STATUS.DELETED },
-    //   },
-    // });
-    // if (!userFound) {
-    //   throw new ErrorHandler({ message: 'accountNotFound' });
-    // }
-    // if (userFound.status === AppObject.COMMON_STATUS.IN_ACTIVE) {
-    //   throw new ErrorHandler({ message: 'accountInactive' });
-    // }
-    // if (!(await userFound.comparePassword(params.password))) {
-    //   throw new ErrorHandler({ message: 'wrongPassword' });
-    // }
-    // return {
-    //   accessToken: await TokenUtil.signToken(userFound),
-    // };
+  async login(params: { body: any; res: Response }) {
+    const userFound = await userService.getUserByConditions({
+      conditions: { email: params.body.email },
+      select: ['id', 'password', 'status'],
+    });
+
+    if (!(await userFound.comparePassword(params.body.password))) {
+      throw new ErrorHandler({ message: 'wrongPassword' });
+    }
+
+    return this._signToken({ res: params.res, payload: { id: userFound.id } });
   }
 
   async register(params) {
@@ -101,6 +97,25 @@ class AuthService {
     );
 
     return googleData;
+  }
+
+  async logout(res: Response) {
+    await tokenUtil.clearTokens(res);
+    return { isSuccess: true };
+  }
+
+  private async _signToken(params: { res: Response; payload: any }) {
+    const [{ accessToken, xsrfToken }, refreshToken] = await Promise.all([
+      tokenUtil.signToken({
+        id: params.payload.id,
+      }),
+      tokenUtil.signRefreshToken(params.payload.id),
+    ]);
+
+    params.res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
+    params.res.cookie('XSRF-TOKEN', xsrfToken);
+
+    return { accessToken: accessToken, tokenType: AppObject.TOKEN_CONFIG.TYPE };
   }
 }
 

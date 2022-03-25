@@ -22,3 +22,13 @@ export interface ListParams {
   //Match any key if fields are not defined
   [key: string]: any;
 }
+
+export interface ParamsCommonList {
+  conditions: {
+    [key: string]: string;
+  };
+  overwriteConditions?: {
+    [key: string]: string;
+  };
+  select?: string[];
+}

@@ -1,5 +1,7 @@
 // import { Document, Model } from 'mongoose';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
+import { AppObject } from '../consts';
+import { ParamsCommonList } from '../interfaces';
 
 // export class MongooseRepository<TModel extends Document> {
 //   public TSchema: Model<TModel>;
@@ -46,7 +48,20 @@ import { Repository } from 'typeorm';
 // }
 
 export class BaseRepository<T> extends Repository<T> {
-  async findOne(params): Promise<T> {
-    return this.findOne(params);
+  async detailByConditions(params: ParamsCommonList): Promise<T> {
+    console.log(params);
+
+    if (params.overwriteConditions) {
+      Object.assign(params.conditions, params.overwriteConditions);
+    } else {
+      Object.assign(params.conditions, {
+        status: Not(AppObject.COMMON_STATUS.DELETED),
+      });
+    }
+
+    return this.findOne({
+      where: params.conditions,
+      select: (params.select as (keyof T)[]) ?? null,
+    }) as Promise<T>;
   }
 }

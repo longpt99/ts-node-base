@@ -25,6 +25,10 @@ class UserController {
   async deleteById(req: Request, res: Response): Promise<IUser[]> {
     return res.result(userService.list());
   }
+
+  async getProfile(req: Request, res: Response): Promise<IUser[]> {
+    return res.result(userService.getProfile(req.user.id));
+  }
   //#endregion Admin section
 
   //#region User section

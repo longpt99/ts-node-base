@@ -6,6 +6,7 @@ export const ENV: AppEnvironment = {
     PORT: 8080,
   },
   SECURE: {
+    COOKIE_SECRET_KEY: 'local-cookie#123456a@A',
     PASSWORD_SECRET_KEY: 'passwordsecretkey#123456a@A',
     JWT_ACCESS_TOKEN: {
       EXPIRED_TIME: 30 * 60,
@@ -30,6 +31,12 @@ export const ENV: AppEnvironment = {
       HOST: 'localhost',
       PORT: 5432,
       NAME: 'postgres',
+    },
+    REDIS: {
+      HOST: 'localhost',
+      PORT: 6379,
+      PASSWORD: '',
+      DATABASE: 0,
     },
   },
   OAUTH2: {

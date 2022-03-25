@@ -1,5 +1,6 @@
 import { expressRouter, router } from '../../common';
 import { validate } from '../../common/middlewares';
+import { authMiddleware } from '../../common/middlewares/auth.middleware';
 import userController from './user.controller';
 import { UserValidation } from './user.validation';
 
@@ -16,9 +17,9 @@ router.delete('/admin/users/:id', [userController.create]);
 //#endregion Admin section
 
 //#region User section
-router.get('/user/profile', [userController.list]);
+router.get('/profile', [authMiddleware, userController.getProfile]);
 
-router.patch('/user/profile/:id', [
+router.patch('/profile/:id', [
   validate(UserValidation.createUser),
   userController.create,
 ]);
