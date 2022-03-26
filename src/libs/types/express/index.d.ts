@@ -1,4 +1,4 @@
-import express from 'express';
+import 'express';
 import { TokenModel } from '../../interfaces';
 
 declare global {

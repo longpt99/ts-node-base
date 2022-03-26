@@ -1,16 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import { normalize } from 'path';
-import tokenUtil from '../../utils/token.util';
-import { AppObject } from '../consts';
-import { ErrorHandler } from '../error';
-import { TokenModel } from '../interfaces';
+import { ErrorHandler } from '../../libs/error';
 
-export async function errorHandler(
+export function errorHandler(
   err: Error,
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): void {
   if (err instanceof ErrorHandler) {
     return res.error(err);
   }

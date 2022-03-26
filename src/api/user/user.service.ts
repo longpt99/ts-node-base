@@ -1,7 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import { AppObject } from '../../common/consts';
-import { ErrorHandler } from '../../common/error';
 import { ParamsCommonList } from '../../common/interfaces';
+import { ErrorHandler } from '../../libs/error';
 import { FacebookData } from '../auth/auth.interface';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';

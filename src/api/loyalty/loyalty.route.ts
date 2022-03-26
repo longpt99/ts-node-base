@@ -1,5 +1,4 @@
 import { expressRouter, router } from '../../common';
-import { validate } from '../../common/middlewares';
 import loyaltyController from './loyalty.controller';
 import { LoyaltyValidation } from './loyalty.validation';
 
@@ -7,7 +6,7 @@ import { LoyaltyValidation } from './loyalty.validation';
 router.get('/admin/loyalties', [loyaltyController.create]);
 
 router.post('/admin/loyalties', [
-  validate(LoyaltyValidation.create, ['s']),
+  // validate(LoyaltyValidation.create, ['s']),
   loyaltyController.create,
 ]);
 
@@ -17,7 +16,7 @@ router.delete('/admin/loyalties/:id', [loyaltyController.create]);
 //#endregion Admin section
 
 //#region User section
-router.get('/user/loyalty', [loyaltyController.list]);
+router.get('/loyalty', [loyaltyController.list]);
 //#endregion User section
 
 export default expressRouter;

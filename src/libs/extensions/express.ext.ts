@@ -1,6 +1,8 @@
 import express, { Response } from 'express';
 import { ErrorHandler } from '../error';
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
+import localeService from '../services/locale.service';
+import i18n from '../../config/i18n.config';
 
 /**
  * @method result
@@ -20,7 +22,7 @@ express.response.result = async function (data) {
   }
 };
 
-express.response.success = async function (data) {
+express.response.success = function (data) {
   const res = _this(this);
   res.status(200).json(data);
 };
@@ -30,7 +32,7 @@ express.response.success = async function (data) {
  * @description Custom response success
  * @param error
  */
-express.response.error = async function (error: ErrorHandler) {
+express.response.error = function (error: ErrorHandler) {
   const res = _this(this);
   return handleError(error, res);
 };
@@ -43,11 +45,13 @@ async function handleError(error: any, res: Response) {
     error.message = getReasonPhrase(status);
   }
 
+  const msg =
+    (error.response && JSON.parse(error.response.body).error.message) ??
+    localeService.translate({ phrase: error.message, locale: res.locale }) ??
+    getReasonPhrase(status);
+
   return res.status(status).json({
-    message:
-      (error.response && JSON.parse(error.response.body).error.message) ??
-      error.message ??
-      getReasonPhrase(status),
+    message: msg,
     stack: error.stack,
     status: status,
     errors: error.error ?? error.errors,

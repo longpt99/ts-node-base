@@ -1,8 +1,7 @@
 import { Response } from 'express';
 import got from 'got';
-import { utils } from 'mocha';
 import { AppObject } from '../../common/consts';
-import { ErrorHandler } from '../../common/error';
+import { ErrorHandler } from '../../libs/error';
 import tokenUtil, { COOKIE_OPTIONS } from '../../utils/token.util';
 import userService from '../user/user.service';
 import { FacebookData } from './auth.interface';
@@ -100,17 +99,15 @@ class AuthService {
   }
 
   async logout(res: Response) {
-    await tokenUtil.clearTokens(res);
+    tokenUtil.clearTokens(res);
     return { isSuccess: true };
   }
 
   private async _signToken(params: { res: Response; payload: any }) {
-    const [{ accessToken, xsrfToken }, refreshToken] = await Promise.all([
-      tokenUtil.signToken({
-        id: params.payload.id,
-      }),
-      tokenUtil.signRefreshToken(params.payload.id),
-    ]);
+    const { accessToken, xsrfToken } = tokenUtil.signToken({
+      id: params.payload.id,
+    });
+    const refreshToken = tokenUtil.signRefreshToken(params.payload.id);
 
     params.res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
     params.res.cookie('XSRF-TOKEN', xsrfToken);

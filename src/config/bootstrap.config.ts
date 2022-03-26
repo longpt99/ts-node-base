@@ -1,4 +1,4 @@
-import registerExtensionMethod from '../common/extensions';
+import registerExtensionMethod from '../libs/extensions';
 
 export const bootstrapConfig = (): void => {
   registerExtensionMethod();

@@ -1,8 +1,8 @@
 import { NextFunction, Request } from 'express';
+import { TokenModel } from '../../libs';
+import { ErrorHandler } from '../../libs/error';
 import tokenUtil from '../../utils/token.util';
 import { AppObject } from '../consts';
-import { ErrorHandler } from '../error';
-import { TokenModel } from '../interfaces';
 
 export async function authMiddleware(
   req: Request,
@@ -33,7 +33,7 @@ export async function authMiddleware(
     }
 
     // verify token with secret key and xsrf token
-    const user = await tokenUtil.verifyToken({
+    const user = tokenUtil.verifyToken({
       accessToken: accessToken,
       xsrfToken: xsrfToken,
     });

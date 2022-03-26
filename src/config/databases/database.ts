@@ -1,10 +1,10 @@
-import { green } from 'chalk';
+import { green, red } from 'chalk';
 import { join } from 'path';
 import { createClient } from 'redis';
 import 'reflect-metadata';
 import { error, success } from 'signale';
 import { ConnectionOptions, createConnection } from 'typeorm';
-import { IServer } from '../../app';
+import { IServer } from '../../common/interfaces/app.interface';
 import APP_CONFIG from '../app.config';
 
 export const client = createClient({
@@ -103,7 +103,6 @@ export const databaseConfig = (app: IServer) => {
     synchronize: true,
     entities: [join(__dirname, '../../api/**/*.entity.{js,ts}')],
     logging: false,
-
     // connectTimeoutMS: 20000,
     // maxQueryExecutionTime: 20000,
     // logNotifications: true,
@@ -123,7 +122,7 @@ export const databaseConfig = (app: IServer) => {
       }
     })
     .catch((err) => {
-      error('Database connection error');
+      error(red('Database connection error'));
       console.log(err);
       process.exit();
     });

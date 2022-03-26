@@ -1,4 +1,7 @@
-export default function () {
+import { green } from 'chalk';
+import { success } from 'signale';
+
+export default function (): void {
   const others = [
     'SIGINT',
     'SIGUSR1',
@@ -12,14 +15,14 @@ export default function () {
 
   function exitRouter(options, exitCode) {
     if (exitCode ?? exitCode === 0) {
-      console.log(`ExitCode ${exitCode}.`);
+      success(green(`ExitCode ${exitCode}.`));
     }
     if (options.exit) process.exit();
   }
 
   function exitHandler(exitCode: number) {
-    console.log(`ExitCode ${exitCode}.`);
-    console.log('Exiting finally.');
+    success(green(`ExitCode ${exitCode}.`));
+    success(green('Exiting finally.'));
   }
 
   process.on('exit', exitHandler);

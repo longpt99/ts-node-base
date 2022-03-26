@@ -1,4 +1,4 @@
-import { ErrorHandler } from '../../common/error';
+import { ErrorHandler } from '../../libs/error';
 
 export default class AdminService {
   constructor() {}

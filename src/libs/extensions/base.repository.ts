@@ -1,7 +1,7 @@
 // import { Document, Model } from 'mongoose';
 import { Not, Repository } from 'typeorm';
-import { AppObject } from '../consts';
-import { ParamsCommonList } from '../interfaces';
+import { AppObject } from '../../common/consts';
+import { ParamsCommonList } from '../../common/interfaces';
 
 // export class MongooseRepository<TModel extends Document> {
 //   public TSchema: Model<TModel>;
@@ -49,8 +49,6 @@ import { ParamsCommonList } from '../interfaces';
 
 export class BaseRepository<T> extends Repository<T> {
   async detailByConditions(params: ParamsCommonList): Promise<T> {
-    console.log(params);
-
     if (params.overwriteConditions) {
       Object.assign(params.conditions, params.overwriteConditions);
     } else {

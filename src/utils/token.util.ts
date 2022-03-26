@@ -13,9 +13,7 @@ export class TokenUtil {
 
   async decodeToken() {}
 
-  async signToken(
-    payload: any
-  ): Promise<{ xsrfToken: string; accessToken: string }> {
+  public signToken(payload: any): { xsrfToken: string; accessToken: string } {
     const xsrfToken = StringUtil.random();
     const accessToken = sign(
       payload,
@@ -29,7 +27,7 @@ export class TokenUtil {
     };
   }
 
-  async signRefreshToken(userId: string): Promise<string> {
+  public signRefreshToken(userId: string): string {
     return sign(
       { id: userId },
       APP_CONFIG.ENV.SECURE.JWT_REFRESH_TOKEN.SECRET_KEY,
@@ -39,16 +37,16 @@ export class TokenUtil {
     );
   }
 
-  async verifyToken(params: {
+  public verifyToken(params: {
     accessToken: string;
     xsrfToken: string;
-  }): Promise<JwtPayload> {
+  }): JwtPayload {
     const privateKey =
       APP_CONFIG.ENV.SECURE.JWT_ACCESS_TOKEN.SECRET_KEY + params.xsrfToken;
     return verify(params.accessToken, privateKey) as JwtPayload;
   }
 
-  async clearTokens(res: Response): Promise<void> {
+  public clearTokens(res: Response): void {
     res.clearCookie('XSRF-TOKEN');
     res.clearCookie('refreshToken', COOKIE_OPTIONS);
   }

@@ -1,14 +1,13 @@
 import { green } from 'chalk';
 import express, { Application } from 'express';
 import { success } from 'signale';
+import { IServer } from './common/interfaces/app.interface';
 import { errorHandler } from './common/middlewares';
 import { bootstrapConfig, expressConfig, routeConfig } from './config';
 import APP_CONFIG from './config/app.config';
 import serverConfig from './config/server.config';
-
-export interface IServer {
-  start(): void;
-}
+import { createServer, Server as HttpServer } from 'http';
+import { AddressInfo } from 'net';
 
 class Server implements IServer {
   private app: Application;
@@ -22,10 +21,12 @@ class Server implements IServer {
     expressConfig(this.app);
     routeConfig(this.app);
     serverConfig();
-
     this.app.use(errorHandler);
-    this.app.listen(APP_CONFIG.ENV.APP.PORT, () => {
-      success(green(`Server is listening on ${APP_CONFIG.ENV.APP.PORT}`));
+
+    const server: HttpServer = createServer(this.app);
+    server.listen(APP_CONFIG.ENV.APP.PORT, () => {
+      const { address, port } = server.address() as AddressInfo;
+      success(green(`Server is running at ${address}:${port}`));
     });
   }
 }
