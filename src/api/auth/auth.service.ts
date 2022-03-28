@@ -1,10 +1,11 @@
 import { Response } from 'express';
 import got from 'got';
-import { AppObject } from '../../common/consts';
+import { AppConst } from '../../common/consts';
 import { ErrorHandler } from '../../libs/error';
 import tokenUtil, { COOKIE_OPTIONS } from '../../utils/token.util';
 import userService from '../user/user.service';
 import { FacebookData } from './auth.interface';
+
 class AuthService {
   constructor() {}
 
@@ -112,7 +113,7 @@ class AuthService {
     params.res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
     params.res.cookie('XSRF-TOKEN', xsrfToken);
 
-    return { accessToken: accessToken, tokenType: AppObject.TOKEN_CONFIG.TYPE };
+    return { accessToken: accessToken, tokenType: AppConst.TOKEN_TYPE };
   }
 }
 

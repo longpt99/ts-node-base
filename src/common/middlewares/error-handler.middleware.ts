@@ -8,8 +8,8 @@ export function errorHandler(
   res: Response,
   next: NextFunction
 ): void {
-  if (err instanceof ErrorHandler) {
-    return res.error(err);
-  }
-  return res.sendFile(normalize(__dirname + '/assets/html/not-found.html'));
+  // if (err instanceof ErrorHandler) {
+  return res.error(err);
+  // }
+  // return res.sendFile(normalize(__dirname + '/assets/html/not-found.html'));
 }

@@ -9,8 +9,6 @@ services:
       - '8080:8080'
     container_name: nodeserver
     hostname: nodeserver
-    # networks:
-    #   - example-net
   nginx:
     restart: always
     build:
@@ -20,6 +18,3 @@ services:
       - '80:80'
     container_name: nginx
     hostname: nginx
-# networks:
-#   example-net:
-#     external: true

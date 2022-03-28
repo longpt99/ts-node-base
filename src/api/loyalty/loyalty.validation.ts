@@ -1,11 +1,12 @@
+import { JSONSchemaType } from 'ajv';
+import { ICreateLoyalty } from './loyalty.interface';
+
 export const LoyaltyValidation = {
   create: {
     body: {
       type: 'object',
       properties: {
         point: { type: 'number' },
-        firstName: { type: 'string' },
-        lastName: { type: 'string' },
       },
       required: ['point'],
       additionalProperties: false,
@@ -15,6 +16,6 @@ export const LoyaltyValidation = {
           point: 'pointRequired',
         },
       },
-    },
+    } as JSONSchemaType<ICreateLoyalty>,
   },
 };

@@ -1,8 +1,7 @@
 import express, { Response } from 'express';
+import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { ErrorHandler } from '../error';
-import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import localeService from '../services/locale.service';
-import i18n from '../../config/i18n.config';
 
 /**
  * @method result
@@ -38,7 +37,6 @@ express.response.error = function (error: ErrorHandler) {
 };
 
 async function handleError(error: any, res: Response) {
-  console.log(error.stack);
   let status = error.status ?? StatusCodes.BAD_REQUEST;
   if (!(error instanceof ErrorHandler)) {
     status = StatusCodes.INTERNAL_SERVER_ERROR;

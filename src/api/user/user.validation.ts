@@ -1,21 +1,29 @@
+import { JSONSchemaType } from 'ajv';
+import { RegisterAccount } from './user.interface';
+
 export const UserValidation = {
-  createUser: {
+  register: {
     body: {
       type: 'object',
       properties: {
-        email: { type: 'string' },
-        firstName: { type: 'string' },
-        lastName: { type: 'string' },
+        email: {
+          type: 'string',
+          minLength: 5,
+          errorMessage: {
+            type: 'mustString',
+            minLength: 'min length',
+          },
+        },
+        password: { type: 'string' },
       },
-      required: ['email', 'firstName', 'lastName'],
+      required: ['email', 'password'],
       additionalProperties: false,
       errorMessage: {
-        type: 'requiredObject', // will not replace internal "type" error for the property "foo"
         required: {
-          firstName: 'should have an integer property "foo"',
-          lastName: 'should have a string property "bar"',
+          email: 'emailIsRequired',
+          password: 'passwordIsRequired',
         },
       },
-    },
+    } as JSONSchemaType<RegisterAccount>,
   },
 };

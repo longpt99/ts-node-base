@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { IUser } from './user.interface';
 import userService from './user.service';
 
 class UserController {
@@ -10,7 +9,7 @@ class UserController {
     return res.result(userService.create(req.body));
   }
 
-  async list(req: Request, res: Response): Promise<IUser[]> {
+  async list(req: Request, res: Response): Promise<any[]> {
     return res.result(userService.list());
   }
 
@@ -18,15 +17,15 @@ class UserController {
     return res.result(userService.getById());
   }
 
-  async updateById(req: Request, res: Response): Promise<IUser> {
+  async updateById(req: Request, res: Response): Promise<any> {
     return res.result(userService.getById());
   }
 
-  async deleteById(req: Request, res: Response): Promise<IUser[]> {
+  async deleteById(req: Request, res: Response): Promise<any[]> {
     return res.result(userService.list());
   }
 
-  async getProfile(req: Request, res: Response): Promise<IUser[]> {
+  async getProfile(req: Request, res: Response): Promise<any[]> {
     return res.result(userService.getProfile(req.user.id));
   }
   //#endregion Admin section

@@ -1,5 +1,6 @@
-import { expressRouter, router } from '../../common';
+import { expressRouter, router, validate } from '../../common';
 import { authMiddleware } from '../../common/middlewares/auth.middleware';
+import { UserValidation } from '../user/user.validation';
 import authController from './auth.controller';
 
 //#region Admin section
@@ -13,7 +14,10 @@ router.get('/auth/facebook', [authController.loginFacebook]);
 
 router.get('/auth/google', [authController.loginGoogle]);
 
-router.post('/auth/register', [authController.register]);
+router.post('/auth/register', [
+  validate(UserValidation.register, ['body']),
+  authController.register,
+]);
 
 router.post('/auth/logout', [authMiddleware, authController.logout]);
 //#endregion User section

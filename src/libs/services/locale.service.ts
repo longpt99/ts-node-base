@@ -7,7 +7,7 @@ export class LocaleService {
     this.i18nProvider = i18n;
   }
 
-  getCurrentLocale(): string {
+  public getCurrentLocale(): string {
     return this.i18nProvider.getLocale();
   }
 
@@ -15,7 +15,7 @@ export class LocaleService {
    *
    * @returns string[] The list of available locale codes
    */
-  getLocales(): string[] {
+  public getLocales(): string[] {
     return this.i18nProvider.getLocales();
   }
 
@@ -23,7 +23,7 @@ export class LocaleService {
    *
    * @param locale The locale to set. Must be from the list of available locales.
    */
-  setLocale(locale: string): void {
+  public setLocale(locale: string): void {
     if (this.getLocales().indexOf(locale) !== -1) {
       return this.i18nProvider.setLocale(locale);
     }
@@ -35,7 +35,7 @@ export class LocaleService {
    * @param args Extra parameters
    * @returns {string} Translated string
    */
-  translate(text: string | TranslateOptions): string {
+  public translate(text: string | TranslateOptions): string {
     return this.i18nProvider.__(text);
   }
 
@@ -45,7 +45,7 @@ export class LocaleService {
    * @param count The plural number
    * @returns {string} Translated string
    */
-  translatePlurals(phrase, count): string {
+  public translatePlurals(phrase, count): string {
     return this.i18nProvider.__n(phrase, count);
   }
 }

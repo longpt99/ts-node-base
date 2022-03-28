@@ -1,4 +1,4 @@
-import { expressRouter, router } from '../../common';
+import { expressRouter, router, validate } from '../../common';
 import loyaltyController from './loyalty.controller';
 import { LoyaltyValidation } from './loyalty.validation';
 
@@ -6,7 +6,7 @@ import { LoyaltyValidation } from './loyalty.validation';
 router.get('/admin/loyalties', [loyaltyController.create]);
 
 router.post('/admin/loyalties', [
-  // validate(LoyaltyValidation.create, ['s']),
+  validate(LoyaltyValidation.create, ['body', 'params', 'query']),
   loyaltyController.create,
 ]);
 

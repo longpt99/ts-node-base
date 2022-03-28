@@ -11,7 +11,9 @@ export class AppObject {
     UNVERIFIED: 'unverified',
   };
 
-  static readonly TOKEN_CONFIG = {
-    TYPE: 'Bearer',
+  static readonly REQUEST_OBJECT = {
+    BODY: 'body',
+    PARAMS: 'params',
+    QUERY: 'query',
   };
 }

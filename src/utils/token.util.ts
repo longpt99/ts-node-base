@@ -37,13 +37,11 @@ export class TokenUtil {
     );
   }
 
-  public verifyToken(params: {
-    accessToken: string;
-    xsrfToken: string;
-  }): JwtPayload {
-    const privateKey =
-      APP_CONFIG.ENV.SECURE.JWT_ACCESS_TOKEN.SECRET_KEY + params.xsrfToken;
-    return verify(params.accessToken, privateKey) as JwtPayload;
+  public verifyToken(token: string): JwtPayload {
+    return verify(
+      token,
+      APP_CONFIG.ENV.SECURE.JWT_ACCESS_TOKEN.SECRET_KEY
+    ) as JwtPayload;
   }
 
   public clearTokens(res: Response): void {
