@@ -1,7 +1,6 @@
 import express, { Response } from 'express';
 import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { ErrorHandler } from '../error';
-import localeService from '../services/locale.service';
 
 /**
  * @method result
@@ -13,10 +12,8 @@ express.response.result = async function (data) {
 
   try {
     const result = await data;
-    return res.status(200).json(result);
+    return res.status(StatusCodes.OK).json({ data: result });
   } catch (error) {
-    console.log(error.status);
-
     return handleError(error, res);
   }
 };
@@ -38,6 +35,7 @@ express.response.error = function (error: ErrorHandler) {
 
 async function handleError(error: any, res: Response) {
   let status = error.status ?? StatusCodes.BAD_REQUEST;
+
   if (!(error instanceof ErrorHandler)) {
     status = StatusCodes.INTERNAL_SERVER_ERROR;
     error.message = getReasonPhrase(status);
@@ -45,7 +43,7 @@ async function handleError(error: any, res: Response) {
 
   const msg =
     (error.response && JSON.parse(error.response.body).error.message) ??
-    localeService.translate({ phrase: error.message, locale: res.locale }) ??
+    res.__(error.message) ??
     getReasonPhrase(status);
 
   return res.status(status).json({

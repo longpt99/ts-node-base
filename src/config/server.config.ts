@@ -14,6 +14,8 @@ export default function (): void {
   });
 
   function exitRouter(options, exitCode) {
+    console.log(exitCode);
+
     if (exitCode ?? exitCode === 0) {
       success(green(`ExitCode ${exitCode}.`));
     }

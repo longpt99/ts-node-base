@@ -1,34 +1,36 @@
 import { Request, Response } from 'express';
 import { LoyaltyModel } from './loyalty.interface';
-import loyaltyService from './loyalty.service';
+import { LoyaltyService } from './loyalty.service';
 
-class LoyaltyController {
-  constructor() {}
+export class LoyaltyController {
+  private loyaltyService: LoyaltyService;
+
+  constructor() {
+    this.loyaltyService = new LoyaltyService();
+  }
 
   //#region Admin section
   async create(req: Request, res: Response): Promise<LoyaltyModel> {
-    return res.result(loyaltyService.create(req.body));
+    return res.result(this.loyaltyService.create(req.body));
   }
 
   async list(req: Request, res: Response): Promise<LoyaltyModel[]> {
-    return res.result(loyaltyService.list());
+    return res.result(this.loyaltyService.list());
   }
 
   async getById(req: Request, res: Response) {
-    return res.result(loyaltyService.getById());
+    return res.result(this.loyaltyService.getById());
   }
 
   async updateById(req: Request, res: Response): Promise<LoyaltyModel> {
-    return res.result(loyaltyService.getById());
+    return res.result(this.loyaltyService.getById());
   }
 
   async deleteById(req: Request, res: Response): Promise<LoyaltyModel[]> {
-    return res.result(loyaltyService.list());
+    return res.result(this.loyaltyService.list());
   }
   //#endregion Admin section
 
   //#region User section
   //#end region User section
 }
-
-export default new LoyaltyController();

@@ -1,13 +1,13 @@
 import { green } from 'chalk';
 import express, { Application } from 'express';
+import { createServer, Server as HttpServer } from 'http';
+import { AddressInfo } from 'net';
 import { success } from 'signale';
 import { IServer } from './common/interfaces/app.interface';
 import { errorHandler } from './common/middlewares';
 import { bootstrapConfig, expressConfig, routeConfig } from './config';
 import APP_CONFIG from './config/app.config';
 import serverConfig from './config/server.config';
-import { createServer, Server as HttpServer } from 'http';
-import { AddressInfo } from 'net';
 
 class Server implements IServer {
   private app: Application;

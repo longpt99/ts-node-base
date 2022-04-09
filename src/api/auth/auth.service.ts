@@ -1,36 +1,86 @@
 import { Response } from 'express';
 import got from 'got';
-import { AppConst } from '../../common/consts';
+import { StatusCodes } from 'http-status-codes';
+import { AppConst, AppObject } from '../../common/consts';
+import { TokenModel } from '../../libs';
 import { ErrorHandler } from '../../libs/error';
-import tokenUtil, { COOKIE_OPTIONS } from '../../utils/token.util';
-import userService from '../user/user.service';
-import { FacebookData } from './auth.interface';
+import { CacheManagerUtil } from '../../utils/cache-manager.util';
+import { TokenUtil } from '../../utils/token.util';
+import { UserModel } from '../user/user.interface';
+import { UserService } from '../user/user.service';
+import { FacebookData, LoginParams, SignTokenResponse } from './auth.interface';
 
-class AuthService {
-  constructor() {}
+export class AuthService {
+  private static instance: AuthService;
+  private userService: UserService;
+  private tokenUtil: TokenUtil;
 
-  async login(params: { body: any; res: Response }) {
-    const userFound = await userService.getUserByConditions({
-      conditions: { email: params.body.email },
-      select: ['id', 'password', 'status'],
-    });
+  constructor() {
+    if (AuthService.instance) {
+      return AuthService.instance;
+    }
 
-    if (!(await userFound.comparePassword(params.body.password))) {
-      throw new ErrorHandler({ message: 'wrongPassword' });
+    this.userService = new UserService();
+    this.tokenUtil = new TokenUtil();
+    AuthService.instance = this;
+  }
+
+  async login(params: {
+    body: LoginParams;
+    res: Response;
+  }): Promise<SignTokenResponse> {
+    let userFound!: UserModel;
+
+    switch (params.body.grantType) {
+      case AppObject.GRANT_TYPES.FACEBOOK: {
+        const facebookData: FacebookData = await got(
+          'https://graph.facebook.com/me',
+          {
+            method: 'GET',
+            searchParams: {
+              fields: [
+                'id',
+                'email',
+                'first_name',
+                'last_name',
+                'gender',
+                'birthday',
+              ].join(','),
+              access_token: params.body.token,
+            },
+          }
+        ).json();
+        userFound = await this.userService.getUserByFacebookId(facebookData);
+        break;
+      }
+      case AppObject.GRANT_TYPES.GOOGLE: {
+        break;
+      }
+      default: {
+        userFound = await this.userService.getUserByConditions({
+          conditions: { email: params.body.username },
+          select: ['id', 'password', 'status'],
+        });
+
+        if (!(await userFound.comparePassword(params.body.password))) {
+          throw new ErrorHandler({ message: 'wrongPassword' });
+        }
+        break;
+      }
     }
 
     return this._signToken({ res: params.res, payload: { id: userFound.id } });
   }
 
   async register(params) {
-    const userCreated = await userService.create(params);
+    const userCreated = await this.userService.create(params);
     return userCreated;
   }
 
   async adminLogin(params) {}
 
   async loginFacebook(params) {
-    const { access_token } = await got(
+    const data = await got(
       'https://graph.facebook.com/v13.0/oauth/access_token',
       {
         method: 'GET',
@@ -43,78 +93,116 @@ class AuthService {
       }
     ).json();
 
-    const facebookData: FacebookData = await got(
-      'https://graph.facebook.com/me',
-      {
-        method: 'GET',
-        searchParams: {
-          fields: [
-            'id',
-            'email',
-            'first_name',
-            'last_name',
-            'gender',
-            'birthday',
-          ].join(','),
-          access_token: access_token,
-        },
-      }
-    ).json();
+    return data;
 
-    const userFound = await userService.getUserByFacebookId(facebookData);
-    return facebookData;
+    // console.log('Data fb: ', t);
+
+    // const facebookData: FacebookData = await got(
+    //   'https://graph.facebook.com/me',
+    //   {
+    //     method: 'GET',
+    //     searchParams: {
+    //       fields: [
+    //         'id',
+    //         'email',
+    //         'first_name',
+    //         'last_name',
+    //         'gender',
+    //         'birthday',
+    //       ].join(','),
+    //       access_token: t.access_token,
+    //     },
+    //   }
+    // ).json();
+
+    // // const userFound = await this.userService.getUserByFacebookId(facebookData);
+    // return facebookData;
   }
 
   async loginGoogle(params) {
-    const { access_token } = await got('https://oauth2.googleapis.com/token', {
+    const data: any = await got('https://oauth2.googleapis.com/token', {
       method: 'POST',
       searchParams: {
         client_id:
-          '873379095237-sq8rsuemift9rl903frqmn82gr2q4l22.apps.googleusercontent.com',
-        client_secret: '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',
+          '820557249269-70q12aui903ueojbceujgdc7tameru42.apps.googleusercontent.com',
+        client_secret: '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',
         redirect_uri: 'http://localhost:8080/api/v1/auth/google',
         grant_type: 'authorization_code',
         code: params.code,
       },
     }).json();
+    console.log('GG data: ', data);
+
     const googleData: any = await got(
       'https://www.googleapis.com/oauth2/v2/userinfo',
       {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${data.access_token}`,
         },
       }
     ).json();
 
-    const t = await got(
-      `https://people.googleapis.com/v1/people/${googleData.id}`,
-      {
-        method: 'GET',
-        searchParams: { personFields: ['birthdays', 'genders'].join(',') },
-        headers: { Authorization: `Bearer ${access_token}` },
-      }
-    );
+    try {
+      const googleData2: any = await got(
+        `https://oauth2.googleapis.com/tokeninfo?id_token=${data.id_token}`,
+        {
+          method: 'POST',
+          // headers: {
+          //   Authorization: `Bearer ${data.access_token}`,
+          // },
+        }
+      ).json();
 
-    return googleData;
+      // const t = await got(
+      //   `https://people.googleapis.com/v1/people/${googleData.id}`,
+      //   {
+      //     method: 'GET',
+      //     searchParams: { personFields: ['birthdays', 'genders'].join(',') },
+      //     headers: { Authorization: `Bearer ${data.access_token}` },
+      //   }
+      // );
+
+      return googleData2;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  async logout(res: Response) {
-    tokenUtil.clearTokens(res);
-    return { isSuccess: true };
+  async refreshToken(params: {
+    res: Response;
+    refreshToken: string;
+  }): Promise<SignTokenResponse> {
+    if (!params.refreshToken) {
+      throw new ErrorHandler({
+        message: 'Unauthorized',
+        status: StatusCodes.UNAUTHORIZED,
+      });
+    }
+
+    try {
+      const payload = this.tokenUtil.verifyRefreshToken(params.refreshToken);
+      return this._signToken({ payload: { id: payload.id }, res: params.res });
+    } catch (error) {
+      throw new ErrorHandler({
+        message: 'unauthorized',
+        status: StatusCodes.UNAUTHORIZED,
+      });
+    }
   }
 
-  private async _signToken(params: { res: Response; payload: any }) {
-    const { accessToken, xsrfToken } = tokenUtil.signToken({
+  async logout(res: Response, user: TokenModel): Promise<void> {
+    this.tokenUtil.clearTokens(res, user.accessToken.split('.')[2]);
+  }
+
+  private _signToken(params: {
+    res: Response;
+    payload: any;
+  }): SignTokenResponse {
+    const accessToken = this.tokenUtil.signToken({
       id: params.payload.id,
     });
-    const refreshToken = tokenUtil.signRefreshToken(params.payload.id);
-
-    params.res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
-    params.res.cookie('XSRF-TOKEN', xsrfToken);
-
+    this.tokenUtil.signRefreshToken(params.payload.id, params.res);
     return { accessToken: accessToken, tokenType: AppConst.TOKEN_TYPE };
   }
 }
-
-export default new AuthService();

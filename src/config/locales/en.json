@@ -1,9 +1,11 @@
 {
-  "userNotFound": "User not found",
-  "user.userNotFound": "user.userNotFound",
-  "Internal Server Error": "Internal Server Error",
-  "emailExists": "emailExists",
-  "validateError": "validateError",
-  "emailIsRequired": "Email is required",
-  "passwordIsRequired": "Password is required"
+	"userNotFound": "User not found",
+	"user.userNotFound": "user.userNotFound",
+	"Internal Server Error": "Internal Server Error",
+	"emailExists": "emailExists",
+	"validateError": "validateError",
+	"emailIsRequired": "Email is required",
+	"passwordIsRequired": "Password is required",
+	"Unauthorized": "Unauthorized",
+	"unauthorized": "unauthorized"
 }

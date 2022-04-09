@@ -4,19 +4,27 @@ import { ParamsCommonList } from '../../common/interfaces';
 import { ErrorHandler } from '../../libs/error';
 import { FacebookData } from '../auth/auth.interface';
 import { User } from './user.entity';
+import { UserModel } from './user.interface';
 import { UserRepository } from './user.repository';
 
-class UserService {
+export class UserService {
+  private static instance: UserService;
   private userRepository: UserRepository;
+
   constructor() {
+    if (UserService.instance) {
+      return UserService.instance;
+    }
+
     this.userRepository = getCustomRepository(UserRepository);
+    UserService.instance = this;
   }
 
-  async detailByConditions(params: ParamsCommonList): Promise<User> {
+  async detailByConditions(params: ParamsCommonList): Promise<UserModel> {
     return this.userRepository.detailByConditions(params);
   }
 
-  async getUserByConditions(params: ParamsCommonList): Promise<User> {
+  async getUserByConditions(params: ParamsCommonList): Promise<UserModel> {
     const userFound = await this.detailByConditions(params);
 
     if (!userFound) {
@@ -34,13 +42,21 @@ class UserService {
     return userFound;
   }
 
-  async getUserByFacebookId(data: FacebookData): Promise<User> {
-    const userFound = await this.detailByConditions({
+  async getUserByFacebookId(data: FacebookData): Promise<UserModel> {
+    let userFound = await this.detailByConditions({
       conditions: { facebookId: data.id },
+      select: ['id'],
     });
 
     if (!userFound) {
-      console.log(123);
+      userFound = await this.userRepository.save(
+        this.userRepository.create({
+          facebookId: data.id,
+          firstName: data.first_name,
+          lastName: data.last_name,
+          status: AppObject.COMMON_STATUS.ACTIVE,
+        })
+      );
     }
 
     return userFound;
@@ -70,5 +86,3 @@ class UserService {
     return this.getUserByConditions({ conditions: { id: userId } });
   }
 }
-
-export default new UserService();

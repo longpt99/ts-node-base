@@ -33,7 +33,7 @@ export class User {
   @Column({ type: 'text', nullable: true })
   gender: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   email: string;
 
   @Column({ type: 'boolean', default: true })
@@ -65,12 +65,20 @@ export class User {
       APP_CONFIG.ENV.SECURE.PASSWORD_SECRET_KEY
     );
     if (this.firstName || this.lastName) {
-      this.firstName = `${this.firstName
-        .charAt(0)
-        .toUpperCase()} ${this.firstName.slice(1).toLowerCase()}`;
-      this.lastName = `${this.lastName.charAt(0).toUpperCase()} ${this.lastName
-        .slice(1)
-        .toLowerCase()}`;
+      this.firstName = this.firstName
+        .split(' ')
+        .map(
+          (item) => item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()
+        )
+        .join(' ');
+
+      this.lastName = this.lastName
+        .split(' ')
+        .map(
+          (item) => item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()
+        )
+        .join(' ');
+
       this.fullName = `${this.firstName} ${this.lastName}`;
     }
   }

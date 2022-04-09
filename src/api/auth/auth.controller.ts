@@ -1,36 +1,48 @@
 import { Request, Response } from 'express';
-import authService from './auth.service';
+import { SignTokenResponse } from './auth.interface';
+import { AuthService } from './auth.service';
 
-class AuthController {
-  constructor() {}
+export class AuthController {
+  private authService: AuthService;
+
+  constructor() {
+    this.authService = new AuthService();
+  }
 
   //#region Admin section
   async adminLogin(req: Request, res: Response) {
-    return res.result(authService.adminLogin(req.body));
+    return res.result(this.authService.adminLogin(req.body));
   }
   //#endregion Admin section
 
   //#region User section
-  async login(req: Request, res: Response) {
-    return res.result(authService.login({ body: req.body, res: res }));
+  async login(req: Request, res: Response): Promise<SignTokenResponse> {
+    return res.result(this.authService.login({ body: req.body, res: res }));
+  }
+
+  async refreshToken(req: Request, res: Response): Promise<SignTokenResponse> {
+    return res.result(
+      this.authService.refreshToken({
+        res: res,
+        refreshToken: req.signedCookies.refreshToken,
+      })
+    );
   }
 
   async loginFacebook(req: Request, res: Response) {
-    return res.result(authService.loginFacebook(req.query));
+    return res.result(this.authService.loginFacebook(req.query));
   }
 
   async loginGoogle(req: Request, res: Response) {
-    return res.result(authService.loginGoogle(req.query));
+    return res.result(this.authService.loginGoogle(req.query));
   }
 
   async register(req: Request, res: Response) {
-    return res.result(authService.register(req.body));
+    return res.result(this.authService.register(req.body));
   }
 
   async logout(req: Request, res: Response) {
-    return res.result(authService.logout(res));
+    return res.result(this.authService.logout(res, req.user));
   }
   //#endregion User section
 }
-
-export default new AuthController();

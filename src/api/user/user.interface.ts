@@ -14,17 +14,9 @@
 //   comparePassword: (password: string) => Promise<boolean>;
 // }
 
-export interface UserModel {
-  dialCode: string;
-  phoneNumber: string;
-  firstName: string;
-  lastName: string;
-  gender: string;
-  dateOfBirth: string;
-  password: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { User } from './user.entity';
+
+export type UserModel = User;
 
 export interface RegisterAccount {
   email: string;

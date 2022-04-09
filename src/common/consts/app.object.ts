@@ -16,4 +16,10 @@ export class AppObject {
     PARAMS: 'params',
     QUERY: 'query',
   };
+
+  static readonly GRANT_TYPES = {
+    PASSWORD: 'password',
+    FACEBOOK: 'facebook',
+    GOOGLE: 'google',
+  };
 }

@@ -1,58 +1,55 @@
 import { client } from '../config/databases/database';
-import { RedisClientType, RedisScripts } from 'redis';
 
 export class CacheManagerUtil {
-  constructor() {}
+  private static instance: CacheManagerUtil;
 
-  async getClient() {
-    return client;
+  constructor() {
+    if (CacheManagerUtil.instance) {
+      return CacheManagerUtil.instance;
+    }
+
+    CacheManagerUtil.instance = this;
   }
 
-  public setKey = async (key: string, value: string, exp?: number) => {
-    const redisClient = await this.getClient();
-    return exp
-      ? redisClient.setEx(key, exp, value)
-      : redisClient.set(key, value);
-  };
+  async setKey(params: {
+    key: string;
+    value: string;
+    exp?: number;
+  }): Promise<string | null> {
+    return params.exp
+      ? client.setEx(params.key, params.exp, params.value)
+      : client.set(params.key, params.value);
+  }
 
-  public delKey = async (key: string) => {
-    const redisClient = await this.getClient();
-    return redisClient.del(key);
-  };
+  async delKey(key: string): Promise<number> {
+    return client.del(key);
+  }
 
-  public getKey = async (key: string) => {
-    const redisClient = await this.getClient();
-    return redisClient.get(key);
-  };
+  async getKey(key: string): Promise<string | null> {
+    return client.get(key);
+  }
 
-  public hashSet = async (key: string, field: string, value: string) => {
-    const redisClient = await this.getClient();
-    return redisClient.hSet(key, field, value);
-  };
+  async hashSet(key: string, field: string, value: string): Promise<number> {
+    return client.hSet(key, field, value);
+  }
 
-  public hashGet = async (key: string, field: string) => {
-    const redisClient = await this.getClient();
-    return redisClient.hGet(key, field);
-  };
+  async hashGet(key: string, field: string): Promise<string | undefined> {
+    return client.hGet(key, field);
+  }
 
-  public hashGetAll = async (key: string) => {
-    const redisClient = await this.getClient();
-    return redisClient.hGetAll(key);
-  };
+  async hashGetAll(key: string): Promise<{ [x: string]: string }> {
+    return client.hGetAll(key);
+  }
 
-  public hashDel = async (key: string, field: string) => {
-    const redisClient = await this.getClient();
-    return redisClient.hDel(key, field);
-  };
+  async hashDel(key: string, field: string): Promise<number> {
+    return client.hDel(key, field);
+  }
 
-  public push = async <T>(queue: string, dataArr: T[]) => {
-    const redisClient = await this.getClient();
+  async push<T>(queue: string, dataArr: T[]): Promise<number> {
     const msgArr: string[] = [];
     for (let i = 0; i < dataArr.length; i++) {
       msgArr.push(JSON.stringify(dataArr[i]));
     }
-    return redisClient.rPush(queue, msgArr);
-  };
+    return client.rPush(queue, msgArr);
+  }
 }
-
-export default new CacheManagerUtil();

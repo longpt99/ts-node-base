@@ -6,26 +6,39 @@ export const ENV: AppEnvironment = {
     PORT: 8080,
   },
   SECURE: {
+    COOKIE_SECRET_KEY: 'local-cookie#123456a@A',
     PASSWORD_SECRET_KEY: 'passwordsecretkey#123456a@A',
-    JWT: {
+    JWT_ACCESS_TOKEN: {
       EXPIRED_TIME: 30 * 60,
       SECRET_KEY: 'local-access-token#123456a@A',
     },
+    JWT_REFRESH_TOKEN: {
+      EXPIRED_TIME: 30 * 60,
+      SECRET_KEY: 'local-refresh-token#123456a@A',
+    },
   },
   DATABASE: {
-    MONGODB: {
-      USERNAME: '',
-      PASSWORD: '',
-      HOST: 'localhost',
-      PORT: 27017,
-      NAME: 'ts-node-base',
-    },
     POSTGRES: {
       USERNAME: 'postgres',
-      PASSWORD: 'postgres',
-      HOST: 'localhost',
+      PASSWORD: 'postgres@123',
+      HOST: 'db.lbzallnzxudagdmrjtru.supabase.co',
       PORT: 5432,
       NAME: 'postgres',
+      // USERNAME: 'postgres',
+      // PASSWORD: 'postgres',
+      // HOST: 'localhost',
+      // PORT: 5432,
+      // NAME: 'postgres',
+    },
+    REDIS: {
+      HOST: 'redis-12778.c252.ap-southeast-1-1.ec2.cloud.redislabs.com',
+      PORT: 12778,
+      PASSWORD: 'mjqobYRnaOkgaa3HS9d4SrNiDsKrlbNO',
+      DATABASE: 0,
+      // HOST: 'localhost',
+      // PORT: 6379,
+      // PASSWORD: '',
+      // DATABASE: 0,
     },
   },
   OAUTH2: {

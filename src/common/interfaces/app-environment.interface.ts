@@ -16,7 +16,7 @@ export interface AppEnvironment {
     };
   };
   DATABASE: {
-    MONGODB: {
+    MONGODB?: {
       USERNAME: string;
       PASSWORD: string;
       HOST: string;

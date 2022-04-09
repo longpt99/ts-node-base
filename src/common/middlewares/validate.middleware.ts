@@ -2,7 +2,6 @@ import Ajv, { SchemaObject } from 'ajv';
 import ajvErrors from 'ajv-errors';
 import { NextFunction, Request, Response } from 'express';
 import { ErrorHandler } from '../../libs/error';
-import localeService from '../../libs/services/locale.service';
 
 type EnumObj = ('body' | 'params' | 'query')[];
 
@@ -17,12 +16,7 @@ export function validate(dto: SchemaObject, objects: EnumObj = ['body']) {
         const validateErrors = validate.errors ?? [];
         const errors: string[] = [];
         for (let i = 0, len = validateErrors.length; i < len; i++) {
-          errors.push(
-            localeService.translate({
-              phrase: validateErrors[i].message as string,
-              locale: res.locale,
-            }) as string
-          );
+          errors.push(res.__(validateErrors[i].message as string));
         }
         next(
           new ErrorHandler({
