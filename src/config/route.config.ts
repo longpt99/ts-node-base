@@ -1,10 +1,9 @@
-import { green } from 'chalk';
 import { Application } from 'express';
 import { sync } from 'glob';
 import { join } from 'path';
-import { success } from 'signale';
 import swaggerUi from 'swagger-ui-express';
 import { AppConst } from '../common/consts';
+import { logger } from '../utils';
 import swaggerConfig from './swagger.config';
 
 export const routeConfig = async (app: Application): Promise<void> => {
@@ -20,12 +19,10 @@ export const routeConfig = async (app: Application): Promise<void> => {
     routes.map((path) => {
       const route = require(path).default;
       for (const layer of route.stack) {
-        success(
-          green(
-            `[Router] ${layer.route.stack[0].method.toUpperCase()}: "/${
-              AppConst.API_PREFIX
-            }/${AppConst.API_VERSION}${layer.route.path}" has been registered!`
-          )
+        logger.info(
+          `[Router] ${layer.route.stack[0].method.toUpperCase()}: "/${
+            AppConst.API_PREFIX
+          }/${AppConst.API_VERSION}${layer.route.path}" has been registered!`
         );
       }
       return route;

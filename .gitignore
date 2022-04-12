@@ -3,3 +3,4 @@ dist
 newrelic_agent.log
 .vscode
 coverage
+logs

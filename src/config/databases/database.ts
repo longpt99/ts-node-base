@@ -1,10 +1,9 @@
-import { green, red } from 'chalk';
 import { join } from 'path';
 import { createClient } from 'redis';
 import 'reflect-metadata';
-import { error, success } from 'signale';
 import { ConnectionOptions, createConnection } from 'typeorm';
 import { IServer } from '../../common/interfaces/app.interface';
+import { logger } from '../../utils';
 import APP_CONFIG from '../app.config';
 
 export const client = createClient({
@@ -86,7 +85,7 @@ async function connectRedis() {
   });
 
   client.on('connect', (err) =>
-    success(green(`[Database][Redis] Database has connected successfully!`))
+    logger.info(`[Database][Redis] Database has connected successfully!`)
   );
 
   await client.connect();
@@ -110,19 +109,21 @@ export const databaseConfig = (app: IServer) => {
   createConnection(databaseOptions)
     .then((connection) => {
       if (connection.isConnected) {
-        success(
-          green(
-            `[Database][Postgres] "${APP_CONFIG.ENV.DATABASE.POSTGRES.NAME}" has connected successfully!`
-          )
+        logger.info(
+          `[Database][${databaseOptions.type}] "${APP_CONFIG.ENV.DATABASE.POSTGRES.NAME}" has connected successfully!`
         );
         connectRedis();
         app.start();
       } else {
-        error('Database has lost connection...');
+        logger.error(
+          `[Database][${databaseOptions.type}] Database has lost connection.`
+        );
       }
     })
     .catch((err) => {
-      error(red('Database connection error'));
+      logger.error(
+        `[Database][${databaseOptions.type}] Database connection error.`
+      );
       console.log(err);
       process.exit();
     });
