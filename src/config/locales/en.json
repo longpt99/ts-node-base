@@ -7,5 +7,6 @@
 	"emailIsRequired": "Email is required",
 	"passwordIsRequired": "Password is required",
 	"Unauthorized": "Unauthorized",
-	"unauthorized": "unauthorized"
+	"unauthorized": "unauthorized",
+	"Not Found": "Not Found"
 }

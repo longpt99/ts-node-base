@@ -33,12 +33,12 @@ express.response.error = function (error: ErrorHandler) {
   return handleError(error, res);
 };
 
-async function handleError(error: any, res: Response) {
-  let status = error.status ?? StatusCodes.BAD_REQUEST;
-
+async function handleError(error: any = {}, res: Response) {
+  const status = error.status ?? res.statusCode ?? StatusCodes.BAD_REQUEST;
   if (!(error instanceof ErrorHandler)) {
-    status = StatusCodes.INTERNAL_SERVER_ERROR;
-    error.message = getReasonPhrase(status);
+    error.message = getReasonPhrase(
+      status ?? StatusCodes.INTERNAL_SERVER_ERROR
+    );
   }
 
   const msg =

@@ -1,5 +1,4 @@
-import { green } from 'chalk';
-import { success } from 'signale';
+import { logger } from '../utils';
 
 export default function (): void {
   const others = [
@@ -14,17 +13,15 @@ export default function (): void {
   });
 
   function exitRouter(options, exitCode) {
-    console.log(exitCode);
-
     if (exitCode ?? exitCode === 0) {
-      success(green(`ExitCode ${exitCode}.`));
+      logger.info(`[System] ExitCode ${exitCode}.`);
     }
     if (options.exit) process.exit();
   }
 
   function exitHandler(exitCode: number) {
-    success(green(`ExitCode ${exitCode}.`));
-    success(green('Exiting finally.'));
+    logger.info(`[System] ExitCode ${exitCode}.`);
+    logger.info('[System] Exiting finally.');
   }
 
   process.on('exit', exitHandler);

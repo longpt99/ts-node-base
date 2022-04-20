@@ -35,7 +35,7 @@ export default createLogger({
         format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         format.printf((info) => {
           const level = info.level.toUpperCase();
-          let msg = `[${info.timestamp}][${level}]: ${info.message.slice(1)}`;
+          let msg = `[${info.timestamp}][${level}]: ${info.message}`;
 
           if (Object.keys(info.metadata).length > 0) {
             msg += ` ${JSON.stringify(info.metadata)}`;

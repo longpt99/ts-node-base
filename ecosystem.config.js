@@ -5,7 +5,7 @@ module.exports = {
       script: './dist/index.js',
       ignore_watch: ['node_modules'],
       exec_mode: 'cluster_mode',
-      instances: '2',
+      instances: 'all',
       watch: true,
       autorestart: true, //Default, Auto reset when app crashes
       env: { NODE_ENV: 'local' },
@@ -14,24 +14,24 @@ module.exports = {
     },
   ],
 
-  deploy: {
-    production: {
-      user: 'SSH_USERNAME',
-      host: 'SSH_HOSTMACHINE',
-      ref: 'origin/master',
-      repo: 'GIT_REPOSITORY',
-      path: 'DESTINATION_PATH',
-      'post-deploy':
-        'yarn install && pm2 startOrRestart ecosystem.config.js --env production',
-    },
-    staging: {
-      user: 'SSH_USERNAME',
-      host: 'SSH_HOSTMACHINE',
-      ref: 'origin/master',
-      repo: 'GIT_REPOSITORY',
-      path: 'DESTINATION_PATH',
-      'post-deploy':
-        'yarn install && pm2 startOrRestart ecosystem.config.js --env staging',
-    },
-  },
+  // deploy: {
+  //   production: {
+  //     user: 'SSH_USERNAME',
+  //     host: 'SSH_HOSTMACHINE',
+  //     ref: 'origin/master',
+  //     repo: 'GIT_REPOSITORY',
+  //     path: 'DESTINATION_PATH',
+  //     'post-deploy':
+  //       'yarn install && pm2 startOrRestart ecosystem.config.js --env production',
+  //   },
+  //   staging: {
+  //     user: 'SSH_USERNAME',
+  //     host: 'SSH_HOSTMACHINE',
+  //     ref: 'origin/master',
+  //     repo: 'GIT_REPOSITORY',
+  //     path: 'DESTINATION_PATH',
+  //     'post-deploy':
+  //       'yarn install && pm2 startOrRestart ecosystem.config.js --env staging',
+  //   },
+  // },
 };

@@ -4,7 +4,6 @@ import { StatusCodes } from 'http-status-codes';
 import { AppConst, AppObject } from '../../common/consts';
 import { TokenModel } from '../../libs';
 import { ErrorHandler } from '../../libs/error';
-import { CacheManagerUtil } from '../../utils/cache-manager.util';
 import { TokenUtil } from '../../utils/token.util';
 import { UserModel } from '../user/user.interface';
 import { UserService } from '../user/user.service';

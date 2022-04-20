@@ -8,9 +8,9 @@ declare global {
     }
 
     interface Response {
-      success;
-      error;
-      result;
+      success: any;
+      error: any;
+      result: any;
     }
   }
 }
