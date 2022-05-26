@@ -1,4 +1,4 @@
-import { Application } from 'express';
+import { Application, Request, Response } from 'express';
 import { sync } from 'glob';
 import { join } from 'path';
 import swaggerUi from 'swagger-ui-express';
@@ -14,6 +14,8 @@ export const routeConfig = async (app: Application): Promise<void> => {
   );
 
   const routes = sync(join(__dirname, '../api/**/**.route.{js,ts}'));
+  console.log(routes);
+
   app.use(
     `/${AppConst.API_PREFIX}/${AppConst.API_VERSION}`,
     routes.map((path) => {
@@ -28,4 +30,8 @@ export const routeConfig = async (app: Application): Promise<void> => {
       return route;
     })
   );
+
+  app.use((req: Request, res: Response) => {
+    return res.status(404).error();
+  });
 };

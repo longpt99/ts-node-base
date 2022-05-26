@@ -45,11 +45,11 @@ gulp.task('test:coverage', (done) => {
 
 gulp.task('build:base', async (done) => {
   return shell.task([
-    'gulp test:coverage',
-    'rimraf ./dist',
-    // 'tsc --build',
-    'gulp compileTS',
-    'gulp copyNonTS',
+    // 'gulp test:coverage',
+    // 'rimraf ./dist',
+    'tsc --build',
+    // 'gulp compileTS',
+    // 'gulp copyNonTS',
   ])(done);
 });
 

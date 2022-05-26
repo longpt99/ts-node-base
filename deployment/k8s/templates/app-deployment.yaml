@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: {{ .Values.appserver.name }}-deployment
+  # namespace
+
+spec:
+  replicas: {{ .Values.appserver.replicas  }}
+
+  selector:
+    matchLabels:
+      server: appserver
+
+  template:
+    metadata:
+      labels:
+        server: appserver
+    spec:
+      containers:
+        - name: appserver
+          image: {{ .Values.appserver.image.name }}:{{ .Values.appserver.image.tag}}
+          imagePullPolicy: Never #Use docker local
+          ports:
+            - containerPort: {{ .Values.appserver.image.exposedPort }}
+          env:
+            - name: NODE_ENV
+              value: {{ .Values.appserver.env.NODE_ENV}}
+        - name: appserver
+          image: {{ .Values.appserver.image.name }}:{{ .Values.appserver.image.tag}}
+          imagePullPolicy: Never #Use docker local
+          ports:
+            - containerPort: {{ .Values.appserver.image.exposedPort }}
+          env:
+            - name: NODE_ENV
+              value: {{ .Values.appserver.env.NODE_ENV}}

@@ -1,6 +1,5 @@
 import { join } from 'path';
 import { createClient } from 'redis';
-import 'reflect-metadata';
 import { ConnectionOptions, createConnection } from 'typeorm';
 import { IServer } from '../../common/interfaces/app.interface';
 import { logger } from '../../utils';
