@@ -10,7 +10,6 @@ spec:
   selector:
     matchLabels:
       server: {{ .Values.nginx.name}}
-
   template:
     metadata:
       labels:

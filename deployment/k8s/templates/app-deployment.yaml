@@ -10,15 +10,15 @@ spec:
 
   selector:
     matchLabels:
-      server: appserver
+      server: {{ .Values.appserver.name }}
 
   template:
     metadata:
       labels:
-        server: appserver
+        server: {{ .Values.appserver.name }}
     spec:
       containers:
-        - name: appserver
+        - name: {{ .Values.appserver.name }}
           image: {{ .Values.appserver.image.name }}:{{ .Values.appserver.image.tag}}
           imagePullPolicy: Never #Use docker local
           ports:
@@ -26,11 +26,8 @@ spec:
           env:
             - name: NODE_ENV
               value: {{ .Values.appserver.env.NODE_ENV}}
-        - name: appserver
-          image: {{ .Values.appserver.image.name }}:{{ .Values.appserver.image.tag}}
-          imagePullPolicy: Never #Use docker local
-          ports:
-            - containerPort: {{ .Values.appserver.image.exposedPort }}
-          env:
-            - name: NODE_ENV
-              value: {{ .Values.appserver.env.NODE_ENV}}
+          readinessProbe:
+            httpGet: 
+              port: {{ .Values.appserver.image.exposedPort }}
+              path: {{ .Values.appserver.image.healthCheck.ping }}
+            failureThreshold: {{ .Values.appserver.image.healthCheck.failureTimes }}

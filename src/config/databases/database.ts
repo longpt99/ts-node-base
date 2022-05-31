@@ -79,7 +79,7 @@ export const client = createClient({
 
 async function connectRedis() {
   client.on('error', (err) => {
-    console.log('Redis Client Error', err);
+    logger.error('Redis Client Error', err);
     process.exit();
   });
 
@@ -123,7 +123,7 @@ export const databaseConfig = (app: IServer) => {
       logger.error(
         `[Database][${databaseOptions.type}] Database connection error.`
       );
-      console.log(err);
+      logger.error(err);
       process.exit();
     });
 };

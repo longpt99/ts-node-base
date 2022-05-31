@@ -5,10 +5,8 @@ metadata:
 
 spec:
   type: {{ .Values.appserver.service.type }}
-
   ports:
     - port: 80
       targetPort: {{ .Values.appserver.image.exposedPort }}
-
   selector:
     server: {{ .Values.appserver.name}}

@@ -14,8 +14,6 @@ export const routeConfig = async (app: Application): Promise<void> => {
   );
 
   const routes = sync(join(__dirname, '../api/**/**.route.{js,ts}'));
-  console.log(routes);
-
   app.use(
     `/${AppConst.API_PREFIX}/${AppConst.API_VERSION}`,
     routes.map((path) => {
