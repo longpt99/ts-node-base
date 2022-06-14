@@ -17,7 +17,7 @@ export class CacheManagerUtil {
     exp?: number;
   }): Promise<string | null> {
     return params.exp
-      ? client.setEx(params.key, params.exp, params.value)
+      ? client.setex(params.key, params.exp, params.value)
       : client.set(params.key, params.value);
   }
 
@@ -26,7 +26,9 @@ export class CacheManagerUtil {
   }
 
   async getKey(key: string): Promise<string | null> {
-    return client.get(key);
+    return client.get(key, (err, result) => {
+      return result;
+    });
   }
 
   async hashSet(key: string, field: string, value: string): Promise<number> {

@@ -1,10 +1,11 @@
 FROM node:lts-alpine
+LABEL author="longpt99.it@gmail.com"
 
 RUN mkdir -p /home/app
 WORKDIR /home/app
-COPY package.json yarn.lock ecosystem.config.js ./
+COPY package*.json ecosystem.config.js ./
 
-RUN yarn install && npm install pm2 -g
+RUN npm install pm2 -g && npm install --production && npm cache clean --force
 COPY ./dist ./dist
 EXPOSE 8080
 

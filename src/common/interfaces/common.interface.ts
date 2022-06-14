@@ -24,11 +24,7 @@ export interface ListParams {
 }
 
 export interface ParamsCommonList {
-  conditions: {
-    [key: string]: string;
-  };
-  overwriteConditions?: {
-    [key: string]: string;
-  };
+  conditions: any;
+  overwriteConditions?: any;
   select?: string[];
 }
