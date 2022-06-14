@@ -1,2 +1,11 @@
 node_modules
 yarn-error.log
+README.md
+src/config/environments
+.dockerignore
+Dockerfile
+docker-compose.yml
+logs
+coverage
+.docker
+deploy

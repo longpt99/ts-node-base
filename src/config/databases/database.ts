@@ -6,12 +6,10 @@ import { logger } from '../../utils';
 import APP_CONFIG from '../app.config';
 
 export const client = createClient({
-  socket: {
-    host: APP_CONFIG.ENV.DATABASE.REDIS.HOST,
-    port: APP_CONFIG.ENV.DATABASE.REDIS.PORT,
-  },
+  host: APP_CONFIG.ENV.DATABASE.REDIS.HOST,
+  port: APP_CONFIG.ENV.DATABASE.REDIS.PORT,
   password: APP_CONFIG.ENV.DATABASE.REDIS.PASSWORD,
-  database: APP_CONFIG.ENV.DATABASE.REDIS.DATABASE,
+  db: APP_CONFIG.ENV.DATABASE.REDIS.DATABASE,
 });
 
 // function connectMongoDB() {
@@ -86,8 +84,6 @@ async function connectRedis() {
   client.on('connect', (err) =>
     logger.info(`[Database][Redis] Database has connected successfully!`)
   );
-
-  await client.connect();
 }
 
 export const databaseConfig = (app: IServer) => {
