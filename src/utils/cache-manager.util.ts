@@ -11,7 +11,7 @@ export class CacheManagerUtil {
     CacheManagerUtil.instance = this;
   }
 
-  async(params: {
+  async setKey(params: {
     key: string;
     value: string;
     exp?: number;

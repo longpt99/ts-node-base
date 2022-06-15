@@ -1,7 +1,6 @@
-import express, { Application, Request, Response } from 'express';
-import { createServer, Server as HttpServer } from 'http';
-import { AddressInfo } from 'net';
 import 'newrelic';
+import express, { Application } from 'express';
+import { createServer, Server as HttpServer } from 'http';
 import { NetworkInterfaceInfo, networkInterfaces } from 'os';
 import { IServer } from './common/interfaces/app.interface';
 import { bootstrapConfig, expressConfig, routeConfig } from './config';
@@ -24,16 +23,13 @@ class Server implements IServer {
 
     const server: HttpServer = createServer(this.app);
     server.listen(APP_CONFIG.ENV.APP.PORT, () => {
-      const { port } = server.address() as AddressInfo;
       const ip = (Object.values(networkInterfaces()) as any)
         .flat()
-        .filter(
+        .find(
           (item: NetworkInterfaceInfo) =>
             !item.internal && item.family === 'IPv4'
-        )
-        .find(Boolean).address;
-
-      logger.info(`[System] Server is running at ${ip}:${port}`);
+        ).address;
+      logger.info(`[System] Server is running at ${ip}:${server.address()}`);
     });
   }
 }

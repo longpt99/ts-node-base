@@ -1,15 +1,17 @@
-import CryptoJS from 'crypto-js';
+import AES from 'crypto-js/aes';
+import encUtf8 from 'crypto-js/enc-utf8';
+import lib from 'crypto-js/lib-typedarrays';
 
 export class StringUtil {
   static encrypt(data: string, secretKey: string): string {
-    return CryptoJS.AES.encrypt(data, secretKey).toString();
+    return AES.encrypt(data, secretKey).toString();
   }
 
   static decrypt(data: string, secretKey: string): string {
-    return CryptoJS.AES.decrypt(data, secretKey).toString(CryptoJS.enc.Utf8);
+    return AES.decrypt(data, secretKey).toString(encUtf8);
   }
 
   static random(): string {
-    return CryptoJS.lib.WordArray.random(128 / 8).toString();
+    return lib.random(128 / 8).toString();
   }
 }
