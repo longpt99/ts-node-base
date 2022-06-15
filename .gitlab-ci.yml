@@ -1,0 +1,8 @@
+variables:
+  IMAGE_NAME:
+  IMAGE_TAG:
+
+stages:
+  - test
+  - build
+  - deploy
