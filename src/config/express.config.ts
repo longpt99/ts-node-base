@@ -19,7 +19,7 @@ export const expressConfig = (app: Application): void => {
   app.use(i18n.init);
   app.use(cookieParser(APP_CONFIG.ENV.SECURE.COOKIE_SECRET_KEY));
 
-  app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
     if (err instanceof ErrorHandler) {
       return res.error(err);
     }

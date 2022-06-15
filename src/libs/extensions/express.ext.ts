@@ -33,7 +33,7 @@ express.response.error = function (error: ErrorHandler) {
   return handleError(error, res);
 };
 
-async function handleError(error: any = {}, res: Response) {
+async function handleError(error, res: Response) {
   const status = error.status ?? res.statusCode ?? StatusCodes.BAD_REQUEST;
   if (!(error instanceof ErrorHandler)) {
     error.message = getReasonPhrase(
@@ -55,7 +55,7 @@ async function handleError(error: any = {}, res: Response) {
   });
 }
 
-function _this(val: express.Response) {
+function _this(val: Response) {
   return val;
 }
 
