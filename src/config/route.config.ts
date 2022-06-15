@@ -13,7 +13,7 @@ export const routeConfig = async (app: Application): Promise<void> => {
     swaggerUi.setup(swaggerConfig, { explorer: true })
   );
 
-  const routes = sync(join(__dirname, '../api/**/**.route.{js,ts}'));
+  const routes = sync(join(__dirname, '../modules/**/**.route.{js,ts}'));
   app.use(
     `/${AppConst.API_PREFIX}/${AppConst.API_VERSION}`,
     routes.map((path) => {

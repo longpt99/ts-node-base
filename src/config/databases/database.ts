@@ -39,54 +39,18 @@ export const client = createClient({
 //   });
 // }
 
-// function connectPostgresqlDb(app: IServer) {
-//   const databaseOptions: ConnectionOptions = {
-//     type: 'postgres',
-//     host: APP_CONFIG.ENV.DATABASE.POSTGRES.HOST,
-//     port: APP_CONFIG.ENV.DATABASE.POSTGRES.PORT,
-//     username: APP_CONFIG.ENV.DATABASE.POSTGRES.USERNAME,
-//     password: APP_CONFIG.ENV.DATABASE.POSTGRES.PASSWORD,
-//     database: APP_CONFIG.ENV.DATABASE.POSTGRES.NAME,
-//     synchronize: true,
-//     entities: [join(__dirname, '../../api/**/*.entity.{js,ts}')],
-//     logging: false,
-
-//     // connectTimeoutMS: 20000,
-//     // maxQueryExecutionTime: 20000,
-//     // logNotifications: true,
-//   };
-//   createConnection(databaseOptions)
-//     .then((connection) => {
-//       if (connection.isConnected) {
-//         success(
-//           green(
-//             `[Database] "${APP_CONFIG.ENV.DATABASE.POSTGRES.NAME}" has connected successfully!`
-//           )
-//         );
-//         app.start();
-//       } else {
-//         error('Database has lost connection...');
-//       }
-//     })
-//     .catch((err) => {
-//       error('Database connection error');
-//       console.log(err);
-//       process.exit(1);
-//     });
-// }
-
 async function connectRedis() {
   client.on('error', (err) => {
     logger.error('Redis Client Error', err);
     process.exit();
   });
 
-  client.on('connect', (err) =>
+  client.on('connect', () =>
     logger.info(`[Database][Redis] Database has connected successfully!`)
   );
 }
 
-export const databaseConfig = (app: IServer) => {
+export const databaseConfig = (app: IServer): void => {
   const databaseOptions: ConnectionOptions = {
     type: 'postgres',
     host: APP_CONFIG.ENV.DATABASE.POSTGRES.HOST,
@@ -95,7 +59,7 @@ export const databaseConfig = (app: IServer) => {
     password: APP_CONFIG.ENV.DATABASE.POSTGRES.PASSWORD,
     database: APP_CONFIG.ENV.DATABASE.POSTGRES.NAME,
     synchronize: true,
-    entities: [join(__dirname, '../../api/**/*.entity.{js,ts}')],
+    entities: [join(__dirname, '../../modules/**/*.entity.{js,ts}')],
     logging: false,
     // connectTimeoutMS: 20000,
     // maxQueryExecutionTime: 20000,

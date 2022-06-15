@@ -1,12 +1,13 @@
 FROM node:lts-alpine
-LABEL author="longpt99.it@gmail.com"
 
-RUN mkdir -p /home/app
+LABEL author="Long Phuong (longpt99.it@gmail.com)"
+
 WORKDIR /home/app
+
 COPY package*.json ecosystem.config.js ./
 
 RUN npm install pm2 -g && npm install --production && npm cache clean --force
-COPY ./dist ./dist
-EXPOSE 8080
 
-ENTRYPOINT [ "pm2-runtime","start","ecosystem.config.js" ]
+COPY ./dist ./dist
+
+CMD ["pm2-runtime","start","ecosystem.config.js"]
