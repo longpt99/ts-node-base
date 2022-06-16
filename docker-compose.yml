@@ -9,6 +9,11 @@ services:
       - '8080:8080'
     container_name: nodeserver
     hostname: nodeserver
+    depends_on:
+      - redis
+    networks:
+      - redis-network
+
   nginx:
     restart: always
     build:
@@ -18,3 +23,21 @@ services:
       - '80:80'
     container_name: nginx
     hostname: nginx
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - .docker/data/redis:/data
+    restart: unless-stopped
+    networks:
+      - redis-network
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+#Docker Networks
+networks:
+  redis-network:
+    driver: bridge
