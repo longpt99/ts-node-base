@@ -29,7 +29,9 @@ class Server implements IServer {
           (item: NetworkInterfaceInfo) =>
             !item.internal && item.family === 'IPv4'
         ).address;
-      logger.info(`[System] Server is running at ${ip}:${server.address()}`);
+      logger.info(
+        `[System] Server is running at ${ip}:${APP_CONFIG.ENV.APP.PORT}`
+      );
     });
   }
 }

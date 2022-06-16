@@ -1,27 +1,26 @@
 const gulp = require('gulp');
 const shell = require('gulp-shell');
-const { argv } = require('yargs');
 const ts = require('gulp-typescript');
 const uglify = require('gulp-uglify');
-const htmlmin = require('gulp-htmlmin');
+// const htmlmin = require('gulp-htmlmin');
 
 const tsConfig = ts.createProject('tsconfig.json');
 
-function compileHTML() {
-  return gulp
-    .src('src/assets/html/*.html')
-    .pipe(
-      htmlmin({
-        collapseWhitespace: true,
-        removeComments: true,
-        removeAttributeQuotes: true,
-        removeEmptyElements: true,
-      })
-    )
-    .pipe(gulp.dest('dist/assets/html'));
-}
+// function compileHTML() {
+//   return gulp
+//     .src('src/assets/html/*.html')
+//     .pipe(
+//       htmlmin({
+//         collapseWhitespace: true,
+//         removeComments: true,
+//         removeAttributeQuotes: true,
+//         removeEmptyElements: true,
+//       })
+//     )
+//     .pipe(gulp.dest('dist/assets/html'));
+// }
 
-gulp.task('copyNonTS', gulp.parallel(compileHTML));
+// gulp.task('copyNonTS', gulp.parallel(compileHTML));
 
 gulp.task('compileTS', async () => {
   return gulp
@@ -32,15 +31,13 @@ gulp.task('compileTS', async () => {
 });
 
 gulp.task('test', (done) => {
-  return shell.task([
-    `${
-      argv.isCoverage && 'nyc'
-    } mocha -r ts-node/register src/api/**/*.spec.ts`,
-  ])(done);
+  return shell.task(['mocha -r ts-node/register src/modules/**/*.spec.ts'])(
+    done
+  );
 });
 
 gulp.task('test:coverage', (done) => {
-  return shell.task([`rimraf coverage`, `gulp test --isCoverage`])(done);
+  return shell.task(['rimraf coverage', 'nyc gulp test'])(done);
 });
 
 gulp.task('build:base', async (done) => {
