@@ -10,27 +10,27 @@ export class UserController {
 
   //#region Admin section
   async create(req: Request, res: Response): Promise<any> {
-    return res.result(this.userService.create(req.body));
+    return res.handler(this.userService.create(req.body));
   }
 
   async list(req: Request, res: Response): Promise<any[]> {
-    return res.result(this.userService.list());
+    return res.handler(this.userService.list());
   }
 
   async getById(req: Request, res: Response) {
-    return res.result(this.userService.getById());
+    return res.handler(this.userService.getById());
   }
 
   async updateById(req: Request, res: Response): Promise<any> {
-    return res.result(this.userService.getById());
+    return res.handler(this.userService.getById());
   }
 
   async deleteById(req: Request, res: Response): Promise<any[]> {
-    return res.result(this.userService.list());
+    return res.handler(this.userService.list());
   }
 
   async getProfile(req: Request, res: Response): Promise<any[]> {
-    return res.result(this.userService.getProfile(req.user.id));
+    return res.handler(this.userService.getProfile(req.user.id));
   }
   //#endregion Admin section
 

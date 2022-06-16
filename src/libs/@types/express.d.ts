@@ -1,5 +1,5 @@
 import 'express';
-import { TokenModel } from '../../interfaces';
+import { TokenModel } from '../interfaces';
 
 declare global {
   namespace Express {
@@ -10,7 +10,7 @@ declare global {
     interface Response {
       success: any;
       error: any;
-      result: any;
+      handler: any;
     }
   }
 }

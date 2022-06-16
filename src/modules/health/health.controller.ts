@@ -10,6 +10,6 @@ export class HealthController {
 
   //#region Admin section
   async ping(req: Request, res: Response) {
-    return res.result(this.healthService.ping());
+    return res.handler(this.healthService.ping());
   }
 }

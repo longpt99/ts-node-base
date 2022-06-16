@@ -24,20 +24,18 @@ const tsConfig = ts.createProject('tsconfig.json');
 
 gulp.task('compileTS', async () => {
   return gulp
-    .src(['src/**/*.ts', '!src/**/*.spec.ts'])
+    .src(['src/**/*.ts'])
     .pipe(tsConfig())
     .pipe(uglify())
     .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('test', (done) => {
-  return shell.task(['mocha -r ts-node/register src/modules/**/*.spec.ts'])(
-    done
-  );
+  return shell.task(['jest'])(done);
 });
 
 gulp.task('test:coverage', (done) => {
-  return shell.task(['rimraf coverage', 'nyc gulp test'])(done);
+  return shell.task(['rimraf coverage', 'gulp test --coverage'])(done);
 });
 
 gulp.task('build:base', async (done) => {

@@ -11,23 +11,23 @@ export class LoyaltyController {
 
   //#region Admin section
   async create(req: Request, res: Response): Promise<LoyaltyModel> {
-    return res.result(this.loyaltyService.create(req.body));
+    return res.handler(this.loyaltyService.create(req.body));
   }
 
   async list(req: Request, res: Response): Promise<LoyaltyModel[]> {
-    return res.result(this.loyaltyService.list());
+    return res.handler(this.loyaltyService.list());
   }
 
   async getById(req: Request, res: Response) {
-    return res.result(this.loyaltyService.getById());
+    return res.handler(this.loyaltyService.getById());
   }
 
   async updateById(req: Request, res: Response): Promise<LoyaltyModel> {
-    return res.result(this.loyaltyService.getById());
+    return res.handler(this.loyaltyService.getById());
   }
 
   async deleteById(req: Request, res: Response): Promise<LoyaltyModel[]> {
-    return res.result(this.loyaltyService.list());
+    return res.handler(this.loyaltyService.list());
   }
   //#endregion Admin section
 

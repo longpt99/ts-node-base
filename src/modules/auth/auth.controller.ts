@@ -11,17 +11,17 @@ export class AuthController {
 
   //#region Admin section
   async adminLogin(req: Request, res: Response) {
-    return res.result(this.authService.adminLogin(req.body));
+    return res.handler(this.authService.adminLogin(req.body));
   }
   //#endregion Admin section
 
   //#region User section
   async login(req: Request, res: Response): Promise<SignTokenResponse> {
-    return res.result(this.authService.login({ body: req.body, res: res }));
+    return res.handler(this.authService.login({ body: req.body, res: res }));
   }
 
   async refreshToken(req: Request, res: Response): Promise<SignTokenResponse> {
-    return res.result(
+    return res.handler(
       this.authService.refreshToken({
         res: res,
         refreshToken: req.signedCookies.refreshToken,
@@ -30,19 +30,19 @@ export class AuthController {
   }
 
   async loginFacebook(req: Request, res: Response) {
-    return res.result(this.authService.loginFacebook(req.query));
+    return res.handler(this.authService.loginFacebook(req.query));
   }
 
   async loginGoogle(req: Request, res: Response) {
-    return res.result(this.authService.loginGoogle(req.query));
+    return res.handler(this.authService.loginGoogle(req.query));
   }
 
   async register(req: Request, res: Response) {
-    return res.result(this.authService.register(req.body));
+    return res.handler(this.authService.register(req.body));
   }
 
   async logout(req: Request, res: Response) {
-    return res.result(this.authService.logout(res, req.user));
+    return res.handler(this.authService.logout(res, req.user));
   }
   //#endregion User section
 }
