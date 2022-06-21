@@ -15,7 +15,7 @@ export class LoyaltyService {
     LoyaltyService.instance = this;
   }
 
-  async create(params: any) {
+  async create(params) {
     return this.loyaltyRepository.save(
       this.loyaltyRepository.create(params as LoyaltyModel)
     );

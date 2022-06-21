@@ -1,5 +1,5 @@
 import 'express';
-import { TokenModel } from '../interfaces';
+import { TokenModel } from '../../interfaces';
 
 declare global {
   namespace Express {

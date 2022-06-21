@@ -7,7 +7,7 @@ import { ErrorHandler } from '../error';
  * @description Custom response
  * @param data
  */
-express.response.result = async function (data) {
+express.response.handler = async function (data) {
   const res = _this(this);
 
   try {
