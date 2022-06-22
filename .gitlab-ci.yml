@@ -1,20 +1,21 @@
 # image: node:16.15.1-alpine
 
 stages:
-  # - test
   - release
+  # - test
   # - deploy
 
-test:
-  stage: test
-  script:
-    - npm install
-    - npm run test:coverage
+# test:
+#   stage: test
+#   script:
+#     - npm install
+#     - npm run test:coverage
 
 release-image:
-  image: docker:19
-  services:
-    - docker:stable-dind
+  image: node:16.15.1-alpine
+  # image: docker:19
+  # services:
+  #   - docker:stable-dind
   stage: release
   before_script:
     - if [ "$CI_COMMIT_BRANCH" == "develop" ]; then ENV="production"; fi
