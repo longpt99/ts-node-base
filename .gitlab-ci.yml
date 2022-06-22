@@ -20,12 +20,12 @@ test:
 release-image:
   stage: release
   rules:
-    - if:  "$CI_COMMIT_BRANCH" == "develop"
+    - if: $CI_COMMIT_BRANCH == "develop"
       variables:
-        ENV: "local"
-    - if:  "$CI_COMMIT_BRANCH" == "master"
+        ENV: 'local'
+    - if: $CI_COMMIT_BRANCH == "master"
       variables:
-        ENV: "production"
+        ENV: 'production'
   script:
     - npm run build:$ENV
     - docker pull $CI_REGISTRY_IMAGE:latest
