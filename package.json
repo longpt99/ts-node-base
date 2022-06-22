@@ -8,6 +8,7 @@
   "scripts": {
     "start:local": "cross-env NODE_ENV=local ts-node-dev --clear --inspect --watch 'src/**/*.ts' src/index.ts",
     "build:local": "gulp build:local",
+    "build:production": "gulp build:production",
     "test": "gulp test",
     "test:coverage": "gulp test:coverage",
     "prettier:format": "prettier --config .prettierrc src/**/*.ts --write",

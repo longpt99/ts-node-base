@@ -43,7 +43,7 @@ gulp.task('test', (done) => {
 });
 
 gulp.task('test:coverage', (done) => {
-  return shell.task(['rimraf coverage', 'gulp test --coverage'])(done);
+  return shell.task(['rimraf coverage', 'jest --coverage'])(done);
 });
 
 gulp.task('build:base', (done) => {
