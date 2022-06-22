@@ -1,10 +1,11 @@
-image: node:16.15.1-alpine
+image: docker:19
 
 stages:
   - test
   - release
 
 before_script:
+  - apk --update add nodejs npm
   - npm install
 
 test:
