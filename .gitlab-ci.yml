@@ -5,11 +5,11 @@ stages:
   # - test
   # - deploy
 
-test:
-  stage: test
-  script:
-    - npm install
-    - npm run test:coverage
+# test:
+#   stage: test
+#   script:
+#     - npm install
+#     - npm run test:coverage
 
 release-image:
   image: docker:19
