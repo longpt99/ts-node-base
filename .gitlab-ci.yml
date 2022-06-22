@@ -1,12 +1,12 @@
 image: node:16.15.1-alpine
 
+ before_script:
+  - npm install
+  
 stages:
   - test
   - release
-  # - deploy
 
- before_script:
-  - npm install
 
 test:
   stage: test
