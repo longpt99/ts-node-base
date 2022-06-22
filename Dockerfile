@@ -6,7 +6,10 @@ WORKDIR /home/app
 
 COPY package*.json ecosystem.config.js ./
 
-RUN  npm install pm2 --location=global && npm install ci --production --ignore-scripts && npm cache clean --force
+RUN npm install pm2 --location=global && \ 
+    npm set-script prepare "" && \ 
+    npm install ci --production && \ 
+    npm cache clean --force
 
 COPY ./dist ./dist
 

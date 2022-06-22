@@ -5,39 +5,31 @@ stages:
   # - test
   # - deploy
 
-# test:
-#   stage: test
-#   script:
-#     - npm install
-#     - npm run test:coverage
+test:
+  stage: test
+  script:
+    - npm install
+    - npm run test:coverage
 
 release-image:
-  image: node:16.15.1-alpine
-  # image: docker:19
-  # services:
-  #   - docker:stable-dind
+  image: docker:19
+  services:
+    - docker:stable-dind
   stage: release
   before_script:
     - if [ "$CI_COMMIT_BRANCH" == "develop" ]; then ENV="production"; fi
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then ENV="production"; fi
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - apk add --update nodejs
   script:
     # Init app
     - npm install
-    - npm run build:$ENV
-
     # Testing
     - npm run test:coverage
 
     # Docker build
+    - npm run build:$ENV
     - docker pull $CI_REGISTRY_IMAGE:latest
     - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE:latest
-# deploy:
-#   stage: deploy
-#   only:
-#     - master
-#   script:
-#     - docker pull $CONTAINER_RELEASE_IMAGE
-#     - docker run -d -p 3000:3000 $CONTAINER_RELEASE_IMAGE
