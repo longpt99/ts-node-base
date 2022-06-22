@@ -3,13 +3,13 @@ image: docker:19
 services:
   - docker:stable-dind
 
+before_script:
+  - apk add nodejs npm
+  - npm install
+
 stages:
   - test
   - release
-
-before_script:
-  - apk add --update npm
-  - npm install
 
 test:
   stage: test
