@@ -48,7 +48,6 @@ gulp.task('test:coverage', (done) => {
 
 gulp.task('build:base', (done) => {
   return gulp.series(
-    'test:coverage',
     'compileTS'
     // 'gulp copyNonTS',
   )(done);
