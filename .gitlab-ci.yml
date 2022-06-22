@@ -20,7 +20,7 @@ test:
 release-image:
   stage: release
   rules:
-    - if [ "$CI_COMMIT_BRANCH" == "develop" ]; then ENV="production"; fi
+    - if [ "$CI_COMMIT_BRANCH" == "develop" ]; then ENV="local"; fi
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then ENV="production"; fi
   script:
     - npm run build:$ENV
