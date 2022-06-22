@@ -1,10 +1,11 @@
+image: node:16.15.1-alpine
+
 stages:
   - test
   - release
   # - deploy
 
 test:
-  image: node:16.15.1-alpine
   stage: test
   script:
     - npm install
@@ -16,9 +17,9 @@ release-image:
     - docker:stable-dind
   stage: release
   before_script:
-    - docker version
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
+    - npm run build:production
     - docker pull $CI_REGISTRY_IMAGE:latest
     - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
