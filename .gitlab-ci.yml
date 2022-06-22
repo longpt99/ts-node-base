@@ -4,6 +4,7 @@ stages:
   # - deploy
 
 test:
+  image: node:16.15.1-alpine
   stage: test
   script:
     - npm install
