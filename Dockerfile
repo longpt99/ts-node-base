@@ -2,6 +2,8 @@ FROM node:lts-alpine
 
 LABEL author="Long Phuong (longpt99.it@gmail.com)"
 
+RUN mkdir -p /home/app
+
 WORKDIR /home/app
 
 COPY package*.json ecosystem.config.js ./
