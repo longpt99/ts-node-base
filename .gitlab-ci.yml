@@ -46,5 +46,3 @@ deploy:
   # environment:
   #   name: production
   #   url: http://35.239.123.116
-  # only:
-  #   - master
