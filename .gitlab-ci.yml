@@ -1,17 +1,11 @@
-image: docker:19
-
-services:
-  - docker:stable-dind
-
 stages:
   - build
   - deploy
 
-before_script:
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - apk --update add nodejs npm
-
 build:
+  image: docker:19
+  services:
+    - docker:stable-dind
   stage: build
   rules:
     - if: $CI_COMMIT_BRANCH == "develop"
@@ -20,6 +14,9 @@ build:
     - if: $CI_COMMIT_BRANCH == "master"
       variables:
         ENV: 'production'
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - apk --update add nodejs npm
   script:
     # Install app
     - npm install
