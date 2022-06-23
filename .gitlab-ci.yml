@@ -4,22 +4,15 @@ services:
   - docker:stable-dind
 
 stages:
-  - test
-  - release
+  - build
   - deploy
 
 before_script:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - apk --update add nodejs npm
-  - npm install
 
-test:
-  stage: test
-  script:
-    - npm run test:coverage
-
-release-image:
-  stage: release
+build:
+  stage: build
   rules:
     - if: $CI_COMMIT_BRANCH == "develop"
       variables:
@@ -28,6 +21,13 @@ release-image:
       variables:
         ENV: 'production'
   script:
+    # Install app
+    - npm install
+
+    # Testing
+    - npm run test:coverage
+
+    # Building
     - npm run build:$ENV
     - docker pull $CI_REGISTRY_IMAGE:latest
     - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
@@ -41,7 +41,7 @@ deploy:
   #   - deployment
   script:
     - chmod og= $ID_RSA
-    - apk update && apk add openssh-client
+    - apk update && apk add openssh-client docker
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f my-app || true"
