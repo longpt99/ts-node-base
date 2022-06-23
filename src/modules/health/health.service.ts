@@ -10,6 +10,6 @@ export class HealthService {
   }
 
   async ping() {
-    return { message: 'Pong! 🐱‍👤' };
+    return { message: 'Ping! 🐱‍👤' };
   }
 }
