@@ -9,10 +9,8 @@ import { ErrorHandler } from '../error';
  */
 express.response.handler = async function (data) {
   const res = _this(this);
-
   try {
-    const result = await data;
-    return res.status(StatusCodes.OK).json({ data: result });
+    return res.status(StatusCodes.OK).json({ data: await data });
   } catch (error) {
     return handleError(error, res);
   }
@@ -30,11 +28,12 @@ express.response.success = function (data) {
  */
 express.response.error = function (error: ErrorHandler) {
   const res = _this(this);
-  return handleError(error, res);
+  return handleError(error ?? {}, res);
 };
 
-async function handleError(error: any = {}, res: Response) {
+async function handleError(error, res: Response) {
   const status = error.status ?? res.statusCode ?? StatusCodes.BAD_REQUEST;
+
   if (!(error instanceof ErrorHandler)) {
     error.message = getReasonPhrase(
       status ?? StatusCodes.INTERNAL_SERVER_ERROR
