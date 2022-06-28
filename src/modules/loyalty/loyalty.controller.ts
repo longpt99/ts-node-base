@@ -1,12 +1,28 @@
 import { Request, Response } from 'express';
+import { router } from '../../common';
 import { LoyaltyModel } from './loyalty.interface';
 import { LoyaltyService } from './loyalty.service';
 
-export class LoyaltyController {
+export default class LoyaltyController {
   private loyaltyService: LoyaltyService;
+  private readonly adminPath = '/admin/loyalties';
+  private readonly userPath = '/loyalty';
+  private readonly router = router;
 
   constructor() {
+    this._initializeRoutes();
     this.loyaltyService = new LoyaltyService();
+  }
+
+  private _initializeRoutes() {
+    //#region Admin section
+    this.router.get(`${this.adminPath}`, [this.create]);
+    this.router.post(`${this.adminPath}`, [this.create]);
+    this.router.patch(`${this.adminPath}/:id`, [this.create]);
+    this.router.delete(`${this.adminPath}/:id`, [this.create]);
+
+    //#region User section
+    this.router.get(this.userPath, [this.list]);
   }
 
   //#region Admin section

@@ -1,7 +1,7 @@
 import { expressRouter, router, validate } from '../../common';
 import { authMiddleware } from '../../common/middlewares/auth.middleware';
 import { UserValidation } from '../user/user.validation';
-import { AuthController } from './auth.controller';
+import { AuthController } from './auth.controllers';
 
 const authController = new AuthController();
 
