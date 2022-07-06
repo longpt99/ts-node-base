@@ -30,6 +30,7 @@ export const routeConfig = async (app: Application): Promise<void> => {
       return expressRouter;
     })()
   );
+
   app.use((_req: Request, res: Response) => {
     return res.status(404).error();
   });
