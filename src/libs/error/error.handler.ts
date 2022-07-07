@@ -1,7 +1,8 @@
 export class ErrorHandler extends Error {
-  private status?: number;
-  private code?: string;
-  private errors?: any;
+  status?: number;
+  code?: string;
+  errors?: any;
+
   constructor(params: {
     message: string;
     status?: number;

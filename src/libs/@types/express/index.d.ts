@@ -1,4 +1,4 @@
-import { TokenModel } from '../interfaces';
+import { TokenModel } from '../../interfaces';
 
 declare module 'express' {
   interface Request {
