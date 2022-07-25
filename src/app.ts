@@ -6,6 +6,7 @@ import { IServer } from './common/interfaces/app.interface';
 import { bootstrapConfig, expressConfig, routeConfig } from './config';
 import APP_CONFIG from './config/app.config';
 import { logger } from './utils';
+import serverConfig from './config/server.config';
 
 export default class Server implements IServer {
   private app: Application;
@@ -15,12 +16,13 @@ export default class Server implements IServer {
   }
 
   public start() {
+    const server: HttpServer = createServer(this.app);
+
     bootstrapConfig();
     expressConfig(this.app);
     routeConfig(this.app);
-    // serverConfig();
+    serverConfig(server);
 
-    const server: HttpServer = createServer(this.app);
     server.listen(APP_CONFIG.ENV.APP.PORT, () => {
       const ip = (Object.values(networkInterfaces()) as any)
         .flat()

@@ -1,23 +1,24 @@
 import { Request, Response } from 'express';
 import { router } from '../../common';
+import { ErrorHandler } from '../../libs/error';
 import { LoyaltyModel } from './loyalty.interface';
 import { LoyaltyService } from './loyalty.service';
 
 export default class LoyaltyController {
-  private loyaltyService: LoyaltyService;
+  private readonly loyaltyService = new LoyaltyService();
+
   private readonly adminPath = '/admin/loyalties';
   private readonly userPath = '/loyalty';
   private readonly router = router;
 
   constructor() {
     this._initializeRoutes();
-    this.loyaltyService = new LoyaltyService();
   }
 
   private _initializeRoutes() {
     //#region Admin section
     this.router.get(`${this.adminPath}`, [this.create]);
-    this.router.post(`${this.adminPath}`, [this.create]);
+    this.router.post(`${this.adminPath}`, [this.create.bind(this)]);
     this.router.patch(`${this.adminPath}/:id`, [this.create]);
     this.router.delete(`${this.adminPath}/:id`, [this.create]);
 
@@ -26,7 +27,8 @@ export default class LoyaltyController {
   }
 
   //#region Admin section
-  async create(req: Request, res: Response): Promise<LoyaltyModel> {
+  async create(req: Request, res: Response): Promise<any> {
+    throw new ErrorHandler({ message: 'test' });
     return res.handler(this.loyaltyService.create(req.body));
   }
 

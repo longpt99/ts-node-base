@@ -8,6 +8,8 @@ import { ErrorHandler } from '../error';
  * @param data
  */
 express.response.handler = async function (data) {
+  console.log(123);
+
   const res = _this(this);
   try {
     return res.status(StatusCodes.OK).json({ data: await data });
@@ -32,6 +34,8 @@ express.response.error = function (error: ErrorHandler) {
 };
 
 async function handleError(error, res: Response) {
+  console.log(123);
+
   const status = error.status ?? res.statusCode ?? StatusCodes.BAD_REQUEST;
 
   if (!(error instanceof ErrorHandler)) {

@@ -1,4 +1,5 @@
 import { getCustomRepository } from 'typeorm';
+import { ErrorHandler } from '../../libs/error';
 import { LoyaltyModel } from './loyalty.interface';
 import { LoyaltyRepository } from './loyalty.repository';
 
@@ -16,6 +17,8 @@ export class LoyaltyService {
   }
 
   async create(params) {
+    throw new ErrorHandler({ message: 'test' });
+
     return this.loyaltyRepository.save(
       this.loyaltyRepository.create(params as LoyaltyModel)
     );
