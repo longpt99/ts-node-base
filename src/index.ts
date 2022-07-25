@@ -1,4 +1,4 @@
-import app from './app';
+import Server from './app';
 import { databaseConfig } from './config/databases/database';
 
-databaseConfig(app);
+databaseConfig(new Server());

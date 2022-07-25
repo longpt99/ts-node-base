@@ -3,25 +3,25 @@ import { RouteOptions } from './router.interface';
 
 export const expressRouter = Router();
 
-export class Index {
-  static get(path: string, fn: any[], options?: RouteOptions): Index {
-    return Index.router('get', path, fn, options);
+export class RouteConfig {
+  static get(path: string, fn: any[], options?: RouteOptions): RouteConfig {
+    return RouteConfig.router('get', path, fn, options);
   }
 
-  static post(path: string, fn: any[], options?: RouteOptions): Index {
-    return Index.router('post', path, fn, options);
+  static post(path: string, fn: any[], options?: RouteOptions): RouteConfig {
+    return RouteConfig.router('post', path, fn, options);
   }
 
-  static put(path: string, fn: any[], options?: RouteOptions): Index {
-    return Index.router('put', path, fn, options);
+  static put(path: string, fn: any[], options?: RouteOptions): RouteConfig {
+    return RouteConfig.router('put', path, fn, options);
   }
 
-  static patch(path: string, fn: any[], options?: RouteOptions): Index {
-    return Index.router('patch', path, fn, options);
+  static patch(path: string, fn: any[], options?: RouteOptions): RouteConfig {
+    return RouteConfig.router('patch', path, fn, options);
   }
 
-  static delete(path: string, fn: any[], options?: RouteOptions): Index {
-    return Index.router('delete', path, fn, options);
+  static delete(path: string, fn: any[], options?: RouteOptions): RouteConfig {
+    return RouteConfig.router('delete', path, fn, options);
   }
 
   static router(
@@ -29,7 +29,7 @@ export class Index {
     path: string,
     fn: any[],
     options?: RouteOptions
-  ): Index {
+  ): RouteConfig {
     if (options) {
       if (options.allowAnonymous) {
         console.log('Verify token base');

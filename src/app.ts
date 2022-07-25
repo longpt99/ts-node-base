@@ -5,10 +5,9 @@ import { NetworkInterfaceInfo, networkInterfaces } from 'os';
 import { IServer } from './common/interfaces/app.interface';
 import { bootstrapConfig, expressConfig, routeConfig } from './config';
 import APP_CONFIG from './config/app.config';
-import serverConfig from './config/server.config';
 import { logger } from './utils';
 
-class Server implements IServer {
+export default class Server implements IServer {
   private app: Application;
 
   constructor() {
@@ -19,7 +18,7 @@ class Server implements IServer {
     bootstrapConfig();
     expressConfig(this.app);
     routeConfig(this.app);
-    serverConfig();
+    // serverConfig();
 
     const server: HttpServer = createServer(this.app);
     server.listen(APP_CONFIG.ENV.APP.PORT, () => {
@@ -35,5 +34,3 @@ class Server implements IServer {
     });
   }
 }
-
-export default new Server();

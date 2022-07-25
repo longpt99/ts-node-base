@@ -1,25 +1,25 @@
-const gulp = require('gulp');
-const shell = require('gulp-shell');
-const ts = require('gulp-typescript');
-const uglify = require('gulp-uglify');
-const htmlmin = require('gulp-htmlmin');
+import gulp from 'gulp';
+import shell from 'gulp-shell';
+import ts from 'gulp-typescript';
+import uglify from 'gulp-uglify';
+// const htmlmin = require('gulp-htmlmin');
 const exec = require('child_process').exec;
 
 const tsConfig = ts.createProject('tsconfig.json');
 
-function compileHTML() {
-  return gulp
-    .src('src/assets/html/*.html')
-    .pipe(
-      htmlmin({
-        collapseWhitespace: true,
-        removeComments: true,
-        removeAttributeQuotes: true,
-        removeEmptyElements: true,
-      })
-    )
-    .pipe(gulp.dest('dist/assets/html'));
-}
+// function compileHTML() {
+//   return gulp
+//     .src('src/assets/html/*.html')
+//     .pipe(
+//       htmlmin({
+//         collapseWhitespace: true,
+//         removeComments: true,
+//         removeAttributeQuotes: true,
+//         removeEmptyElements: true,
+//       })
+//     )
+//     .pipe(gulp.dest('dist/assets/html'));
+// }
 
 // gulp.task('copyNonTS', gulp.parallel(compileHTML));
 
@@ -30,7 +30,7 @@ gulp.task('compileTS', (done) => {
       .pipe(tsConfig())
       .pipe(uglify())
       .pipe(gulp.dest('dist/'));
-    done(err);
+    done();
   });
 });
 

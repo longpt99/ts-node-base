@@ -1,8 +1,8 @@
-import { json, urlencoded } from 'body-parser';
+// import { json, urlencoded } from 'body-parser';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { Application, NextFunction, Request, Response } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { ErrorHandler } from '../libs/error';
@@ -13,8 +13,8 @@ export const expressConfig = (app: Application): void => {
   app.use(helmet());
   app.use(cors());
   app.use(compression());
-  app.use(json());
-  app.use(urlencoded({ extended: false }));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
   app.use(morgan('dev'));
   app.use(i18n.init);
   app.use(cookieParser(APP_CONFIG.ENV.SECURE.COOKIE_SECRET_KEY));
