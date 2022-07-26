@@ -17,48 +17,32 @@ const formatOptions = format.combine(
     fillExcept: ['message', 'level', 'timestamp', 'label'],
   }),
   format.printf((info) => {
-    let msg = `${info.timestamp} ${info.level}: ${info.message}`;
+    const level = info.level.toUpperCase();
+    let msg = `[${info.timestamp}][${level}]: ${info.message}`;
+
     if (Object.keys(info.metadata).length > 0) {
-      msg += ` Data: ${JSON.stringify(info.metadata)}`;
+      msg += ` ${JSON.stringify(info.metadata)}`;
     }
+
+    switch (level) {
+      case 'INFO':
+        msg = green(msg);
+        break;
+      case 'WARN':
+        break;
+      case 'ERROR':
+        msg = red(msg);
+        break;
+      case 'DEBUG':
+        break;
+      default:
+        break;
+    }
+
     return msg;
   })
 );
 
 export default createLogger({
-  format: formatOptions,
-  transports: [
-    transport,
-    new transports.Console({
-      level: 'debug',
-      format: format.combine(
-        format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        format.printf((info) => {
-          const level = info.level.toUpperCase();
-          let msg = `[${info.timestamp}][${level}]: ${info.message}`;
-
-          if (Object.keys(info.metadata).length > 0) {
-            msg += ` ${JSON.stringify(info.metadata)}`;
-          }
-
-          switch (level) {
-            case 'INFO':
-              msg = green(msg);
-              break;
-            case 'WARN':
-              break;
-            case 'ERROR':
-              msg = red(msg);
-              break;
-            case 'DEBUG':
-              break;
-            default:
-              break;
-          }
-
-          return msg;
-        })
-      ),
-    }),
-  ],
+  transports: [transport, new transports.Console({ format: formatOptions })],
 });

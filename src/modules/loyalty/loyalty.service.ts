@@ -17,14 +17,18 @@ export class LoyaltyService {
   }
 
   async create(params) {
-    throw new ErrorHandler({ message: 'test' });
-
+    throw new ErrorHandler({ message: 'Message' });
+    return {
+      name: 'Long',
+    };
     return this.loyaltyRepository.save(
       this.loyaltyRepository.create(params as LoyaltyModel)
     );
   }
 
-  async getById() {}
+  async getById(params?) {
+    console.log(params.error.b);
+  }
 
   async list() {}
 }

@@ -22,6 +22,11 @@ exports.config = {
    * this feature: https://docs.newrelic.com/docs/transition-guide-distributed-tracing
    * Default is true.
    */
+  application_logging: {
+    forwarding: {
+      enabled: true,
+    },
+  },
   distributed_tracing: {
     /**
      * Enables/disables distributed tracing.

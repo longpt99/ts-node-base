@@ -5,7 +5,7 @@ module.exports = {
       script: './dist/index.js',
       ignore_watch: ['node_modules'],
       autorestart: true, //Default, Auto reset when app crashes
-      env_production: { NODE_ENV: 'production' },
+      env_production: { NODE_ENV: 'local' },
     },
   ],
 };

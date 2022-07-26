@@ -41,7 +41,7 @@ export const client = createClient({
 
 async function connectRedis() {
   client.on('error', (err) => {
-    logger.error('Redis Client Error', err);
+    // logger.error('Redis Client Error', err);
     process.exit();
   });
 
@@ -74,16 +74,15 @@ export const databaseConfig = (app: IServer): void => {
         connectRedis();
         app.start();
       } else {
-        logger.error(
-          `[Database][${databaseOptions.type}] Database has lost connection.`
-        );
+        // logger.error(
+        //   `[Database][${databaseOptions.type}] Database has lost connection.`
+        // );
       }
     })
     .catch((err) => {
-      logger.error(
-        `[Database][${databaseOptions.type}] Database connection error.`
-      );
-      logger.error(err);
+      // logger.error(
+      //   `[Database][${databaseOptions.type}] Database connection error.`
+      // );
       process.exit();
     });
 };

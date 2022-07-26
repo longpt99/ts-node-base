@@ -10,5 +10,9 @@
 	"unauthorized": "unauthorized",
 	"Not Found": "Not Found",
 	"Error roi nhe": "Error roi nhe",
-	"test": "test"
+	"test": "test",
+	"Get message error": "Get message error",
+	"Hello error": "Hello error",
+	"Message": "Message",
+	"Bad Request": "Bad Request"
 }

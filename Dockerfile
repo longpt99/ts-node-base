@@ -4,7 +4,7 @@ LABEL author="Long Phuong (longpt99.it@gmail.com)"
 
 WORKDIR /home/app
 
-COPY package*.json ecosystem.config.js ./
+COPY package*.json ecosystem.config.js newrelic.js ./
 
 RUN npm install pm2 --location=global && \ 
     npm set-script prepare "" && \ 

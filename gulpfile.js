@@ -1,7 +1,7 @@
-import gulp from 'gulp';
-import shell from 'gulp-shell';
-import ts from 'gulp-typescript';
-import uglify from 'gulp-uglify';
+const gulp = require('gulp');
+const shell = require('gulp-shell');
+const ts = require('gulp-typescript');
+const uglify = require('gulp-uglify');
 // const htmlmin = require('gulp-htmlmin');
 const exec = require('child_process').exec;
 
@@ -28,7 +28,7 @@ gulp.task('compileTS', (done) => {
     gulp
       .src('src/**/*.ts')
       .pipe(tsConfig())
-      .pipe(uglify())
+      // .pipe(uglify())
       .pipe(gulp.dest('dist/'));
     done();
   });

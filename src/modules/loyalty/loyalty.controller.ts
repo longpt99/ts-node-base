@@ -17,7 +17,7 @@ export default class LoyaltyController {
 
   private _initializeRoutes() {
     //#region Admin section
-    this.router.get(`${this.adminPath}`, [this.create]);
+    this.router.get(`${this.adminPath}`, [this.list]);
     this.router.post(`${this.adminPath}`, [this.create.bind(this)]);
     this.router.patch(`${this.adminPath}/:id`, [this.create]);
     this.router.delete(`${this.adminPath}/:id`, [this.create]);
@@ -28,11 +28,12 @@ export default class LoyaltyController {
 
   //#region Admin section
   async create(req: Request, res: Response): Promise<any> {
-    throw new ErrorHandler({ message: 'test' });
+    // throw new ErrorHandler({ message: 'test' });
     return res.handler(this.loyaltyService.create(req.body));
   }
 
   async list(req: Request, res: Response): Promise<LoyaltyModel[]> {
+    // throw new ErrorHandler({ message: 'test' });
     return res.handler(this.loyaltyService.list());
   }
 

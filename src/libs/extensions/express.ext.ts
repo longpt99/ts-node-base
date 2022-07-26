@@ -1,6 +1,8 @@
 import express, { Response } from 'express';
 import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { ErrorHandler } from '../error';
+import newrelic from 'newrelic';
+import { logger } from '../../utils';
 
 /**
  * @method result
@@ -8,8 +10,6 @@ import { ErrorHandler } from '../error';
  * @param data
  */
 express.response.handler = async function (data) {
-  console.log(123);
-
   const res = _this(this);
   try {
     return res.status(StatusCodes.OK).json({ data: await data });
@@ -34,14 +34,12 @@ express.response.error = function (error: ErrorHandler) {
 };
 
 async function handleError(error, res: Response) {
-  console.log(123);
-
-  const status = error.status ?? res.statusCode ?? StatusCodes.BAD_REQUEST;
+  let status = error.status ?? StatusCodes.BAD_REQUEST;
+  logger.error(error.stack);
 
   if (!(error instanceof ErrorHandler)) {
-    error.message = getReasonPhrase(
-      status ?? StatusCodes.INTERNAL_SERVER_ERROR
-    );
+    status = StatusCodes.INTERNAL_SERVER_ERROR;
+    error.message = getReasonPhrase(status);
   }
 
   const msg =

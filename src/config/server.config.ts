@@ -1,5 +1,5 @@
-import { Application } from 'express';
 import { Server } from 'http';
+import newrelic from 'newrelic';
 import { logger } from '../utils';
 
 export default function (server: Server): void {
@@ -10,17 +10,14 @@ export default function (server: Server): void {
     'unhandledRejection',
   ];
   others.forEach((eventType) => {
-    process.on(eventType, exitRouter.bind(null, { exit: true }));
+    process.on(eventType, exitRouter);
   });
 
-  function exitRouter(options, exitCode) {
+  async function exitRouter(exitCode) {
     if (exitCode.stack) {
-      logger.error(`[System] ${exitCode.message} ${exitCode.stack}.`);
+      logger.error(exitCode.stack);
     } else {
       logger.info(`[System] ExitCode ${exitCode}.`);
-    }
-    if (options.exit) {
-      process.exit();
     }
   }
 
