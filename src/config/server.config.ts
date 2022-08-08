@@ -19,10 +19,7 @@ export default function (server: Server): void {
     } else {
       logger.info(`[System] ExitCode ${exitCode}.`);
     }
-
-    setTimeout(() => {
-      process.exit();
-    }, 1000);
+    process.exit();
   }
 
   function exitHandler(exitCode: number) {

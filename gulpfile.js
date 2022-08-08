@@ -1,11 +1,8 @@
 const gulp = require('gulp');
 const shell = require('gulp-shell');
-const ts = require('gulp-typescript');
 const uglify = require('gulp-uglify');
 // const htmlmin = require('gulp-htmlmin');
-const exec = require('child_process').exec;
-
-const tsConfig = ts.createProject('tsconfig.json');
+const pipeline = require('readable-stream').pipeline;
 
 // function compileHTML() {
 //   return gulp
@@ -23,20 +20,14 @@ const tsConfig = ts.createProject('tsconfig.json');
 
 // gulp.task('copyNonTS', gulp.parallel(compileHTML));
 
-gulp.task('compileTS', (done) => {
-  exec('rimraf dist', (err) => {
-    gulp
-      .src('src/**/*.ts')
-      .pipe(tsConfig())
-      // .pipe(uglify())
-      .pipe(gulp.dest('dist/'));
-    done();
-  });
+gulp.task('compress', (done) => {
+  gulp.src('dist/**/*.js').pipe(uglify()).pipe(gulp.dest('dist/'));
+  done();
 });
 
-gulp.task('watch', gulp.series('compileTS'), () => {
-  gulp.watch('src/**/*.ts', ['compileTS']);
-});
+// gulp.task('watch', gulp.series('compileTS'), () => {
+//   gulp.watch('src/**/*.ts', ['compileTS']);
+// });
 
 gulp.task('test', (done) => {
   return shell.task(['jest'])(done);
@@ -47,10 +38,7 @@ gulp.task('test:coverage', (done) => {
 });
 
 gulp.task('build:base', (done) => {
-  return gulp.series(
-    'compileTS'
-    // 'gulp copyNonTS',
-  )(done);
+  return shell.task(['rimraf dist', 'tsc'])(done);
 });
 
 gulp.task('build:local', async (done) => {
@@ -58,5 +46,5 @@ gulp.task('build:local', async (done) => {
 });
 
 gulp.task('build:production', async (done) => {
-  return shell.task(['gulp build:base'])(done);
+  return shell.task(['gulp build:base', 'gulp compress'])(done);
 });
