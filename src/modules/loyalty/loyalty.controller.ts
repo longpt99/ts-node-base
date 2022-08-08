@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { router } from '../../common';
-import { ErrorHandler } from '../../libs/error';
 import { LoyaltyModel } from './loyalty.interface';
 import { LoyaltyService } from './loyalty.service';
 
@@ -17,7 +16,7 @@ export default class LoyaltyController {
 
   private _initializeRoutes() {
     //#region Admin section
-    this.router.get(`${this.adminPath}`, [this.list]);
+    this.router.get(`${this.adminPath}`, [this.list.bind(this)]);
     this.router.post(`${this.adminPath}`, [this.create.bind(this)]);
     this.router.patch(`${this.adminPath}/:id`, [this.create]);
     this.router.delete(`${this.adminPath}/:id`, [this.create]);

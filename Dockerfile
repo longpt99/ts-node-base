@@ -4,12 +4,9 @@ LABEL author="Long Phuong (longpt99.it@gmail.com)"
 
 WORKDIR /home/app
 
-COPY package*.json ecosystem.config.js newrelic.js ./
+COPY yarn.lock package.json ecosystem.config.js newrelic.js ./
 
-RUN npm install pm2 --location=global && \ 
-    npm set-script prepare "" && \ 
-    npm install ci --production && \ 
-    npm cache clean --force
+RUN yarn global add pm2 && yarn install --production && yarn cache clean
 
 COPY ./dist ./dist
 
