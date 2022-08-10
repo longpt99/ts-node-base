@@ -13,9 +13,17 @@ export default class HealthController {
   }
 
   private _initializeRoutes() {
-    this.router.get(`${this.path}/ping`, [this.ping]);
+    this.router.get(`${this.path}/ping`, [this.ping.bind(this)]);
   }
 
+  /**
+   * @api {get} /api/v1/healths/ping Health check
+   * @apiName GetUser
+   * @apiGroup Healths
+   *
+   * @apiSuccess {String} firstname Firstname of the User.
+   * @apiSuccess {String} lastname  Lastname of the User.
+   */
   async ping(req: Request, res: Response) {
     return res.handler(this.healthService.ping());
   }

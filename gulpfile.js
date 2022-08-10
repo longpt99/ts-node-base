@@ -1,41 +1,43 @@
 const gulp = require('gulp');
 const shell = require('gulp-shell');
-const ts = require('gulp-typescript');
 const uglify = require('gulp-uglify');
-// const htmlmin = require('gulp-htmlmin');
-const exec = require('child_process').exec;
+const htmlmin = require('gulp-htmlmin');
+const argv = require('yargs')['argv'];
 
-const tsConfig = ts.createProject('tsconfig.json');
+function minifyHTML() {
+  return gulp
+    .src('dist/assets/html/*.html')
+    .pipe(
+      htmlmin({
+        collapseWhitespace: true,
+        removeComments: true,
+        removeAttributeQuotes: true,
+        removeEmptyElements: true,
+      })
+    )
+    .pipe(gulp.dest('dist/assets/html'));
+}
+function minifyJS() {
+  return gulp.src('dist/').pipe(uglify()).pipe(gulp.dest('dist'));
+}
 
-// function compileHTML() {
-//   return gulp
-//     .src('src/assets/html/*.html')
-//     .pipe(
-//       htmlmin({
-//         collapseWhitespace: true,
-//         removeComments: true,
-//         removeAttributeQuotes: true,
-//         removeEmptyElements: true,
-//       })
-//     )
-//     .pipe(gulp.dest('dist/assets/html'));
+// function genDocument(done) {
+//   return shell.task(['apidoc-swagger -i src/ -o doc/'])(done);
 // }
-
-// gulp.task('copyNonTS', gulp.parallel(compileHTML));
-
-gulp.task('compileTS', (done) => {
-  exec('rimraf dist', (err) => {
-    gulp
-      .src('src/**/*.ts')
-      .pipe(tsConfig())
-      // .pipe(uglify())
-      .pipe(gulp.dest('dist/'));
-    done();
-  });
+gulp.task('genDocument', (done) => {
+  return shell.task(['apidoc-swagger -i src/ -o doc/'])(done);
 });
 
-gulp.task('watch', gulp.series('compileTS'), () => {
-  gulp.watch('src/**/*.ts', ['compileTS']);
+gulp.task('copyNonTS', gulp.parallel(minifyHTML, minifyJS));
+
+gulp.task('watcher', (done) => {
+  return shell.task([
+    'gulp genDocument',
+    `cross-env NODE_ENV=${
+      argv['env'] || 'local'
+    } nodemon --watch 'src/**/*.ts' --exec node --inspect --require ts-node/register ./src/index.ts`,
+    gulp.watch('src/**/*.ts', gulp.series('genDocument')),
+  ])(done);
 });
 
 gulp.task('test', (done) => {
@@ -46,11 +48,16 @@ gulp.task('test:coverage', (done) => {
   return shell.task(['rimraf coverage', 'jest --coverage'])(done);
 });
 
+gulp.task('start:local', (done) => {
+  return shell.task('gulp watcher --env=local')(done);
+});
+
+gulp.task('start:production', (done) => {
+  return shell.task('gulp watcher --env=production')(done);
+});
+
 gulp.task('build:base', (done) => {
-  return gulp.series(
-    'compileTS'
-    // 'gulp copyNonTS',
-  )(done);
+  return shell.task(['gulp test:coverage', 'rimraf dist/', 'tsc'])(done);
 });
 
 gulp.task('build:local', async (done) => {
@@ -58,5 +65,5 @@ gulp.task('build:local', async (done) => {
 });
 
 gulp.task('build:production', async (done) => {
-  return shell.task(['gulp build:base'])(done);
+  return shell.task(['gulp build:base', 'gulp copyNonTS'])(done);
 });
