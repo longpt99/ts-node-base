@@ -1,41 +1,46 @@
 import express, { Response } from 'express';
 import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { ErrorHandler } from '../error';
-import newrelic from 'newrelic';
 import { logger } from '../../utils';
 
 /**
- * @method result
- * @description Custom response
+ * @method handler
+ * @description Custom response http method
  * @param data
  */
 express.response.handler = async function (data) {
   const res = _this(this);
   try {
-    return res.status(StatusCodes.OK).json({ data: await data });
+    const result = await data;
+    return res.status(StatusCodes.OK).json(result);
   } catch (error) {
-    return handleError(error, res);
+    return res.error(error ?? {}, res);
   }
 };
 
+/**
+ * @method success
+ * @description Custom response success
+ * @param data
+ */
 express.response.success = function (data) {
   const res = _this(this);
-  res.status(200).json(data);
+  return res.status(200).json(data);
 };
 
 /**
  * @method error
- * @description Custom response success
+ * @description Custom response error
  * @param error
  */
-express.response.error = function (error: ErrorHandler) {
+express.response.error = function (error) {
   const res = _this(this);
-  return handleError(error ?? {}, res);
-};
 
-async function handleError(error, res: Response) {
   let status = error.status ?? StatusCodes.BAD_REQUEST;
-  logger.error(error.stack);
+
+  if (error.stack) {
+    logger.error(error.stack);
+  }
 
   if (!(error instanceof ErrorHandler)) {
     status = StatusCodes.INTERNAL_SERVER_ERROR;
@@ -44,17 +49,17 @@ async function handleError(error, res: Response) {
 
   const msg =
     (error.response && JSON.parse(error.response.body).error.message) ??
-    res.__(error.message) ??
+    (error.message && res.__(error.message)) ??
     getReasonPhrase(status);
 
   return res.status(status).json({
     message: msg,
-    stack: error.stack,
+    stack: process.env.NODE_ENV !== 'production' && error.stack,
     status: status,
     errors: error.error ?? error.errors,
     code: error.code,
   });
-}
+};
 
 function _this(val: Response) {
   return val;

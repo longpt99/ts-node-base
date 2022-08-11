@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { router } from '../../common';
+import { router } from '../../libs';
 import { LoyaltyModel } from './loyalty.interface';
 import { LoyaltyService } from './loyalty.service';
 
@@ -26,7 +26,6 @@ export default class LoyaltyController {
   }
 
   //#region Admin section
-
   /**
    * @api {get} /user/id Request User information
    * @apiName GetUser

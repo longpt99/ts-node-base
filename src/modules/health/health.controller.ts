@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { router } from '../../common';
+import { router } from '../../libs';
 import { HealthService } from './health.service';
 
 export default class HealthController {
