@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { router } from '../../common';
+import { router } from '../../libs';
 import { LoyaltyModel } from './loyalty.interface';
 import { LoyaltyService } from './loyalty.service';
 
@@ -26,6 +26,16 @@ export default class LoyaltyController {
   }
 
   //#region Admin section
+  /**
+   * @api {get} /user/id Request User information
+   * @apiName GetUser
+   * @apiGroup User
+   *
+   * @apiParam {Number} id Users unique ID.
+   *
+   * @apiSuccess {String} firstname Firstname of the User.
+   * @apiSuccess {String} lastname  Lastname of the User.
+   */
   async create(req: Request, res: Response): Promise<any> {
     // throw new ErrorHandler({ message: 'test' });
     return res.handler(this.loyaltyService.create(req.body));
@@ -36,6 +46,16 @@ export default class LoyaltyController {
     return res.handler(this.loyaltyService.list());
   }
 
+  /**
+   * @api {delete} /user/:id Request User information
+   * @apiName GetUser
+   * @apiGroup User
+   *
+   * @apiParam {Number} id Users unique ID.
+   *
+   * @apiSuccess {String} firstname Firstname of the User.
+   * @apiSuccess {String} lastname  Lastname of the User.
+   */
   async getById(req: Request, res: Response) {
     return res.handler(this.loyaltyService.getById());
   }
@@ -44,6 +64,16 @@ export default class LoyaltyController {
     return res.handler(this.loyaltyService.getById());
   }
 
+  /**
+   * @api {delete} /user/id Request User information
+   * @apiName GetUser
+   * @apiGroup User
+   *
+   * @apiParam {Number} id Users unique ID.
+   *
+   * @apiSuccess {String} firstname Firstname of the User.
+   * @apiSuccess {String} lastname  Lastname of the User.
+   */
   async deleteById(req: Request, res: Response): Promise<LoyaltyModel[]> {
     return res.handler(this.loyaltyService.list());
   }

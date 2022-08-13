@@ -4,6 +4,12 @@ export class AppObject {
     ADMIN: 'Admin',
   };
 
+  static readonly ENVIRONMENTS = {
+    DEV: 'dev',
+    LOCAL: 'local',
+    PRODUCTION: 'production',
+  };
+
   static readonly COMMON_STATUS = {
     ACTIVE: 'active',
     INACTIVE: 'inactive',

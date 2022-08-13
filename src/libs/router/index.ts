@@ -1,9 +1,12 @@
-import { Router } from 'express';
+import express from 'express';
 import { RouteOptions } from './router.interface';
 
-export const expressRouter = Router();
+export const expressRouter = express.Router();
 
 export class RouteConfig {
+  static globalPrefix: string;
+  constructor() {}
+
   static get(path: string, fn: any[], options?: RouteOptions): RouteConfig {
     return RouteConfig.router('get', path, fn, options);
   }
@@ -41,6 +44,7 @@ export class RouteConfig {
         // fn.unshift('token');
       }
     }
-    return expressRouter[method](path, fn);
+
+    return expressRouter[method](`${RouteConfig.globalPrefix}${path}`, fn);
   }
 }

@@ -8,6 +8,8 @@ import APP_CONFIG from './config/app.config';
 import { logger } from './utils';
 import { ErrorHandler } from './libs/error';
 import serverConfig from './config/server.config';
+import { router } from './libs';
+import { AppConst } from './common/consts';
 
 export default class Server implements IServer {
   private app: Application;
@@ -18,6 +20,7 @@ export default class Server implements IServer {
 
   public start() {
     const server: HttpServer = createServer(this.app);
+    router.globalPrefix = `/${AppConst.API_PREFIX}/${AppConst.API_VERSION}`;
 
     bootstrapConfig();
     expressConfig(this.app);

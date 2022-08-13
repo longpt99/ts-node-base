@@ -19,6 +19,7 @@ export default function (server: Server): void {
     } else {
       logger.info(`[System] ExitCode ${exitCode}.`);
     }
+
     process.exit();
   }
 
