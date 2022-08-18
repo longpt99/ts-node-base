@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { router } from '../../common';
+import { router } from '../../libs';
 import UploadService from './upload.service';
 
 export default class UploadController {

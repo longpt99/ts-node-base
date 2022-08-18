@@ -9,7 +9,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['anam-coffee'],
+  app_name: [`anam-coffee-backend-${process.env.NODE_ENV}`],
   /**
    * Your New Relic license key.
    */
