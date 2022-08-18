@@ -17,20 +17,18 @@ function minifyHTML() {
     )
     .pipe(gulp.dest('dist/assets/html'));
 }
+
 function minifyJS() {
   return gulp.src('dist/').pipe(uglify()).pipe(gulp.dest('dist'));
 }
 
-// function genDocument(done) {
-//   return shell.task(['apidoc-swagger -i src/ -o doc/'])(done);
-// }
 gulp.task('genDocument', (done) => {
   return shell.task(['apidoc-swagger -i src/ -o doc/'])(done);
 });
 
 gulp.task('copyNonTS', gulp.parallel(minifyHTML, minifyJS));
 
-gulp.task('watcher', (done) => {
+gulp.task('watch', (done) => {
   return shell.task([
     'gulp genDocument',
     `cross-env NODE_ENV=${
@@ -49,11 +47,11 @@ gulp.task('test:coverage', (done) => {
 });
 
 gulp.task('start:local', (done) => {
-  return shell.task('gulp watcher --env=local')(done);
+  return shell.task('gulp watch --env=local')(done);
 });
 
 gulp.task('start:production', (done) => {
-  return shell.task('gulp watcher --env=production')(done);
+  return shell.task('gulp watch --env=production')(done);
 });
 
 gulp.task('build:base', (done) => {

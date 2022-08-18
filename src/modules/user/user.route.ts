@@ -1,4 +1,4 @@
-import { expressRouter, router } from '../../common';
+import { expressRouter, router } from '../../libs';
 import { authMiddleware } from '../../common/middlewares/auth.middleware';
 import { UserController } from './user.controllers';
 
