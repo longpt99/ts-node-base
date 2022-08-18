@@ -1,6 +1,6 @@
 import { Server } from 'http';
-import newrelic from 'newrelic';
 import { logger } from '../utils';
+import newrelic from 'newrelic';
 
 export default function (server: Server): void {
   const others = [

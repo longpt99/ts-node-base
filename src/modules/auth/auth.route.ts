@@ -1,5 +1,6 @@
-import { expressRouter, router, validate } from '../../common';
+import { validate } from '../../common';
 import { authMiddleware } from '../../common/middlewares/auth.middleware';
+import { expressRouter, router } from '../../libs';
 import { UserValidation } from '../user/user.validation';
 import { AuthController } from './auth.controllers';
 

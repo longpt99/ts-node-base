@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { router } from '../../common';
+import { router } from '../../libs';
 import AdminService from './admin.service';
 
 export default class AdminController {
