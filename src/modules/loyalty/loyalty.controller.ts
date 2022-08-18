@@ -1,14 +1,13 @@
 import { Request, Response } from 'express';
-import { router } from '../../libs';
+import { RouteConfig } from '../../libs';
 import { LoyaltyModel } from './loyalty.interface';
 import { LoyaltyService } from './loyalty.service';
 
 export default class LoyaltyController {
   private readonly loyaltyService = new LoyaltyService();
-
   private readonly adminPath = '/admin/loyalties';
   private readonly userPath = '/loyalty';
-  private readonly router = router;
+  private readonly router = RouteConfig;
 
   constructor() {
     this._initializeRoutes();

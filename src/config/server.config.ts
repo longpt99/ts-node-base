@@ -4,8 +4,8 @@ import newrelic from 'newrelic';
 
 export default function (server: Server): void {
   const others = [
-    'SIGINT',
-    'SIGTERM',
+    // 'SIGINT',
+    // 'SIGTERM',
     'uncaughtException',
     'unhandledRejection',
   ];

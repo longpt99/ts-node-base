@@ -5,6 +5,7 @@ import { join } from 'path';
 import swaggerUi from 'swagger-ui-express';
 import { expressRouter } from '../libs';
 import { ErrorHandler } from '../libs/error';
+import { RouteConfig } from '../libs/router';
 import { logger } from '../utils';
 
 export const routeConfig = async (app: Application): Promise<void> => {
@@ -17,26 +18,22 @@ export const routeConfig = async (app: Application): Promise<void> => {
   );
   app.use(
     (() => {
-      (() => {
-        glob(
-          join(__dirname, '../modules/**/**.controller.[tj]s'),
-          (_err, paths) => {
-            for (let i = 0, len = paths.length; i < len; i++) {
-              import(paths[i]).then((route) => {
-                new route.default();
-                expressRouter.stack.forEach((layer) => {
-                  logger.info(
-                    `[Router] ${layer.route.stack[0].method.toUpperCase()}: "${
-                      layer.route.path
-                    }" has been registered!`
-                  );
-                });
-              });
-            }
+      glob(
+        join(__dirname, '../modules/**/**.controller.[tj]s'),
+        async (_err, paths) => {
+          for (let i = 0, len = paths.length; i < len; i++) {
+            await import(paths[i]).then((route) => new route.default());
           }
-        );
-      })();
-      return expressRouter;
+          RouteConfig.expressRouter.stack.forEach((layer) => {
+            logger.info(
+              `[Router] ${layer.route.stack[0].method.toUpperCase()}: "${
+                layer.route.path
+              }" has been registered!`
+            );
+          });
+        }
+      );
+      return RouteConfig.expressRouter;
     })()
   );
 

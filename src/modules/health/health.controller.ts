@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { router } from '../../libs';
+import { RouteConfig } from '../../libs';
 import { HealthService } from './health.service';
 
 export default class HealthController {
   private healthService: HealthService;
   private readonly path = '/healths';
-  private readonly router = router;
+  private readonly router = RouteConfig;
 
   constructor() {
     this._initializeRoutes();
@@ -18,11 +18,8 @@ export default class HealthController {
 
   /**
    * @api {get} /api/v1/healths/ping Health check
-   * @apiName GetUser
+   * @apiName Get status health check
    * @apiGroup Healths
-   *
-   * @apiSuccess {String} firstname Firstname of the User.
-   * @apiSuccess {String} lastname  Lastname of the User.
    */
   async ping(req: Request, res: Response) {
     return res.handler(this.healthService.ping());

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { router } from '../../libs';
+import { RouteConfig } from '../../libs';
 import AdminService from './admin.service';
 
 export default class AdminController {
-  private readonly router = router;
+  private readonly router = RouteConfig;
   private readonly path = '/admin';
   private readonly adminService: AdminService;
 

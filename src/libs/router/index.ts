@@ -5,6 +5,8 @@ export const expressRouter = express.Router();
 
 export class RouteConfig {
   static globalPrefix: string;
+  static readonly expressRouter = express.Router();
+
   constructor() {}
 
   static get(path: string, fn: any[], options?: RouteOptions): RouteConfig {
@@ -45,6 +47,6 @@ export class RouteConfig {
       }
     }
 
-    return expressRouter[method](`${RouteConfig.globalPrefix}${path}`, fn);
+    return this.expressRouter[method](`${RouteConfig.globalPrefix}${path}`, fn);
   }
 }

@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { router } from '../../libs';
+import { RouteConfig } from '../../libs';
 import UploadService from './upload.service';
 
 export default class UploadController {
   private readonly uploadService = new UploadService();
-  private readonly router = router;
+  private readonly router = RouteConfig;
 
   constructor() {
     this._initializeRoutes();

@@ -1,15 +1,14 @@
-import 'newrelic';
-import express, { Application, NextFunction, Request, Response } from 'express';
+import express, { Application } from 'express';
 import { createServer, Server as HttpServer } from 'http';
+import 'newrelic';
 import { NetworkInterfaceInfo, networkInterfaces } from 'os';
+import { AppConst } from './common/consts';
 import { IServer } from './common/interfaces/app.interface';
 import { bootstrapConfig, expressConfig, routeConfig } from './config';
 import APP_CONFIG from './config/app.config';
-import { logger } from './utils';
-import { ErrorHandler } from './libs/error';
 import serverConfig from './config/server.config';
-import { router } from './libs';
-import { AppConst } from './common/consts';
+import { RouteConfig } from './libs';
+import { logger } from './utils';
 
 export default class Server implements IServer {
   private app: Application;
@@ -20,7 +19,7 @@ export default class Server implements IServer {
 
   public start() {
     const server: HttpServer = createServer(this.app);
-    router.globalPrefix = `/${AppConst.API_PREFIX}/${AppConst.API_VERSION}`;
+    RouteConfig.globalPrefix = `/${AppConst.API_PREFIX}/${AppConst.API_VERSION}`;
 
     bootstrapConfig();
     expressConfig(this.app);
