@@ -3,10 +3,9 @@ import glob from 'glob';
 import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { join } from 'path';
 import swaggerUi from 'swagger-ui-express';
-import { expressRouter } from '../libs';
 import { ErrorHandler } from '../libs/error';
 import { RouteConfig } from '../libs/router';
-import { logger } from '../utils';
+import logger from '../utils/logger';
 
 export const routeConfig = async (app: Application): Promise<void> => {
   app.use(

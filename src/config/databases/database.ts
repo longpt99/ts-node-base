@@ -1,8 +1,8 @@
-import { join } from 'path';
+import path from 'path';
 import { createClient } from 'redis';
 import { ConnectionOptions, createConnection } from 'typeorm';
 import { IServer } from '../../common/interfaces/app.interface';
-import { logger } from '../../utils';
+import logger from '../../utils/logger';
 import APP_CONFIG from '../app.config';
 
 export const client = createClient({
@@ -41,7 +41,7 @@ export const client = createClient({
 
 async function connectRedis() {
   client.on('error', (err) => {
-    // logger.error('Redis Client Error', err);
+    logger.error('Redis Client Error', err);
     process.exit();
   });
 
@@ -59,8 +59,8 @@ export const databaseConfig = (app: IServer): void => {
     password: APP_CONFIG.ENV.DATABASE.POSTGRES.PASSWORD,
     database: APP_CONFIG.ENV.DATABASE.POSTGRES.NAME,
     synchronize: true,
-    entities: [join(__dirname, '../../modules/**/*.entity.{js,ts}')],
-    logging: false,
+    entities: [path.join(__dirname, '../../modules/**/*.entity.{js,ts}')],
+    logging: true,
     // connectTimeoutMS: 20000,
     // maxQueryExecutionTime: 20000,
     // logNotifications: true,
@@ -74,15 +74,16 @@ export const databaseConfig = (app: IServer): void => {
         connectRedis();
         app.start();
       } else {
-        // logger.error(
-        //   `[Database][${databaseOptions.type}] Database has lost connection.`
-        // );
+        logger.error(
+          `[Database][${databaseOptions.type}] Database has lost connection.`
+        );
       }
     })
     .catch((err) => {
-      // logger.error(
-      //   `[Database][${databaseOptions.type}] Database connection error.`
-      // );
+      logger.error(err.stack);
+      logger.error(
+        `[Database][${databaseOptions.type}] Database connection error.`
+      );
       process.exit();
     });
 };

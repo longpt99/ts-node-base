@@ -8,7 +8,7 @@ import { bootstrapConfig, expressConfig, routeConfig } from './config';
 import APP_CONFIG from './config/app.config';
 import serverConfig from './config/server.config';
 import { RouteConfig } from './libs';
-import { logger } from './utils';
+import logger from './utils/logger';
 
 export default class Server implements IServer {
   private app: Application;

@@ -1,7 +1,7 @@
 import express, { Response } from 'express';
 import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { ErrorHandler } from '../error';
-import { logger } from '../../utils';
+import logger from '../../utils/logger';
 
 /**
  * @method handler
