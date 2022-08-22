@@ -1,6 +1,6 @@
 import { Server } from 'http';
 import { logger } from '../utils';
-import newrelic from 'newrelic';
+// import newrelic from 'newrelic';
 
 export default function (server: Server): void {
   const others = [
@@ -20,9 +20,9 @@ export default function (server: Server): void {
       logger.info(`[System] ExitCode ${exitCode}.`);
     }
 
-    newrelic.shutdown({ collectPendingData: true }, () => {
-      process.exit();
-    });
+    // newrelic.shutdown({ collectPendingData: true }, () => {
+    process.exit();
+    // });
   }
 
   function exitHandler(exitCode: number) {

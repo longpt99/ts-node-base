@@ -1,6 +1,6 @@
 import { AppEnvironment } from '../../common/interfaces';
 
-export const ENV: AppEnvironment = {
+export default {
   NAME: 'local',
   APP: {
     PORT: 8080,
@@ -30,10 +30,6 @@ export const ENV: AppEnvironment = {
       PORT: 12778,
       PASSWORD: 'mjqobYRnaOkgaa3HS9d4SrNiDsKrlbNO',
       DATABASE: 0,
-      // HOST: 'localhost',
-      // PORT: 6379,
-      // PASSWORD: '',
-      // DATABASE: 0,
     },
   },
   OAUTH2: {
@@ -48,4 +44,4 @@ export const ENV: AppEnvironment = {
       CLIENT_SECRET: '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',
     },
   },
-};
+} as AppEnvironment;

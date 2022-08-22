@@ -1,6 +1,6 @@
 import express, { Application } from 'express';
 import { createServer, Server as HttpServer } from 'http';
-import 'newrelic';
+// import 'newrelic';
 import { NetworkInterfaceInfo, networkInterfaces } from 'os';
 import { AppConst } from './common/consts';
 import { IServer } from './common/interfaces/app.interface';

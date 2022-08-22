@@ -1,9 +1,13 @@
-import { join } from 'path';
-import { createClient } from 'redis';
+import path from 'path';
+import { createClient } from 'redis/index';
 import { ConnectionOptions, createConnection } from 'typeorm';
+import { fileURLToPath } from 'url';
 import { IServer } from '../../common/interfaces/app.interface';
 import { logger } from '../../utils';
 import APP_CONFIG from '../app.config';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const client = createClient({
   host: APP_CONFIG.ENV.DATABASE.REDIS.HOST,
@@ -59,7 +63,7 @@ export const databaseConfig = (app: IServer): void => {
     password: APP_CONFIG.ENV.DATABASE.POSTGRES.PASSWORD,
     database: APP_CONFIG.ENV.DATABASE.POSTGRES.NAME,
     synchronize: true,
-    entities: [join(__dirname, '../../modules/**/*.entity.{js,ts}')],
+    entities: [path.join(__dirname, '../../modules/**/*.entity.{js,ts}')],
     logging: false,
     // connectTimeoutMS: 20000,
     // maxQueryExecutionTime: 20000,

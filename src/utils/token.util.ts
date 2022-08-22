@@ -1,7 +1,9 @@
 import { CookieOptions, Response } from 'express';
-import { JwtPayload, sign, verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import APP_CONFIG from '../config/app.config';
 import { CacheManagerUtil } from './cache-manager.util';
+
+const { sign, verify } = jwt;
 
 export const COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
@@ -56,18 +58,18 @@ export class TokenUtil {
     return token;
   }
 
-  public verifyToken(token: string): JwtPayload {
+  public verifyToken(token: string): jwt.JwtPayload {
     return verify(
       token,
       APP_CONFIG.ENV.SECURE.JWT_ACCESS_TOKEN.SECRET_KEY
-    ) as JwtPayload;
+    ) as jwt.JwtPayload;
   }
 
-  public verifyRefreshToken(token: string): JwtPayload {
+  public verifyRefreshToken(token: string): jwt.JwtPayload {
     return verify(
       token,
       APP_CONFIG.ENV.SECURE.JWT_REFRESH_TOKEN.SECRET_KEY
-    ) as JwtPayload;
+    ) as jwt.JwtPayload;
   }
 
   public clearTokens(res: Response, signedKey: string): void {

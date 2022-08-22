@@ -1,3 +1,5 @@
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
 const gulp = require('gulp');
 const shell = require('gulp-shell');
 const uglify = require('gulp-uglify');
@@ -33,7 +35,7 @@ gulp.task('watch', (done) => {
     'gulp genDocument',
     `cross-env NODE_ENV=${
       argv['env'] || 'local'
-    } nodemon --watch 'src/**/*.ts' --exec node --inspect --require ts-node/register ./src/index.ts`,
+    } nodemon --watch 'src/**/*.ts' --exec node --experimental-modules --inspect --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts`,
     gulp.watch('src/**/*.ts', gulp.series('genDocument')),
   ])(done);
 });

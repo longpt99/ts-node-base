@@ -1,6 +1,8 @@
-import { green, red } from 'chalk';
+import chalk from 'chalk';
 import { createLogger, format, transports } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
+
+const { green, red } = chalk;
 
 const transport: DailyRotateFile = new DailyRotateFile({
   filename: 'logs/%DATE%.log',

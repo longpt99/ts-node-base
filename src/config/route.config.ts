@@ -1,28 +1,33 @@
 import { Application, Request, Response } from 'express';
 import glob from 'glob';
 import { getReasonPhrase, StatusCodes } from 'http-status-codes';
-import { join } from 'path';
+import path from 'path';
 import swaggerUi from 'swagger-ui-express';
-import { expressRouter } from '../libs';
 import { ErrorHandler } from '../libs/error';
 import { RouteConfig } from '../libs/router';
 import { logger } from '../utils';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const routeConfig = async (app: Application): Promise<void> => {
-  app.use(
-    '/api-docs',
-    swaggerUi.serve,
-    swaggerUi.setup(await import(join(process.cwd(), './doc/swagger.json')), {
-      explorer: true,
-    })
-  );
+  // app.use(
+  //   '/api-docs',
+  //   swaggerUi.serve,
+  //   swaggerUi.setup(
+  //     await import(`file://${path.join(__dirname, '../../doc/swagger.json')}`),
+  //     { explorer: true }
+  //   )
+  // );
   app.use(
     (() => {
       glob(
-        join(__dirname, '../modules/**/**.controller.[tj]s'),
+        path.join(__dirname, '../modules/**/**.controller.[tj]s'),
         async (_err, paths) => {
           for (let i = 0, len = paths.length; i < len; i++) {
-            await import(paths[i]).then((route) => new route.default());
+            await import(`file://${paths[i]}`).then(
+              (route) => new route.default()
+            );
           }
           RouteConfig.expressRouter.stack.forEach((layer) => {
             logger.info(
