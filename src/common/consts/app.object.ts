@@ -1,4 +1,8 @@
 export class AppObject {
+  static readonly ERR_CODE_DB = {
+    UNIQUE: '23505',
+  };
+
   static readonly MODULES = {
     USER: 'User',
     ADMIN: 'Admin',

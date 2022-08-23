@@ -3,67 +3,62 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { StringUtil } from '../../utils';
-import APP_CONFIG from '../../config/app.config';
 import { AppObject } from '../../common/consts';
+import { PhoneNumberProperties } from './user.interface';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  public id: string;
 
   @Column({ type: 'text', nullable: true })
-  firstName: string;
+  public firstName: string;
 
   @Column({ type: 'text', nullable: true })
-  lastName: string;
+  public lastName: string;
+
+  @Column({ type: 'date', nullable: true })
+  public dateOfBirth: Date;
 
   @Column({ type: 'text', nullable: true })
-  fullName: string;
+  public gender: string;
 
   @Column({ type: 'text', nullable: true })
-  password: string;
+  public email: string;
 
-  @Column({ type: 'text', nullable: true })
-  dateOfBirth: string;
-
-  @Column({ type: 'text', nullable: true })
-  gender: string;
-
-  @Column({ type: 'text', nullable: true })
-  email: string;
-
-  @Column({ type: 'boolean', default: true })
-  notification: boolean;
+  @Column({ type: 'jsonb', nullable: true })
+  @Index({ unique: true })
+  public mobilePhone: PhoneNumberProperties;
 
   @Column({
     type: 'enum',
     enum: Object.values(AppObject.COMMON_STATUS),
     default: AppObject.COMMON_STATUS.UNVERIFIED,
   })
-  status: string;
+  public status: string;
 
   @Column({ type: 'text', nullable: true })
-  facebookId: string;
+  public facebookId: string;
 
   @Column({ type: 'text', nullable: true })
-  googleId: string;
+  public googleId: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  public updatedAt: Date;
 
   @BeforeInsert()
-  async preSave() {
-    this.password = StringUtil.encrypt(
-      this.password,
-      APP_CONFIG.ENV.SECURE.PASSWORD_SECRET_KEY
-    );
+  async beforeInsert() {
+    // this.password = StringUtil.encrypt(
+    //   this.password,
+    //   APP_CONFIG.ENV.SECURE.PASSWORD_SECRET_KEY
+    // );
     if (this.firstName || this.lastName) {
       this.firstName = this.firstName
         .split(' ')
@@ -79,17 +74,17 @@ export class User {
         )
         .join(' ');
 
-      this.fullName = `${this.firstName} ${this.lastName}`;
+      // this.fullName = `${this.firstName} ${this.lastName}`;
     }
   }
 
-  async comparePassword(password: string): Promise<boolean> {
-    return (
-      password ===
-      StringUtil.decrypt(
-        this.password,
-        APP_CONFIG.ENV.SECURE.PASSWORD_SECRET_KEY
-      )
-    );
-  }
+  // async comparePassword(password: string): Promise<boolean> {
+  // return (
+  //   password ===
+  //   StringUtil.decrypt(
+  //     this.password,
+  //     APP_CONFIG.ENV.SECURE.PASSWORD_SECRET_KEY
+  //   )
+  // );
+  // }
 }

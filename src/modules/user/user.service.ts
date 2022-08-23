@@ -43,39 +43,37 @@ export class UserService {
   }
 
   async getUserByFacebookId(data: FacebookData): Promise<UserModel> {
-    let userFound = await this.detailByConditions({
+    const userFound = await this.detailByConditions({
       conditions: { facebookId: data.id },
       select: ['id'],
     });
 
     if (!userFound) {
-      userFound = await this.userRepository.save(
-        this.userRepository.create({
-          facebookId: data.id,
-          firstName: data.first_name,
-          lastName: data.last_name,
-          status: AppObject.COMMON_STATUS.ACTIVE,
-        })
-      );
+      // userFound = await this.userRepository.save(
+      //   this.userRepository.create({
+      //     facebookId: data.id,
+      //     firstName: data.first_name,
+      //     lastName: data.last_name,
+      //     status: AppObject.COMMON_STATUS.ACTIVE,
+      //   })
+      // );
     }
 
     return userFound;
   }
 
   async create(params) {
-    const emailExists = await this.userRepository.count({
-      where: { email: params.email },
-    });
-
-    if (emailExists > 0) {
-      throw new ErrorHandler({ message: 'emailExists' });
+    try {
+      const userCreated = await this.userRepository.save(
+        this.userRepository.create(params)
+      );
+      return userCreated;
+    } catch (error) {
+      if (error.code === AppObject.ERR_CODE_DB.UNIQUE) {
+        throw new ErrorHandler({ message: 'phoneNumberExists' });
+      }
+      throw error;
     }
-
-    const user = new User();
-    user.email = params.email;
-    user.password = params.password;
-    const userCreated = await this.userRepository.save(user);
-    return userCreated;
   }
 
   async getById() {}

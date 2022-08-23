@@ -1,12 +1,25 @@
 import { Request, Response } from 'express';
+import { RouteConfig } from '../../libs';
 import { SignTokenResponse } from './auth.interface';
 import { AuthService } from './auth.service';
 
-export class AuthController {
-  private authService: AuthService;
+export default class AuthController {
+  private authService = new AuthService();
+  private readonly router = RouteConfig;
+  private readonly adminPath = '/admin/auth';
+  private readonly userPath = '/auth';
 
   constructor() {
-    this.authService = new AuthService();
+    this._initializeRoutes();
+  }
+
+  private _initializeRoutes() {
+    //#region Admin section
+    this.router.post(`${this.adminPath}/login`, [this.adminLogin.bind(this)]);
+
+    //#region User section
+    this.router.post(`${this.userPath}/login`, [this.login.bind(this)]);
+    this.router.post(`${this.userPath}/register`, [this.register.bind(this)]);
   }
 
   //#region Admin section

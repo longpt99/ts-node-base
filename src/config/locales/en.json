@@ -15,5 +15,7 @@
 	"Hello error": "Hello error",
 	"Message": "Message",
 	"Bad Request": "Bad Request",
-	"": ""
+	"": "",
+	"phoneNumberExists": "phoneNumberExists",
+	"accountUnverified": "accountUnverified"
 }

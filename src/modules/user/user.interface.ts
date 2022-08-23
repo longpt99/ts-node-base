@@ -22,3 +22,8 @@ export interface RegisterAccount {
   email: string;
   password: string;
 }
+
+export interface PhoneNumberProperties {
+  phone: string;
+  dialCode: string;
+}

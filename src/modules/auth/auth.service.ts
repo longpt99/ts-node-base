@@ -1,18 +1,26 @@
 import { Response } from 'express';
 import got from 'got';
+import { getCustomRepository } from 'typeorm';
 import { StatusCodes } from 'http-status-codes';
 import { AppConst, AppObject } from '../../common/consts';
 import { TokenModel } from '../../libs';
 import { ErrorHandler } from '../../libs/error';
 import { TokenUtil } from '../../utils/token.util';
 import { UserModel } from '../user/user.interface';
+import { UserRepository } from '../user/user.repository';
 import { UserService } from '../user/user.service';
-import { FacebookData, LoginParams, SignTokenResponse } from './auth.interface';
+import {
+  FacebookData,
+  LoginParams,
+  RegisterParams,
+  SignTokenResponse,
+} from './auth.interface';
 
 export class AuthService {
   private static instance: AuthService;
   private userService: UserService;
   private tokenUtil: TokenUtil;
+  private userRepository: UserRepository;
 
   constructor() {
     if (AuthService.instance) {
@@ -21,6 +29,7 @@ export class AuthService {
 
     this.userService = new UserService();
     this.tokenUtil = new TokenUtil();
+    this.userRepository = getCustomRepository(UserRepository);
     AuthService.instance = this;
   }
 
@@ -57,13 +66,13 @@ export class AuthService {
       }
       default: {
         userFound = await this.userService.getUserByConditions({
-          conditions: { email: params.body.username },
-          select: ['id', 'password', 'status'],
+          conditions: { mobilePhone: params.body.mobilePhone },
+          // select: ['id', 'password', 'status'],
         });
 
-        if (!(await userFound.comparePassword(params.body.password))) {
-          throw new ErrorHandler({ message: 'wrongPassword' });
-        }
+        // if (!(await userFound.comparePassword(params.body.password))) {
+        //   throw new ErrorHandler({ message: 'wrongPassword' });
+        // }
         break;
       }
     }
@@ -71,7 +80,7 @@ export class AuthService {
     return this._signToken({ res: params.res, payload: { id: userFound.id } });
   }
 
-  async register(params) {
+  async register(params: RegisterParams) {
     const userCreated = await this.userService.create(params);
     return userCreated;
   }
