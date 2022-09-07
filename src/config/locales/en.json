@@ -17,5 +17,9 @@
 	"Bad Request": "Bad Request",
 	"": "",
 	"phoneNumberExists": "phoneNumberExists",
-	"accountUnverified": "accountUnverified"
+	"accountUnverified": "accountUnverified",
+	"Message 12312312": "Message 12312312",
+	"No Code": "No Code",
+	"Conflict": "Conflict",
+	"I'm a Teapot": "I'm a Teapot"
 }

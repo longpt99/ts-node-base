@@ -1,5 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import { ErrorHandler } from '../../libs/error';
+import StatusCodes from '../../utils/status-code';
 import { LoyaltyModel } from './loyalty.interface';
 import { LoyaltyRepository } from './loyalty.repository';
 
@@ -17,7 +18,7 @@ export class LoyaltyService {
   }
 
   async create(params) {
-    throw new ErrorHandler({ message: 'Message' });
+    throw new ErrorHandler({ message: `I'm a Teapot` });
     return {
       name: 'Long',
     };

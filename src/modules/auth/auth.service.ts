@@ -1,10 +1,10 @@
 import { Response } from 'express';
 import got from 'got';
 import { getCustomRepository } from 'typeorm';
-import { StatusCodes } from 'http-status-codes';
 import { AppConst, AppObject } from '../../common/consts';
 import { TokenModel } from '../../libs';
 import { ErrorHandler } from '../../libs/error';
+import StatusCodes from '../../utils/status-code';
 import { TokenUtil } from '../../utils/token.util';
 import { UserModel } from '../user/user.interface';
 import { UserRepository } from '../user/user.repository';
@@ -183,8 +183,8 @@ export class AuthService {
   }): Promise<SignTokenResponse> {
     if (!params.refreshToken) {
       throw new ErrorHandler({
-        message: 'Unauthorized',
-        status: StatusCodes.UNAUTHORIZED,
+        message: StatusCodes.getReasonPhraseCode(401),
+        status: 401,
       });
     }
 
@@ -193,8 +193,8 @@ export class AuthService {
       return this._signToken({ payload: { id: payload.id }, res: params.res });
     } catch (error) {
       throw new ErrorHandler({
-        message: 'unauthorized',
-        status: StatusCodes.UNAUTHORIZED,
+        message: StatusCodes.getReasonPhraseCode(401),
+        status: 401,
       });
     }
   }

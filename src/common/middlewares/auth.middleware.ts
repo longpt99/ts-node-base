@@ -1,9 +1,9 @@
 import { NextFunction, Request } from 'express';
-import { StatusCodes } from 'http-status-codes';
 import { TokenModel } from '../../libs';
 import { ErrorHandler } from '../../libs/error';
 import { TokenUtil } from '../../utils';
 import { CacheManagerUtil } from '../../utils/cache-manager.util';
+import StatusCodes from '../../utils/status-code';
 import { AppConst } from '../consts';
 
 const tokenUtil = new TokenUtil();
@@ -19,16 +19,14 @@ export async function authMiddleware(
     const token = req.headers['authorization'];
     if (!token) {
       throw new ErrorHandler({
-        message: 'unauthorized',
-        status: StatusCodes.UNAUTHORIZED,
+        message: StatusCodes.getReasonPhraseCode(401),
       });
     }
 
     const [tokenType, accessToken] = token.split(' ');
     if (tokenType !== AppConst.TOKEN_TYPE) {
       throw new ErrorHandler({
-        message: 'unauthorized',
-        status: StatusCodes.UNAUTHORIZED,
+        message: StatusCodes.getReasonPhraseCode(401),
       });
     }
 
@@ -38,8 +36,7 @@ export async function authMiddleware(
 
     if (!isFounded) {
       throw new ErrorHandler({
-        message: 'unauthorized',
-        status: StatusCodes.UNAUTHORIZED,
+        message: StatusCodes.getReasonPhraseCode(401),
       });
     }
     // Check user session
@@ -52,8 +49,7 @@ export async function authMiddleware(
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       throw new ErrorHandler({
-        message: 'unauthorized',
-        status: StatusCodes.UNAUTHORIZED,
+        message: StatusCodes.getReasonPhraseCode(401),
         code: 'TOKEN_EXPIRED',
       });
     }

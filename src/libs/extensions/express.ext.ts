@@ -1,7 +1,7 @@
 import express, { Response } from 'express';
-import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { ErrorHandler } from '../error';
 import logger from '../../utils/logger';
+import StatusCodes from '../../utils/status-code';
 
 /**
  * @method handler
@@ -12,7 +12,7 @@ express.response.handler = async function (data) {
   const res = _this(this);
   try {
     const result = await data;
-    return res.status(StatusCodes.OK).json(result);
+    return res.status(200).json(result);
   } catch (error) {
     return res.error(error ?? {}, res);
   }
@@ -36,21 +36,24 @@ express.response.success = function (data) {
 express.response.error = function (error) {
   const res = _this(this);
 
-  let status = error.status ?? StatusCodes.BAD_REQUEST;
+  let status =
+    error.status ??
+    (error.message && StatusCodes.getCode(error.message)) ??
+    400;
 
   if (error.stack) {
     logger.error(error.stack);
   }
 
   if (!(error instanceof ErrorHandler)) {
-    status = StatusCodes.INTERNAL_SERVER_ERROR;
-    error.message = getReasonPhrase(status);
+    status = 500;
+    error.message = StatusCodes.getReasonPhraseCode(status);
   }
 
   const msg =
     (error.response && JSON.parse(error.response.body).error.message) ??
     (error.message && res.__(error.message)) ??
-    getReasonPhrase(status);
+    StatusCodes.getReasonPhraseCode(status);
 
   return res.status(status).json({
     message: msg,
