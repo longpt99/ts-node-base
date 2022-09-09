@@ -43,4 +43,15 @@ export interface AppEnvironment {
       CLIENT_SECRET: string;
     };
   };
+  MAIL_CONFIG: {
+    SMTP_CONFIG: {
+      HOST: string;
+      PORT: number;
+      SECURE: boolean;
+      AUTH: {
+        USER: string;
+        PASS: string;
+      };
+    };
+  };
 }

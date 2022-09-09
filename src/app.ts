@@ -19,7 +19,7 @@ export default class Server implements IServer {
 
   public start() {
     const server: HttpServer = createServer(this.app);
-    RouteConfig.globalPrefix = `/${AppConst.API_PREFIX}/${AppConst.API_VERSION}`;
+    RouteConfig.globalPrefix = `/${AppConst.API_VERSION}`;
 
     bootstrapConfig();
     expressConfig(this.app);

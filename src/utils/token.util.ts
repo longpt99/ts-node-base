@@ -1,5 +1,5 @@
 import { CookieOptions, Response } from 'express';
-import { JwtPayload, sign, verify } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 import APP_CONFIG from '../config/app.config';
 import { client } from '../config/databases/database';
 import { TokenPayload } from '../modules/auth/auth.interface';

@@ -3,7 +3,6 @@ import { AppObject } from '../../common/consts';
 import { ParamsCommonList } from '../../common/interfaces';
 import { ErrorHandler } from '../../libs/errors';
 import { FacebookData } from '../auth/auth.interface';
-import { User } from './user.entity';
 import { UserModel } from './user.interface';
 import { UserRepository } from './user.repository';
 

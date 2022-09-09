@@ -48,4 +48,15 @@ export const ENV: AppEnvironment = {
       CLIENT_SECRET: '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',
     },
   },
+  MAIL_CONFIG: {
+    SMTP_CONFIG: {
+      HOST: 'smtp.gmail.com',
+      PORT: 456,
+      SECURE: true,
+      AUTH: {
+        USER: 'longpt99.it@gmail.com',
+        PASS: 'fuydxbuzmvfkuezz',
+      },
+    },
+  },
 };

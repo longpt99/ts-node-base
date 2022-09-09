@@ -2,10 +2,9 @@ import { Application, Request, Response } from 'express';
 import glob from 'glob';
 import { join } from 'path';
 import swaggerUi from 'swagger-ui-express';
-import { ErrorHandler } from '../libs/errors';
+import { NotFoundError } from '../libs/errors/not-found.error';
 import { RouteConfig } from '../libs/router';
 import logger from '../utils/logger';
-import StatusCodes from '../utils/status-code';
 
 export const routeConfig = async (app: Application): Promise<void> => {
   app.use(
@@ -38,11 +37,6 @@ export const routeConfig = async (app: Application): Promise<void> => {
   );
 
   app.use((_req: Request, res: Response) => {
-    return res.error(
-      new ErrorHandler({
-        message: StatusCodes.getReasonPhraseCode(400),
-        status: 400,
-      })
-    );
+    return res.error(new NotFoundError());
   });
 };
