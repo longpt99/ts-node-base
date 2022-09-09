@@ -1,7 +1,7 @@
 import Ajv, { SchemaObject } from 'ajv';
 import ajvErrors from 'ajv-errors';
 import { NextFunction, Request, Response } from 'express';
-import { ErrorHandler } from '../../libs/error';
+import { ErrorHandler } from '../../libs/errors';
 
 type EnumObj = ('body' | 'params' | 'query')[];
 
@@ -21,7 +21,7 @@ export function validate(dto: SchemaObject, objects: EnumObj = ['body']) {
         next(
           new ErrorHandler({
             message: 'validateError',
-            errors: errors,
+            error: errors,
           })
         );
       }

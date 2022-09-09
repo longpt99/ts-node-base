@@ -30,11 +30,11 @@ gulp.task('copyNonTS', gulp.parallel(minifyHTML, minifyJS));
 
 gulp.task('watch', (done) => {
   return shell.task([
-    'gulp genDocument',
+    // 'gulp genDocument',
     `cross-env NODE_ENV=${
       argv['env'] || 'local'
     } nodemon --watch 'src/**/*.ts' --exec node --inspect --require ts-node/register ./src/index.ts`,
-    gulp.watch('src/**/*.ts', gulp.series('genDocument')),
+    // gulp.watch('src/**/*.ts', gulp.series('genDocument')),
   ])(done);
 });
 

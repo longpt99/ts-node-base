@@ -1,13 +1,14 @@
 import { NextFunction, Request } from 'express';
+import { client } from '../../config/databases/database';
 import { TokenModel } from '../../libs';
-import { ErrorHandler } from '../../libs/error';
+import { ErrorHandler } from '../../libs/errors';
 import { TokenUtil } from '../../utils';
 import { CacheManagerUtil } from '../../utils/cache-manager.util';
 import StatusCodes from '../../utils/status-code';
 import { AppConst } from '../consts';
 
 const tokenUtil = new TokenUtil();
-const cacheManagerUtil = new CacheManagerUtil();
+const cacheManagerUtil = new CacheManagerUtil(client);
 
 export async function authMiddleware(
   req: Request,

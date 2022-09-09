@@ -20,6 +20,12 @@ export default class AuthController {
     //#region User section
     this.router.post(`${this.userPath}/login`, [this.login.bind(this)]);
     this.router.post(`${this.userPath}/register`, [this.register.bind(this)]);
+
+    this.router.post(`${this.userPath}/refresh-token`, [
+      this.refreshToken.bind(this),
+    ]);
+
+    this.router.post(`${this.userPath}/logout`, [this.logout.bind(this)]);
   }
 
   //#region Admin section
@@ -34,12 +40,7 @@ export default class AuthController {
   }
 
   async refreshToken(req: Request, res: Response): Promise<SignTokenResponse> {
-    return res.handler(
-      this.authService.refreshToken({
-        res: res,
-        refreshToken: req.signedCookies.refreshToken,
-      })
-    );
+    return res.handler(this.authService.refreshToken(req.body.refreshToken));
   }
 
   async loginFacebook(req: Request, res: Response) {
@@ -55,7 +56,7 @@ export default class AuthController {
   }
 
   async logout(req: Request, res: Response) {
-    return res.handler(this.authService.logout(res, req.user));
+    return res.handler(this.authService.logout(req.user.id));
   }
   //#endregion User section
 }

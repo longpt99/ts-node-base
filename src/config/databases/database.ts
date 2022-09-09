@@ -40,14 +40,14 @@ export const client = createClient({
 // }
 
 async function connectRedis() {
+  client.ping(() => {
+    logger.info(`[Database][Redis] Database has connected successfully!`);
+  });
+
   client.on('error', (err) => {
     logger.error('Redis Client Error', err);
     process.exit();
   });
-
-  client.on('connect', () =>
-    logger.info(`[Database][Redis] Database has connected successfully!`)
-  );
 }
 
 export const databaseConfig = (app: IServer): void => {

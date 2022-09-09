@@ -2,8 +2,10 @@ import { Response } from 'express';
 import got from 'got';
 import { getCustomRepository } from 'typeorm';
 import { AppConst, AppObject } from '../../common/consts';
+import { client } from '../../config/databases/database';
 import { TokenModel } from '../../libs';
-import { ErrorHandler } from '../../libs/error';
+import { ErrorHandler, UnauthorizedError } from '../../libs/errors';
+import { CacheManagerUtil } from '../../utils/cache-manager.util';
 import StatusCodes from '../../utils/status-code';
 import { TokenUtil } from '../../utils/token.util';
 import { UserModel } from '../user/user.interface';
@@ -14,6 +16,7 @@ import {
   LoginParams,
   RegisterParams,
   SignTokenResponse,
+  TokenPayload,
 } from './auth.interface';
 
 export class AuthService {
@@ -21,6 +24,7 @@ export class AuthService {
   private userService: UserService;
   private tokenUtil: TokenUtil;
   private userRepository: UserRepository;
+  private cacheManager: CacheManagerUtil;
 
   constructor() {
     if (AuthService.instance) {
@@ -30,6 +34,7 @@ export class AuthService {
     this.userService = new UserService();
     this.tokenUtil = new TokenUtil();
     this.userRepository = getCustomRepository(UserRepository);
+    this.cacheManager = new CacheManagerUtil(client);
     AuthService.instance = this;
   }
 
@@ -77,7 +82,7 @@ export class AuthService {
       }
     }
 
-    return this._signToken({ res: params.res, payload: { id: userFound.id } });
+    return this._signToken({ id: userFound.id });
   }
 
   async register(params: RegisterParams) {
@@ -177,40 +182,30 @@ export class AuthService {
     }
   }
 
-  async refreshToken(params: {
-    res: Response;
-    refreshToken: string;
-  }): Promise<SignTokenResponse> {
-    if (!params.refreshToken) {
-      throw new ErrorHandler({
-        message: StatusCodes.getReasonPhraseCode(401),
-        status: 401,
-      });
+  async refreshToken(token: string) {
+    const payload = this.tokenUtil.verifyRefreshToken(token);
+    const tokenKey = await this.cacheManager.getKey(
+      `caches:users:${payload.id}:refreshTokens:${token.split('.')[2]}`
+    );
+
+    if (!tokenKey && token.split('.')[2] !== tokenKey) {
+      throw new UnauthorizedError();
     }
 
-    try {
-      const payload = this.tokenUtil.verifyRefreshToken(params.refreshToken);
-      return this._signToken({ payload: { id: payload.id }, res: params.res });
-    } catch (error) {
-      throw new ErrorHandler({
-        message: StatusCodes.getReasonPhraseCode(401),
-        status: 401,
-      });
-    }
+    return this._signToken(payload);
   }
 
-  async logout(res: Response, user: TokenModel): Promise<void> {
-    this.tokenUtil.clearTokens(res, user.accessToken.split('.')[2]);
-  }
-
-  private _signToken(params: {
-    res: Response;
-    payload: any;
-  }): SignTokenResponse {
-    const accessToken = this.tokenUtil.signToken({
-      id: params.payload.id,
+  async logout(userId: string): Promise<void> {
+    this.cacheManager.client.keys(`caches:users:${userId}:*`, (err, data) => {
+      this.cacheManager.delKey(data);
     });
-    this.tokenUtil.signRefreshToken(params.payload.id, params.res);
-    return { accessToken: accessToken, tokenType: AppConst.TOKEN_TYPE };
+  }
+
+  private _signToken(payload: TokenPayload): SignTokenResponse {
+    return {
+      accessToken: this.tokenUtil.signToken(payload),
+      refreshToken: this.tokenUtil.signRefreshToken(payload),
+      tokenType: AppObject.TOKEN_TYPES.BEARER,
+    };
   }
 }

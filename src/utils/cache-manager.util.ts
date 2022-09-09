@@ -1,14 +1,16 @@
-import { client } from '../config/databases/database';
+import { RedisClient } from 'redis';
 
 export class CacheManagerUtil {
   private static instance: CacheManagerUtil;
+  public client: RedisClient;
 
-  constructor() {
-    if (CacheManagerUtil.instance) {
-      return CacheManagerUtil.instance;
-    }
+  constructor(client: RedisClient) {
+    // if (CacheManagerUtil.instance) {
+    //   return CacheManagerUtil.instance;
+    // }
 
-    CacheManagerUtil.instance = this;
+    // CacheManagerUtil.instance = this;
+    this.client = client;
   }
 
   async setKey(params: {
@@ -18,14 +20,20 @@ export class CacheManagerUtil {
   }): Promise<string | null> {
     return new Promise((resolve, reject) => {
       if (params.exp) {
-        client.setex(params.key, params.exp, params.value, (err, val) => {
-          if (err) {
-            return reject(err);
+        return this.client.setex(
+          params.key,
+          params.exp,
+          params.value,
+          (err, val) => {
+            if (err) {
+              return reject(err);
+            }
+            return resolve(val);
           }
-          return resolve(val);
-        });
+        );
       }
-      client.set(params.key, params.value, (err, val) => {
+
+      return this.client.set(params.key, params.value, (err, val) => {
         if (err) {
           return reject(err);
         }
@@ -34,9 +42,9 @@ export class CacheManagerUtil {
     });
   }
 
-  async delKey(key: string): Promise<number> {
+  async delKey(key: string | string[]): Promise<number> {
     return new Promise((resolve, reject) => {
-      client.del(key, (err, val) => {
+      this.client.del(key, (err, val) => {
         if (err) {
           return reject(err);
         }
@@ -47,7 +55,7 @@ export class CacheManagerUtil {
 
   async getKey(key: string): Promise<string | null> {
     return new Promise((resolve, reject) => {
-      client.get(key, (err, val) => {
+      this.client.get(key, (err, val) => {
         if (err) {
           return reject(err);
         }
@@ -58,7 +66,7 @@ export class CacheManagerUtil {
 
   async hashSet(key: string, field: string, value: string): Promise<number> {
     return new Promise((resolve, reject) => {
-      client.hset(key, field, value, (err, val) => {
+      this.client.hset(key, field, value, (err, val) => {
         if (err) {
           return reject(err);
         }
@@ -69,7 +77,7 @@ export class CacheManagerUtil {
 
   async hashGet(key: string, field: string): Promise<string | undefined> {
     return new Promise((resolve, reject) => {
-      client.hget(key, field, (err, val) => {
+      this.client.hget(key, field, (err, val) => {
         if (err) {
           return reject(err);
         }
@@ -80,7 +88,7 @@ export class CacheManagerUtil {
 
   async hashGetAll(key: string): Promise<{ [x: string]: string }> {
     return new Promise((resolve, reject) => {
-      client.hgetall(key, (err, val) => {
+      this.client.hgetall(key, (err, val) => {
         if (err) {
           return reject(err);
         }
@@ -91,7 +99,7 @@ export class CacheManagerUtil {
 
   async hashDel(key: string, field: string): Promise<number> {
     return new Promise((resolve, reject) => {
-      client.hdel(key, field, (err, val) => {
+      this.client.hdel(key, field, (err, val) => {
         if (err) {
           return reject(err);
         }
@@ -106,7 +114,7 @@ export class CacheManagerUtil {
       msgArr.push(JSON.stringify(dataArr[i]));
     }
     return new Promise((resolve, reject) => {
-      client.rpush(queue, msgArr, (err, val) => {
+      this.client.rpush(queue, msgArr, (err, val) => {
         if (err) {
           return reject(err);
         }

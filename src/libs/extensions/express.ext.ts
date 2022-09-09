@@ -1,7 +1,8 @@
 import express, { Response } from 'express';
-import { ErrorHandler } from '../error';
+import { ErrorHandler } from '../errors';
 import logger from '../../utils/logger';
 import StatusCodes from '../../utils/status-code';
+import { AppObject } from '../../common/consts';
 
 /**
  * @method handler
@@ -36,28 +37,28 @@ express.response.success = function (data) {
 express.response.error = function (error) {
   const res = _this(this);
 
-  let status =
-    error.status ??
-    (error.message && StatusCodes.getCode(error.message)) ??
-    400;
-
+  // let status =
+  //   error.status ??
+  //   (error.message && StatusCodes.getCode(error.message)) ??
+  //   400;
   if (error.stack) {
     logger.error(error.stack);
   }
-
+  let status = error.status;
   if (!(error instanceof ErrorHandler)) {
     status = 500;
     error.message = StatusCodes.getReasonPhraseCode(status);
   }
 
-  const msg =
-    (error.response && JSON.parse(error.response.body).error.message) ??
-    (error.message && res.__(error.message)) ??
-    StatusCodes.getReasonPhraseCode(status);
+  // const msg =
+  //   (error.response && JSON.parse(error.response.body).error.message) ??
+  //   (error.message && res.__(error.message)) ??
+  //   StatusCodes.getReasonPhraseCode(status);
 
   return res.status(status).json({
-    message: msg,
-    stack: process.env.NODE_ENV !== 'production' && error.stack,
+    message: res.__(error.message),
+    stack:
+      process.env.NODE_ENV !== AppObject.ENVIRONMENTS.PRODUCTION && error.stack,
     status: status,
     errors: error.error ?? error.errors,
     code: error.code,

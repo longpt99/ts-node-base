@@ -1,4 +1,8 @@
 export class AppObject {
+  static readonly TOKEN_TYPES = {
+    BEARER: 'Bearer',
+  };
+
   static readonly ERR_CODE_DB = {
     UNIQUE: '23505',
   };

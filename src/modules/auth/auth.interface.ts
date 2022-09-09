@@ -25,7 +25,13 @@ export interface RegisterParams {
   email?: string;
 }
 
+export interface TokenPayload {
+  id: string;
+  [key: string]: string;
+}
+
 export interface SignTokenResponse {
   accessToken: string;
+  refreshToken: string;
   tokenType: string;
 }

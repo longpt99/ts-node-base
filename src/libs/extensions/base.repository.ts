@@ -1,5 +1,5 @@
 // import { Document, Model } from 'mongoose';
-import { Not, Repository } from 'typeorm';
+import { Not, ObjectLiteral, Repository } from 'typeorm';
 import { AppObject } from '../../common/consts';
 import { ParamsCommonList } from '../../common/interfaces';
 
@@ -47,7 +47,7 @@ import { ParamsCommonList } from '../../common/interfaces';
 //   }
 // }
 
-export class BaseRepository<T> extends Repository<T> {
+export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
   async detailByConditions(params: ParamsCommonList): Promise<T> {
     if (params.overwriteConditions) {
       Object.assign(params.conditions, params.overwriteConditions);

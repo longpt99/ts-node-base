@@ -2,7 +2,7 @@ import { Application, Request, Response } from 'express';
 import glob from 'glob';
 import { join } from 'path';
 import swaggerUi from 'swagger-ui-express';
-import { ErrorHandler } from '../libs/error';
+import { ErrorHandler } from '../libs/errors';
 import { RouteConfig } from '../libs/router';
 import logger from '../utils/logger';
 import StatusCodes from '../utils/status-code';
