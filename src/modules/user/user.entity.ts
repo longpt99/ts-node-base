@@ -8,30 +8,31 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { AppObject } from '../../common/consts';
+import { StringUtil } from '../../utils';
 import { PhoneNumberProperties } from './user.interface';
+import APP_CONFIG from '../../configs/app.config';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'text' })
   public firstName: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'text' })
   public lastName: string;
 
   @Column({ type: 'date', nullable: true })
   public dateOfBirth: Date;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'text' })
   public gender: string;
 
   @Column({ type: 'text', nullable: true })
   public email: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  @Index({ unique: true })
   public mobilePhone: PhoneNumberProperties;
 
   @Column({
@@ -47,6 +48,9 @@ export class User {
   @Column({ type: 'text', nullable: true })
   public googleId: string;
 
+  @Column({ type: 'text', nullable: true })
+  public password: string;
+
   @CreateDateColumn()
   public createdAt: Date;
 
@@ -55,10 +59,11 @@ export class User {
 
   @BeforeInsert()
   async beforeInsert() {
-    // this.password = StringUtil.encrypt(
-    //   this.password,
-    //   APP_CONFIG.ENV.SECURE.PASSWORD_SECRET_KEY
-    // );
+    this.password = StringUtil.encrypt(
+      this.password,
+      APP_CONFIG.ENV.SECURE.PASSWORD_SECRET_KEY
+    );
+
     if (this.firstName || this.lastName) {
       this.firstName = this.firstName
         .split(' ')

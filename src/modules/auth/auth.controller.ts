@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
+import { validate } from '../../common';
 import { RouteConfig } from '../../libs';
 import { SignTokenResponse } from './auth.interface';
 import { AuthService } from './auth.service';
+import { AuthValidation } from './auth.validation';
 
 export default class AuthController {
   private authService = new AuthService();
@@ -19,7 +21,10 @@ export default class AuthController {
 
     //#region User section
     this.router.post(`${this.userPath}/login`, [this.login.bind(this)]);
-    this.router.post(`${this.userPath}/register`, [this.register.bind(this)]);
+    this.router.post(`${this.userPath}/register`, [
+      validate(AuthValidation.register),
+      this.register.bind(this),
+    ]);
 
     this.router.post(`${this.userPath}/refresh-token`, [
       this.refreshToken.bind(this),

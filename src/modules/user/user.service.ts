@@ -2,7 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import { AppObject } from '../../common/consts';
 import { ParamsCommonList } from '../../common/interfaces';
 import { ErrorHandler } from '../../libs/errors';
-import { FacebookData } from '../auth/auth.interface';
+import { FacebookData, RegisterParams } from '../auth/auth.interface';
 import { UserModel } from './user.interface';
 import { UserRepository } from './user.repository';
 
@@ -61,7 +61,7 @@ export class UserService {
     return userFound;
   }
 
-  async create(params) {
+  async create(params: RegisterParams) {
     try {
       const userCreated = await this.userRepository.save(
         this.userRepository.create(params)
@@ -69,7 +69,7 @@ export class UserService {
       return userCreated;
     } catch (error) {
       if (error.code === AppObject.ERR_CODE_DB.UNIQUE) {
-        throw new ErrorHandler({ message: 'phoneNumberExists' });
+        throw new ErrorHandler({ message: 'emailExists' });
       }
       throw error;
     }

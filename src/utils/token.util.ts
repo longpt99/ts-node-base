@@ -1,7 +1,7 @@
 import { CookieOptions, Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
-import APP_CONFIG from '../config/app.config';
-import { client } from '../config/databases/database';
+import APP_CONFIG from '../configs/app.config';
+import { client } from '../configs/databases/database';
 import { TokenPayload } from '../modules/auth/auth.interface';
 import { CacheManagerUtil } from './cache-manager.util';
 

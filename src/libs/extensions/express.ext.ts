@@ -36,7 +36,6 @@ express.response.success = function (data) {
  */
 express.response.error = function (error) {
   const res = _this(this);
-
   // let status =
   //   error.status ??
   //   (error.message && StatusCodes.getCode(error.message)) ??

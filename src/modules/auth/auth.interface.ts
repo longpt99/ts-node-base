@@ -18,11 +18,12 @@ export interface LoginParams {
 }
 
 export interface RegisterParams {
-  mobilePhone: PhoneNumberProperties;
+  mobilePhone?: PhoneNumberProperties;
   firstName: string;
   lastName: string;
   gender: string;
-  email?: string;
+  email: string;
+  password: string;
 }
 
 export interface TokenPayload {

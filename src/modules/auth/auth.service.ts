@@ -2,7 +2,7 @@ import { Response } from 'express';
 import got from 'got';
 import { getCustomRepository } from 'typeorm';
 import { AppConst, AppObject } from '../../common/consts';
-import { client } from '../../config/databases/database';
+import { client } from '../../configs/databases/database';
 import { TokenModel } from '../../libs';
 import { ErrorHandler, UnauthorizedError } from '../../libs/errors';
 import { CacheManagerUtil } from '../../utils/cache-manager.util';
@@ -86,8 +86,8 @@ export class AuthService {
   }
 
   async register(params: RegisterParams) {
-    const userCreated = await this.userService.create(params);
-    return userCreated;
+    await this.userService.create(params);
+    return;
   }
 
   async adminLogin(params) {}

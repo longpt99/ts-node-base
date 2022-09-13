@@ -1,5 +1,4 @@
 import compression from 'compression';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application } from 'express';
 import helmet from 'helmet';
@@ -14,8 +13,7 @@ export const expressConfig = (app: Application): void => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(i18n.init);
-  app.use(cookieParser());
   if (process.env.NODE_ENV !== AppObject.ENVIRONMENTS.PRODUCTION) {
-    app.use(morgan('dev'));
+    app.use(morgan('tiny'));
   }
 };

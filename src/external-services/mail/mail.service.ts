@@ -1,6 +1,6 @@
 import { SendMailParams } from './mail.interface';
 import nodemailer from 'nodemailer';
-import APP_CONFIG from '../../config/app.config';
+import APP_CONFIG from '../../configs/app.config';
 
 export default class MailService {
   private static instance: MailService;

@@ -22,5 +22,10 @@
 	"No Code": "No Code",
 	"Conflict": "Conflict",
 	"I'm a Teapot": "I'm a Teapot",
-	"Payment Required": "Payment Required"
+	"Payment Required": "Payment Required",
+	"must NOT have additional properties": "must NOT have additional properties",
+	"must match format \"email\"": "must match format \"email\"",
+	"must have required property 'lastName'": "must have required property 'lastName'",
+	"firstNameIsRequired": "firstNameIsRequired",
+	"lastNameIsRequired": "lastNameIsRequired"
 }

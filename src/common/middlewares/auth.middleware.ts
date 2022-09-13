@@ -1,5 +1,5 @@
 import { NextFunction, Request } from 'express';
-import { client } from '../../config/databases/database';
+import { client } from '../../configs/databases/database';
 import { TokenModel } from '../../libs';
 import { ErrorHandler } from '../../libs/errors';
 import { TokenUtil } from '../../utils';
@@ -12,7 +12,7 @@ const cacheManagerUtil = new CacheManagerUtil(client);
 
 export async function authMiddleware(
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ): Promise<void> {
   try {

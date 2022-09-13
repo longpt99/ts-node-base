@@ -1,5 +1,5 @@
-import { Application, Request, Response } from 'express';
-import glob from 'glob';
+import { Application, NextFunction, Request, Response } from 'express';
+import globSync from 'glob/sync';
 import { join } from 'path';
 import swaggerUi from 'swagger-ui-express';
 import { NotFoundError } from '../libs/errors/not-found.error';
@@ -17,24 +17,23 @@ export const routeConfig = async (app: Application): Promise<void> => {
 
   app.use(
     (() => {
-      glob(
-        join(__dirname, '../modules/**/**.controller.[tj]s'),
-        async (_err, paths) => {
-          for (let i = 0, len = paths.length; i < len; i++) {
-            await import(paths[i]).then((route) => new route.default());
-          }
-          RouteConfig.expressRouter.stack.forEach((layer) => {
-            logger.info(
-              `[Router] ${layer.route.stack[0].method.toUpperCase()}: "${
-                layer.route.path
-              }" has been registered!`
-            );
-          });
-        }
+      globSync(join(__dirname, '../modules/**/**.controller.[tj]s')).forEach(
+        (path: string) => new (require(path).default)()
       );
+      for (const layer of RouteConfig.expressRouter.stack) {
+        logger.info(
+          `[Router] ${layer.route.stack[0].method.toUpperCase()}: "${
+            layer.route.path
+          }" has been registered!`
+        );
+      }
       return RouteConfig.expressRouter;
     })()
   );
+
+  app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
+    return res.error(error);
+  });
 
   app.use((_req: Request, res: Response) => {
     return res.error(new NotFoundError());

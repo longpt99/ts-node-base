@@ -3,7 +3,7 @@ import { RouteConfig } from '../../libs';
 import { HealthService } from './health.service';
 
 export default class HealthController {
-  private healthService: HealthService;
+  private readonly healthService: HealthService;
   private readonly path = '/healths';
   private readonly router = RouteConfig;
 

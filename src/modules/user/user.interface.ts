@@ -21,6 +21,8 @@ export type UserModel = User;
 export interface RegisterAccount {
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
 }
 
 export interface PhoneNumberProperties {
