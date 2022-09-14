@@ -8,7 +8,7 @@ export class init1663143462582 implements MigrationInterface {
       `CREATE TABLE "loyalty" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "point" integer NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_327d399b9ca75dd638ccbd4b991" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "firstName" text NOT NULL, "lastName" text NOT NULL, "dateOfBirth" date, "gender" text NOT NULL, "email" text, "mobilePhone" jsonb, "status" "public"."user_status_enum" NOT NULL DEFAULT 'unverified', "facebookId" text, "googleId" text, "password" text, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`
+      `CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "firstName" text NOT NULL, "lastName" text NOT NULL, "dateOfBirth" date, "gender" text, "email" text, "mobilePhone" jsonb, "status" "public"."user_status_enum" NOT NULL DEFAULT 'unverified', "facebookId" text, "googleId" text, "password" text, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(`ALTER TABLE "loyalty" DROP COLUMN "point"`);
     await queryRunner.query(

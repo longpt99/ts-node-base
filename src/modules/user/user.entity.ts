@@ -25,7 +25,7 @@ export class User {
   @Column({ type: 'date', nullable: true })
   public dateOfBirth: Date;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   public gender: string;
 
   @Column({ type: 'text', nullable: true })
