@@ -1,4 +1,4 @@
 import Server from './app';
-import { databaseConfig } from './configs/databases/database';
+import { databaseConnect } from './configs/databases/database';
 
-databaseConfig(new Server());
+databaseConnect(new Server());

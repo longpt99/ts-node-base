@@ -13,7 +13,12 @@
     "test:coverage": "gulp test:coverage",
     "prettier:format": "prettier --config .prettierrc src/**/*.ts --write",
     "lint": "eslint . --ext .ts",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "typeorm": "ts-node ./node_modules/typeorm/cli --config ./src/configs/databases/typeorm.config.ts",
+    "migration:run": "yarn typeorm migration:run",
+    "migration:generate": "yarn typeorm migration:generate -n",
+    "migration:create": "yarn typeorm migration:create -n",
+    "migration:revert": "yarn typeorm migration:revert"
   },
   "dependencies": {
     "ajv": "^8.6.2",

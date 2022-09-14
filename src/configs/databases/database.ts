@@ -1,9 +1,9 @@
-import path from 'path';
 import { createClient } from 'redis';
-import { ConnectionOptions, createConnection } from 'typeorm';
+import { createConnection } from 'typeorm';
 import { IServer } from '../../common/interfaces/app.interface';
 import logger from '../../utils/logger';
 import APP_CONFIG from '../app.config';
+import databaseConfig from './typeorm.config';
 
 export const client = createClient({
   host: APP_CONFIG.ENV.DATABASE.REDIS.HOST,
@@ -50,40 +50,25 @@ async function connectRedis() {
   });
 }
 
-export const databaseConfig = (app: IServer): void => {
-  const databaseOptions: ConnectionOptions = {
-    type: 'postgres',
-    host: APP_CONFIG.ENV.DATABASE.POSTGRES.HOST,
-    port: APP_CONFIG.ENV.DATABASE.POSTGRES.PORT,
-    username: APP_CONFIG.ENV.DATABASE.POSTGRES.USERNAME,
-    password: APP_CONFIG.ENV.DATABASE.POSTGRES.PASSWORD,
-    database: APP_CONFIG.ENV.DATABASE.POSTGRES.NAME,
-    entities: [path.join(__dirname, '../../modules/**/*.entity.{js,ts}')],
-    synchronize: true,
-    metadataTableName: undefined,
-    // logging: true,
-    // connectTimeoutMS: 20000,
-    // maxQueryExecutionTime: 20000,
-    // logNotifications: true,
-  };
-  createConnection(databaseOptions)
+export const databaseConnect = (app: IServer): void => {
+  createConnection(databaseConfig)
     .then((connection) => {
       if (connection.isConnected) {
         logger.info(
-          `[Database][${databaseOptions.type}] "${APP_CONFIG.ENV.DATABASE.POSTGRES.NAME}" has connected successfully!`
+          `[Database][${databaseConfig.type}] "${APP_CONFIG.ENV.DATABASE.POSTGRES.NAME}" has connected successfully!`
         );
         connectRedis();
         app.start();
       } else {
         logger.error(
-          `[Database][${databaseOptions.type}] Database has lost connection.`
+          `[Database][${databaseConfig.type}] Database has lost connection.`
         );
       }
     })
     .catch((err) => {
       logger.error(err.stack);
       logger.error(
-        `[Database][${databaseOptions.type}] Database connection error.`
+        `[Database][${databaseConfig.type}] Database connection error.`
       );
       process.exit();
     });

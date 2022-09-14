@@ -33,7 +33,7 @@ gulp.task('watch', (done) => {
     // 'gulp genDocument',
     `cross-env NODE_ENV=${
       argv['env'] || 'local'
-    } nodemon --watch 'src/**/*.ts' --exec node --inspect --require ts-node/register ./src/index.ts`,
+    } nodemon --watch 'src/**/*.ts' --ignore src/migrations --exec node --inspect --require ts-node/register ./src/index.ts`,
     // gulp.watch('src/**/*.ts', gulp.series('genDocument')),
   ])(done);
 });

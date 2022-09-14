@@ -3,14 +3,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { AppObject } from '../../common/consts';
+import APP_CONFIG from '../../configs/app.config';
 import { StringUtil } from '../../utils';
 import { PhoneNumberProperties } from './user.interface';
-import APP_CONFIG from '../../configs/app.config';
 
 @Entity()
 export class User {
