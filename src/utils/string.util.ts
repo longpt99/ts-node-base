@@ -14,4 +14,8 @@ export class StringUtil {
   static random(): string {
     return lib.random(128 / 8).toString();
   }
+
+  static randomNumber(): string {
+    return Math.floor(100000 + Math.random() * 899999).toString();
+  }
 }

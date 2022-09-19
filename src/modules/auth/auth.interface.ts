@@ -15,6 +15,7 @@ export interface LoginParams {
   password: string;
   token?: string;
   mobilePhone?: PhoneNumberProperties;
+  email?: string;
 }
 
 export interface RegisterParams {

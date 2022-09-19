@@ -27,5 +27,9 @@
 	"must match format \"email\"": "must match format \"email\"",
 	"must have required property 'lastName'": "must have required property 'lastName'",
 	"firstNameIsRequired": "firstNameIsRequired",
-	"lastNameIsRequired": "lastNameIsRequired"
+	"lastNameIsRequired": "lastNameIsRequired",
+	"otpInvalid": "otpInvalid",
+	"must have required property 'otp'": "must have required property 'otp'",
+	"limitResendOtp": "limitResendOtp",
+	"accountVerified": "accountVerified"
 }

@@ -1,5 +1,9 @@
 import { JSONSchemaType } from 'ajv';
-import { RegisterAccount } from '../user/user.interface';
+import {
+  RegisterAccount,
+  ResendVerifyAccount,
+  VerifyAccount,
+} from '../user/user.interface';
 
 export const AuthValidation = {
   register: {
@@ -30,5 +34,52 @@ export const AuthValidation = {
         },
       },
     } as JSONSchemaType<RegisterAccount>,
+  },
+  verifyAccount: {
+    body: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          minLength: 5,
+          errorMessage: {
+            type: 'mustString',
+            minLength: 'min length',
+          },
+        },
+        otp: { type: 'string' },
+      },
+      required: ['email', 'otp'],
+      additionalProperties: false,
+      errorMessage: {
+        required: {
+          email: 'emailIsRequired',
+        },
+      },
+    } as JSONSchemaType<VerifyAccount>,
+  },
+  resendVerifyAccount: {
+    body: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          minLength: 5,
+          errorMessage: {
+            type: 'mustString',
+            minLength: 'min length',
+          },
+        },
+      },
+      required: ['email'],
+      additionalProperties: false,
+      errorMessage: {
+        required: {
+          email: 'emailIsRequired',
+        },
+      },
+    } as JSONSchemaType<ResendVerifyAccount>,
   },
 };

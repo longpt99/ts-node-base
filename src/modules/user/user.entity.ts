@@ -82,13 +82,13 @@ export class User {
     }
   }
 
-  // async comparePassword(password: string): Promise<boolean> {
-  // return (
-  //   password ===
-  //   StringUtil.decrypt(
-  //     this.password,
-  //     APP_CONFIG.ENV.SECURE.PASSWORD_SECRET_KEY
-  //   )
-  // );
-  // }
+  async comparePassword(password: string): Promise<boolean> {
+    return (
+      password ===
+      StringUtil.decrypt(
+        this.password,
+        APP_CONFIG.ENV.SECURE.PASSWORD_SECRET_KEY
+      )
+    );
+  }
 }

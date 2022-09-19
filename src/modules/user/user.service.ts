@@ -1,7 +1,9 @@
 import { getCustomRepository } from 'typeorm';
 import { AppObject } from '../../common/consts';
 import { ParamsCommonList } from '../../common/interfaces';
+import { client } from '../../configs/databases/database';
 import { ErrorHandler } from '../../libs/errors';
+import { CacheManagerUtil } from '../../utils/cache-manager.util';
 import { FacebookData, RegisterParams } from '../auth/auth.interface';
 import { UserModel } from './user.interface';
 import { UserRepository } from './user.repository';
@@ -9,6 +11,7 @@ import { UserRepository } from './user.repository';
 export class UserService {
   private static instance: UserService;
   private userRepository: UserRepository;
+  private cacheManager: CacheManagerUtil;
 
   constructor() {
     if (UserService.instance) {
@@ -16,6 +19,8 @@ export class UserService {
     }
 
     this.userRepository = getCustomRepository(UserRepository);
+    this.cacheManager = new CacheManagerUtil(client);
+
     UserService.instance = this;
   }
 
@@ -25,7 +30,6 @@ export class UserService {
 
   async getUserByConditions(params: ParamsCommonList): Promise<UserModel> {
     const userFound = await this.detailByConditions(params);
-
     if (!userFound) {
       throw new ErrorHandler({ message: 'userNotFound' });
     }
@@ -66,6 +70,7 @@ export class UserService {
       const userCreated = await this.userRepository.save(
         this.userRepository.create(params)
       );
+
       return userCreated;
     } catch (error) {
       if (error.code === AppObject.ERR_CODE_DB.UNIQUE) {

@@ -21,9 +21,20 @@ export default class AuthController {
 
     //#region User section
     this.router.post(`${this.userPath}/login`, [this.login.bind(this)]);
+
     this.router.post(`${this.userPath}/register`, [
       validate(AuthValidation.register),
       this.register.bind(this),
+    ]);
+
+    this.router.post(`${this.userPath}/verify-account/resend`, [
+      validate(AuthValidation.resendVerifyAccount),
+      this.resendOtp.bind(this),
+    ]);
+
+    this.router.post(`${this.userPath}/verify-account`, [
+      validate(AuthValidation.verifyAccount),
+      this.verify.bind(this),
     ]);
 
     this.router.post(`${this.userPath}/refresh-token`, [
@@ -41,7 +52,15 @@ export default class AuthController {
 
   //#region User section
   async login(req: Request, res: Response): Promise<SignTokenResponse> {
-    return res.handler(this.authService.login({ body: req.body, res: res }));
+    return res.handler(this.authService.login({ body: req.body }));
+  }
+
+  async verify(req: Request, res: Response): Promise<SignTokenResponse> {
+    return res.handler(this.authService.verify({ body: req.body }));
+  }
+
+  async resendOtp(req: Request, res: Response): Promise<SignTokenResponse> {
+    return res.handler(this.authService.resendOtp({ body: req.body }));
   }
 
   async refreshToken(req: Request, res: Response): Promise<SignTokenResponse> {

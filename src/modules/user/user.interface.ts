@@ -25,6 +25,15 @@ export interface RegisterAccount {
   lastName: string;
 }
 
+export interface ResendVerifyAccount {
+  email: string;
+}
+
+export interface VerifyAccount {
+  email: string;
+  otp: string;
+}
+
 export interface PhoneNumberProperties {
   phone: string;
   dialCode: string;

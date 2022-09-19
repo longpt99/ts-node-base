@@ -1,5 +1,5 @@
 // import { Document, Model } from 'mongoose';
-import { Not, ObjectLiteral, Repository } from 'typeorm';
+import { Not, ObjectLiteral, Repository, UpdateQueryBuilder } from 'typeorm';
 import { AppObject } from '../../common/consts';
 import { ParamsCommonList } from '../../common/interfaces';
 
@@ -61,5 +61,20 @@ export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
       where: params.conditions,
       select: (params.select as (keyof T)[]) ?? null,
     }) as Promise<T>;
+  }
+
+  async updateByConditions(params: ParamsCommonList) {
+    if (params.overwriteConditions) {
+      Object.assign(params.conditions, params.overwriteConditions);
+    } else {
+      Object.assign(params.conditions, {
+        status: Not(AppObject.COMMON_STATUS.DELETED),
+      });
+    }
+
+    return this.createQueryBuilder()
+      .update(params.data)
+      .where(params.conditions)
+      .execute();
   }
 }

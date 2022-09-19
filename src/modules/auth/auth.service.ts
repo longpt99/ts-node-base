@@ -5,10 +5,11 @@ import { AppConst, AppObject } from '../../common/consts';
 import { client } from '../../configs/databases/database';
 import { TokenModel } from '../../libs';
 import { ErrorHandler, UnauthorizedError } from '../../libs/errors';
+import { StringUtil } from '../../utils';
 import { CacheManagerUtil } from '../../utils/cache-manager.util';
 import StatusCodes from '../../utils/status-code';
 import { TokenUtil } from '../../utils/token.util';
-import { UserModel } from '../user/user.interface';
+import { UserModel, VerifyAccount } from '../user/user.interface';
 import { UserRepository } from '../user/user.repository';
 import { UserService } from '../user/user.service';
 import {
@@ -38,10 +39,7 @@ export class AuthService {
     AuthService.instance = this;
   }
 
-  async login(params: {
-    body: LoginParams;
-    res: Response;
-  }): Promise<SignTokenResponse> {
+  async login(params: { body: LoginParams }): Promise<SignTokenResponse> {
     let userFound!: UserModel;
 
     switch (params.body.grantType) {
@@ -71,13 +69,13 @@ export class AuthService {
       }
       default: {
         userFound = await this.userService.getUserByConditions({
-          conditions: { mobilePhone: params.body.mobilePhone },
-          // select: ['id', 'password', 'status'],
+          conditions: { email: params.body.email },
+          select: ['id', 'password', 'status'],
         });
 
-        // if (!(await userFound.comparePassword(params.body.password))) {
-        //   throw new ErrorHandler({ message: 'wrongPassword' });
-        // }
+        if (!(await userFound.comparePassword(params.body.password))) {
+          throw new ErrorHandler({ message: 'wrongPassword' });
+        }
         break;
       }
     }
@@ -85,8 +83,80 @@ export class AuthService {
     return this._signToken({ id: userFound.id });
   }
 
+  async resendOtp(params: { body: VerifyAccount }): Promise<any> {
+    const userFound = await this.userService.detailByConditions({
+      conditions: { email: params.body.email },
+      select: ['status', 'id'],
+    });
+
+    if (!userFound) {
+      throw new ErrorHandler({ message: 'userNotFound' });
+    }
+
+    if (userFound.status !== AppObject.COMMON_STATUS.UNVERIFIED) {
+      throw new ErrorHandler({ message: 'accountVerified' });
+    }
+
+    const otpDoc = await this.cacheManager.getKey(
+      `caches:users:${userFound.id}:verify-account`
+    );
+
+    const times: number = otpDoc ? JSON.parse(otpDoc).times : 0;
+
+    if (times + 1 > 5) {
+      throw new ErrorHandler({ message: 'limitResendOtp' });
+    }
+
+    await this.cacheManager.setKey({
+      key: `caches:users:${userFound.id}:verify-account`,
+      value: JSON.stringify({
+        otp: StringUtil.randomNumber(),
+        times: times + 1,
+      }),
+      exp: 3 * 60,
+    });
+
+    return { isSuccess: 1 };
+  }
+
+  async verify(params: { body: VerifyAccount }): Promise<any> {
+    const userFound = await this.userService.detailByConditions({
+      conditions: { email: params.body.email },
+      select: ['id', 'status'],
+    });
+
+    if (!userFound) {
+      throw new ErrorHandler({ message: 'userNotFound' });
+    }
+
+    if (userFound.status !== AppObject.COMMON_STATUS.UNVERIFIED) {
+      throw new ErrorHandler({ message: 'accountVerified' });
+    }
+
+    const otpDoc = await this.cacheManager.getKey(
+      `caches:users:${userFound.id}:verify-account`
+    );
+
+    if (!otpDoc || JSON.parse(otpDoc).otp !== params.body.otp) {
+      throw new ErrorHandler({ message: 'otpInvalid' });
+    }
+
+    this.userRepository.updateByConditions({
+      conditions: { id: userFound.id },
+      data: { status: AppObject.COMMON_STATUS.ACTIVE },
+    });
+
+    return this._signToken({ id: userFound.id });
+  }
+
   async register(params: RegisterParams) {
-    await this.userService.create(params);
+    const user = await this.userService.create(params);
+    await this.cacheManager.setKey({
+      key: `caches:users:${user.id}:verify-account`,
+      value: JSON.stringify({ otp: StringUtil.randomNumber(), times: 1 }),
+      exp: 3 * 60,
+    });
+
     return;
   }
 
