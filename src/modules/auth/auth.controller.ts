@@ -17,7 +17,6 @@ export default class AuthController {
 
   private _initializeRoutes() {
     //#region Admin section
-    this.router.post(`${this.adminPath}/login`, [this.adminLogin.bind(this)]);
 
     //#region User section
     this.router.post(`${this.userPath}/login`, [this.login.bind(this)]);
@@ -45,9 +44,7 @@ export default class AuthController {
   }
 
   //#region Admin section
-  async adminLogin(req: Request, res: Response) {
-    return res.handler(this.authService.adminLogin(req.body));
-  }
+
   //#endregion Admin section
 
   //#region User section

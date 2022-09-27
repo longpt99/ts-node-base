@@ -1,7 +1,7 @@
 import { CookieOptions, Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
 import APP_CONFIG from '../configs/app.config';
-import { client } from '../configs/databases/database';
+import RedisConfig from '../configs/databases/redis.config';
 import { TokenPayload } from '../modules/auth/auth.interface';
 import { CacheManagerUtil } from './cache-manager.util';
 
@@ -16,7 +16,7 @@ export class TokenUtil {
   private cacheManagerUtil: CacheManagerUtil;
 
   constructor() {
-    this.cacheManagerUtil = new CacheManagerUtil(client);
+    this.cacheManagerUtil = new CacheManagerUtil(RedisConfig.client);
   }
 
   async decodeToken() {}

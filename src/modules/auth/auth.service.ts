@@ -1,13 +1,10 @@
-import { Response } from 'express';
 import got from 'got';
 import { getCustomRepository } from 'typeorm';
-import { AppConst, AppObject } from '../../common/consts';
-import { client } from '../../configs/databases/database';
-import { TokenModel } from '../../libs';
+import { AppObject } from '../../common/consts';
+import RedisConfig from '../../configs/databases/redis.config';
 import { ErrorHandler, UnauthorizedError } from '../../libs/errors';
 import { StringUtil } from '../../utils';
 import { CacheManagerUtil } from '../../utils/cache-manager.util';
-import StatusCodes from '../../utils/status-code';
 import { TokenUtil } from '../../utils/token.util';
 import { UserModel, VerifyAccount } from '../user/user.interface';
 import { UserRepository } from '../user/user.repository';
@@ -35,13 +32,12 @@ export class AuthService {
     this.userService = new UserService();
     this.tokenUtil = new TokenUtil();
     this.userRepository = getCustomRepository(UserRepository);
-    this.cacheManager = new CacheManagerUtil(client);
+    this.cacheManager = new CacheManagerUtil(RedisConfig.client);
     AuthService.instance = this;
   }
 
   async login(params: { body: LoginParams }): Promise<SignTokenResponse> {
     let userFound!: UserModel;
-
     switch (params.body.grantType) {
       case AppObject.GRANT_TYPES.FACEBOOK: {
         const facebookData: FacebookData = await got(
@@ -159,8 +155,6 @@ export class AuthService {
 
     return;
   }
-
-  async adminLogin(params) {}
 
   async loginFacebook(params) {
     const data = await got(

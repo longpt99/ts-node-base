@@ -1,16 +1,9 @@
-import { createClient } from 'redis';
 import { createConnection } from 'typeorm';
 import { IServer } from '../../common/interfaces/app.interface';
 import logger from '../../utils/logger';
 import APP_CONFIG from '../app.config';
+import RedisConfig from './redis.config';
 import databaseConfig from './typeorm.config';
-
-export const client = createClient({
-  host: APP_CONFIG.ENV.DATABASE.REDIS.HOST,
-  port: APP_CONFIG.ENV.DATABASE.REDIS.PORT,
-  password: APP_CONFIG.ENV.DATABASE.REDIS.PASSWORD,
-  db: APP_CONFIG.ENV.DATABASE.REDIS.DATABASE,
-});
 
 // function connectMongoDB() {
 //   // const connectionUri = `mongodb://${APP_CONFIG.ENV.DATABASE.MONGODB.USERNAME}:${APP_CONFIG.ENV.DATABASE.MONGODB.PASSWORD}@${APP_CONFIG.ENV.DATABASE.MONGODB.HOST}:${APP_CONFIG.ENV.DATABASE.MONGODB.PORT}/${APP_CONFIG.ENV.DATABASE.MONGODB.NAME}`;
@@ -38,18 +31,6 @@ export const client = createClient({
 //     sAwait('Db has reconnected!');
 //   });
 // }
-
-async function connectRedis() {
-  client.ping(() => {
-    logger.info(`[Database][Redis] Database has connected successfully!`);
-  });
-
-  client.on('error', (err) => {
-    logger.error('Redis Client Error', err);
-    process.exit();
-  });
-}
-
 export const databaseConnect = (app: IServer): void => {
   createConnection(databaseConfig)
     .then((connection) => {
@@ -57,7 +38,7 @@ export const databaseConnect = (app: IServer): void => {
         logger.info(
           `[Database][${databaseConfig.type}] "${APP_CONFIG.ENV.DATABASE.POSTGRES.NAME}" has connected successfully!`
         );
-        connectRedis();
+        new RedisConfig().connectRedis();
         app.start();
       } else {
         logger.error(

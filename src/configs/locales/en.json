@@ -31,5 +31,6 @@
 	"otpInvalid": "otpInvalid",
 	"must have required property 'otp'": "must have required property 'otp'",
 	"limitResendOtp": "limitResendOtp",
-	"accountVerified": "accountVerified"
+	"accountVerified": "accountVerified",
+	"wrongPassword": "wrongPassword"
 }

@@ -4,8 +4,8 @@ import newrelic from 'newrelic';
 
 export default function (server: Server): void {
   const others = [
-    // 'SIGINT',
-    // 'SIGTERM',
+    'SIGINT',
+    'SIGTERM',
     'uncaughtException',
     'unhandledRejection',
   ];
@@ -18,6 +18,7 @@ export default function (server: Server): void {
       logger.error(exitCode.stack);
     } else {
       logger.info(`[System] ExitCode ${exitCode}.`);
+      return process.exit();
     }
 
     newrelic.shutdown({ collectPendingData: true }, () => {

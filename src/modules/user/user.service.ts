@@ -1,7 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import { AppObject } from '../../common/consts';
 import { ParamsCommonList } from '../../common/interfaces';
-import { client } from '../../configs/databases/database';
+import RedisConfig from '../../configs/databases/redis.config';
 import { ErrorHandler } from '../../libs/errors';
 import { CacheManagerUtil } from '../../utils/cache-manager.util';
 import { FacebookData, RegisterParams } from '../auth/auth.interface';
@@ -19,7 +19,7 @@ export class UserService {
     }
 
     this.userRepository = getCustomRepository(UserRepository);
-    this.cacheManager = new CacheManagerUtil(client);
+    this.cacheManager = new CacheManagerUtil(RedisConfig.client);
 
     UserService.instance = this;
   }

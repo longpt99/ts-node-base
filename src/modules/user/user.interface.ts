@@ -38,3 +38,9 @@ export interface PhoneNumberProperties {
   phone: string;
   dialCode: string;
 }
+
+export interface UserLoginParams {
+  email?: string;
+  password?: string;
+  grantType: string;
+}
