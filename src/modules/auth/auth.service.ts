@@ -38,6 +38,7 @@ export class AuthService {
 
   async login(params: { body: LoginParams }): Promise<SignTokenResponse> {
     let userFound!: UserModel;
+
     switch (params.body.grantType) {
       case AppObject.GRANT_TYPES.FACEBOOK: {
         const facebookData: FacebookData = await got(
@@ -154,46 +155,6 @@ export class AuthService {
     });
 
     return;
-  }
-
-  async loginFacebook(params) {
-    const data = await got(
-      'https://graph.facebook.com/v13.0/oauth/access_token',
-      {
-        method: 'GET',
-        searchParams: {
-          client_id: 280781597506441,
-          client_secret: '54ae9879655813b508f46795946b57ad',
-          redirect_uri: 'http://localhost:8080/api/v1/auth/facebook',
-          code: params.code,
-        },
-      }
-    ).json();
-
-    return data;
-
-    // console.log('Data fb: ', t);
-
-    // const facebookData: FacebookData = await got(
-    //   'https://graph.facebook.com/me',
-    //   {
-    //     method: 'GET',
-    //     searchParams: {
-    //       fields: [
-    //         'id',
-    //         'email',
-    //         'first_name',
-    //         'last_name',
-    //         'gender',
-    //         'birthday',
-    //       ].join(','),
-    //       access_token: t.access_token,
-    //     },
-    //   }
-    // ).json();
-
-    // // const userFound = await this.userService.getUserByFacebookId(facebookData);
-    // return facebookData;
   }
 
   async loginGoogle(params) {

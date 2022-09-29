@@ -6,7 +6,7 @@
   "description": "Typescript node base with NodeJs, Express, PostgreSQL",
   "license": "MIT",
   "scripts": {
-    "start:local": "gulp start:local",
+    "start": "gulp start:local",
     "build:local": "gulp build:local",
     "build:production": "gulp build:production",
     "test": "gulp test",

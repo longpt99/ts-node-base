@@ -36,7 +36,7 @@ export default class AuthController {
       this.verify.bind(this),
     ]);
 
-    this.router.post(`${this.userPath}/refresh-token`, [
+    this.router.post(`${this.userPath}/refresh`, [
       this.refreshToken.bind(this),
     ]);
 
@@ -62,14 +62,6 @@ export default class AuthController {
 
   async refreshToken(req: Request, res: Response): Promise<SignTokenResponse> {
     return res.handler(this.authService.refreshToken(req.body.refreshToken));
-  }
-
-  async loginFacebook(req: Request, res: Response) {
-    return res.handler(this.authService.loginFacebook(req.query));
-  }
-
-  async loginGoogle(req: Request, res: Response) {
-    return res.handler(this.authService.loginGoogle(req.query));
   }
 
   async register(req: Request, res: Response) {

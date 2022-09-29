@@ -46,20 +46,20 @@ export class UserService {
   }
 
   async getUserByFacebookId(data: FacebookData): Promise<UserModel> {
-    const userFound = await this.detailByConditions({
+    let userFound = await this.detailByConditions({
       conditions: { facebookId: data.id },
       select: ['id'],
     });
 
     if (!userFound) {
-      // userFound = await this.userRepository.save(
-      //   this.userRepository.create({
-      //     facebookId: data.id,
-      //     firstName: data.first_name,
-      //     lastName: data.last_name,
-      //     status: AppObject.COMMON_STATUS.ACTIVE,
-      //   })
-      // );
+      userFound = await this.userRepository.save(
+        this.userRepository.create({
+          facebookId: data.id,
+          firstName: data.first_name,
+          lastName: data.last_name,
+          status: AppObject.COMMON_STATUS.ACTIVE,
+        })
+      );
     }
 
     return userFound;
