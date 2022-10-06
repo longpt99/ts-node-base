@@ -19,6 +19,10 @@ export default class AuthController {
     //#region Admin section
 
     //#region User section
+    this.router.get(`${this.userPath}/login/socials/:social`, [
+      this.socialLink.bind(this),
+    ]);
+
     this.router.post(`${this.userPath}/login`, [this.login.bind(this)]);
 
     this.router.post(`${this.userPath}/register`, [
@@ -48,6 +52,10 @@ export default class AuthController {
   //#endregion Admin section
 
   //#region User section
+  async socialLink(req: Request, res: Response) {
+    return this.authService.socialLink(res, req.params.social);
+  }
+
   async login(req: Request, res: Response): Promise<SignTokenResponse> {
     return res.handler(this.authService.login({ body: req.body }));
   }

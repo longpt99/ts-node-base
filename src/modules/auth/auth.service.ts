@@ -16,6 +16,8 @@ import {
   SignTokenResponse,
   TokenPayload,
 } from './auth.interface';
+import qs from 'query-string';
+import { Response } from 'express';
 
 export class AuthService {
   private static instance: AuthService;
@@ -36,8 +38,24 @@ export class AuthService {
     AuthService.instance = this;
   }
 
+  async socialLink(res: Response, social: string) {
+    let link: string;
+    switch (social) {
+      case AppObject.GRANT_TYPES.FACEBOOK:
+      default:
+        link = `https://www.facebook.com/v15.0/dialog/oauth?${qs.stringify({
+          client_id: '2959728634319670',
+          redirect_uri: 'http://localhost:5173/?grantType=facebook',
+          scope: ['public_profile'].join(','),
+          response_type: 'code',
+        })}`;
+        break;
+    }
+    return res.redirect(link);
+  }
+
   async login(params: { body: LoginParams }): Promise<SignTokenResponse> {
-    let userFound!: UserModel;
+    let userFound: UserModel;
 
     switch (params.body.grantType) {
       case AppObject.GRANT_TYPES.FACEBOOK: {
@@ -61,9 +79,9 @@ export class AuthService {
         userFound = await this.userService.getUserByFacebookId(facebookData);
         break;
       }
-      case AppObject.GRANT_TYPES.GOOGLE: {
-        break;
-      }
+      // case AppObject.GRANT_TYPES.GOOGLE: {
+      //   break;
+      // }
       default: {
         userFound = await this.userService.getUserByConditions({
           conditions: { email: params.body.email },
