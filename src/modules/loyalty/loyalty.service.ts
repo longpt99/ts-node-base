@@ -1,7 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import { ErrorHandler, UnauthorizedError } from '../../libs/errors';
 import StatusCodes from '../../utils/status-code';
-import { LoyaltyModel } from './loyalty.interface';
+import { LoyaltyModel } from './loyalty.model';
 import { LoyaltyRepository } from './loyalty.repository';
 
 export class LoyaltyService {
@@ -20,9 +20,7 @@ export class LoyaltyService {
   async create(params) {
     throw new UnauthorizedError();
 
-    return {
-      name: 'Long',
-    };
+    return { name: 'Long' };
     return this.loyaltyRepository.save(
       this.loyaltyRepository.create(params as LoyaltyModel)
     );

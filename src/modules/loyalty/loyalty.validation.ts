@@ -1,5 +1,5 @@
 import { JSONSchemaType } from 'ajv';
-import { ICreateLoyalty } from './loyalty.interface';
+import { ICreateLoyalty } from './loyalty.model';
 
 export const LoyaltyValidation = {
   create: {
