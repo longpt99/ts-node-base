@@ -9,6 +9,7 @@ import {
 import { AppObject } from '../../common/consts';
 import { StringUtil } from '../../utils';
 import APP_CONFIG from '../../configs/app.config';
+import { PhoneNumberProperties } from '../user/user.interface';
 
 @Entity()
 export class Admin {
@@ -27,7 +28,11 @@ export class Admin {
   @Column({ type: 'varchar', length: 255 })
   public password: string;
 
-  @Column({ type: 'enum', enum: AppObject.ROLES })
+  @Column({
+    type: 'enum',
+    enum: AppObject.ROLES,
+    default: AppObject.ROLES.STAFF,
+  })
   public role: string;
 
   @Column({
@@ -36,6 +41,9 @@ export class Admin {
     default: AppObject.USER_STATUS.ACTIVE,
   })
   public status: string;
+
+  @Column({ type: 'jsonb', nullable: true })
+  public mobilePhone: PhoneNumberProperties;
 
   @CreateDateColumn()
   public createdAt: Date;

@@ -24,11 +24,15 @@ export class UserService {
     UserService.instance = this;
   }
 
-  async detailByConditions(params: ParamsCommonList): Promise<UserModel> {
+  async detailByConditions(
+    params: ParamsCommonList<UserModel>
+  ): Promise<UserModel> {
     return this.userRepository.detailByConditions(params);
   }
 
-  async getUserByConditions(params: ParamsCommonList): Promise<UserModel> {
+  async getUserByConditions(
+    params: ParamsCommonList<UserModel>
+  ): Promise<UserModel> {
     const userFound = await this.detailByConditions(params);
     if (!userFound) {
       throw new ErrorHandler({ message: 'userNotFound' });

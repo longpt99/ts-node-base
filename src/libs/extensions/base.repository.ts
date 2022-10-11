@@ -1,5 +1,11 @@
 // import { Document, Model } from 'mongoose';
-import { Not, ObjectLiteral, Repository, UpdateQueryBuilder } from 'typeorm';
+import {
+  DeepPartial,
+  Not,
+  ObjectLiteral,
+  Repository,
+  UpdateQueryBuilder,
+} from 'typeorm';
 import { AppObject } from '../../common/consts';
 import {
   ParamsCommonList,
@@ -51,7 +57,7 @@ import {
 // }
 
 export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
-  async detailByConditions(params: ParamsCommonList): Promise<T> {
+  async detailByConditions(params: ParamsCommonList<T>): Promise<T> {
     if (params.overwriteConditions) {
       Object.assign(params.conditions, params.overwriteConditions);
     } else {
@@ -66,7 +72,7 @@ export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
     }) as Promise<T>;
   }
 
-  async updateByConditions(params: ParamsUpdateCommonList) {
+  async updateByConditions(params: ParamsUpdateCommonList<T>) {
     if (params.overwriteConditions) {
       Object.assign(params.conditions, params.overwriteConditions);
     } else {
@@ -79,5 +85,9 @@ export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
       .update(params.data)
       .where(params.conditions)
       .execute();
+  }
+
+  async createDoc(params: DeepPartial<T>) {
+    return this.save(this.create(params) as DeepPartial<T>);
   }
 }

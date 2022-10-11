@@ -67,14 +67,8 @@ export class User {
       this.password,
       APP_CONFIG.ENV.SECURE.PASSWORD_SECRET_KEY
     );
-
-    if (this.firstName) {
-      this.firstName = StringUtil.titleCase(this.firstName);
-    }
-
-    if (this.lastName) {
-      this.lastName = StringUtil.titleCase(this.lastName);
-    }
+    this.firstName = StringUtil.titleCase(this.firstName);
+    this.lastName = StringUtil.titleCase(this.lastName);
   }
 
   public comparePassword(password: string): boolean {

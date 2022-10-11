@@ -2,6 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import { AppObject } from '../../common/consts';
 import { ErrorHandler } from '../../libs/errors';
 import { AdminLoginParams } from '../auth/auth.interface';
+import { CreateAdminParams } from './admin.model';
 import { AdminRepository } from './admin.repository';
 
 export class AdminService {
@@ -32,14 +33,9 @@ export class AdminService {
 
   async login(params: AdminLoginParams) {
     const adminFound = await this.adminRepository.detailByConditions({
-      conditions: {
-        email: params.email.toLowerCase(),
-        status: AppObject.USER_STATUS.ACTIVE,
-      },
+      conditions: { email: params.email, status: AppObject.USER_STATUS.ACTIVE },
       select: ['id', 'password'],
     });
-
-    console.log(adminFound);
 
     if (!adminFound) {
       throw new ErrorHandler({ message: 'accountNotFound' });
@@ -50,5 +46,17 @@ export class AdminService {
     }
 
     return adminFound;
+  }
+
+  async detailById(id: string) {
+    const data = await this.adminRepository.detailByConditions({
+      conditions: { id: id },
+    });
+    return data;
+  }
+
+  async create(params: CreateAdminParams) {
+    const created = await this.adminRepository.createDoc(params);
+    return created;
   }
 }

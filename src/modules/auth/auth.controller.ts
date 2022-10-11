@@ -17,7 +17,10 @@ export default class AuthController {
 
   private _initializeRoutes() {
     //#region Admin section
-    this.router.post(`${this.adminPath}/login`, [this.adminLogin.bind(this)]);
+    this.router.post(`${this.adminPath}/login`, [
+      validate(AuthValidation.adminLogin),
+      this.adminLogin.bind(this),
+    ]);
     //#endregion Admin section
 
     //#region User section

@@ -23,15 +23,16 @@ export interface ListParams {
   [key: string]: any;
 }
 
-export interface ParamsCommonList {
+export interface ParamsCommonList<T> {
   conditions: any;
   overwriteConditions?: any;
-  select?: string[];
+  select?: (keyof T)[];
+  unselect?: string[];
 }
 
-export interface ParamsUpdateCommonList {
+export interface ParamsUpdateCommonList<T> {
   conditions: any;
   overwriteConditions?: any;
-  select?: string[];
+  select?: (keyof T)[];
   data: any;
 }

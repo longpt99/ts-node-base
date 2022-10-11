@@ -205,9 +205,7 @@ export class AuthService {
       'https://www.googleapis.com/oauth2/v2/userinfo',
       {
         method: 'GET',
-        headers: {
-          Authorization: `Bearer ${data.access_token}`,
-        },
+        headers: { Authorization: `Bearer ${data.access_token}` },
       }
     ).json();
 
