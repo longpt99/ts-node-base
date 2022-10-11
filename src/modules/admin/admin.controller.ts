@@ -16,6 +16,8 @@ export default class AdminController {
   }
 
   private initializeRoutes() {
+    this.router.get(this.path, [this.list.bind(this)]);
+
     this.router.post(this.path, [
       validate(AdminValidation.create),
       this.create.bind(this),
@@ -25,6 +27,15 @@ export default class AdminController {
       validate(UUIDValidation),
       this.detailById.bind(this),
     ]);
+
+    this.router.delete(`${this.path}/:id`, [
+      validate(UUIDValidation),
+      this.deleteById.bind(this),
+    ]);
+  }
+
+  async list(req: Request, res: Response) {
+    return res.handler(this.adminService.list());
   }
 
   async create(req: Request, res: Response) {
@@ -33,5 +44,9 @@ export default class AdminController {
 
   async detailById(req: Request, res: Response) {
     return res.handler(this.adminService.detailById(req.params.id));
+  }
+
+  async deleteById(req: Request, res: Response) {
+    return res.handler(this.adminService.deleteById(req.params.id));
   }
 }

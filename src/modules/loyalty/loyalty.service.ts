@@ -19,11 +19,6 @@ export class LoyaltyService {
 
   async create(params) {
     throw new UnauthorizedError();
-
-    return { name: 'Long' };
-    return this.loyaltyRepository.save(
-      this.loyaltyRepository.create(params as LoyaltyModel)
-    );
   }
 
   async getById(params?) {

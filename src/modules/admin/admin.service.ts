@@ -20,15 +20,17 @@ export class AdminService {
   }
 
   async init() {
-    return this.adminRepository.save(
-      this.adminRepository.create({
-        email: 'admin@anamcoffee.com',
-        password: 'adminA#@123456',
-        firstName: 'Super',
-        lastName: 'Admin',
-        role: AppObject.ROLES.SUPER_ADMIN,
-      })
-    );
+    return this.adminRepository.createDoc({
+      email: 'admin@anamcoffee.com',
+      password: 'adminA#@123456',
+      firstName: 'Super',
+      lastName: 'Admin',
+      role: AppObject.ROLES.SUPER_ADMIN,
+    });
+  }
+
+  async list() {
+    return this.adminRepository.find();
   }
 
   async login(params: AdminLoginParams) {
@@ -53,6 +55,14 @@ export class AdminService {
       conditions: { id: id },
     });
     return data;
+  }
+
+  async deleteById(id: string) {
+    await this.adminRepository.updateByConditions({
+      conditions: { id: id },
+      data: { status: AppObject.USER_STATUS.DELETED },
+    });
+    return;
   }
 
   async create(params: CreateAdminParams) {

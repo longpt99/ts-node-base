@@ -56,14 +56,12 @@ export class UserService {
     });
 
     if (!userFound) {
-      userFound = await this.userRepository.save(
-        this.userRepository.create({
-          facebookId: data.id,
-          firstName: data.first_name,
-          lastName: data.last_name,
-          status: AppObject.USER_STATUS.ACTIVE,
-        })
-      );
+      userFound = await this.userRepository.createDoc({
+        facebookId: data.id,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        status: AppObject.USER_STATUS.ACTIVE,
+      });
     }
 
     return userFound;
@@ -71,9 +69,7 @@ export class UserService {
 
   async create(params: RegisterParams) {
     try {
-      const userCreated = await this.userRepository.save(
-        this.userRepository.create(params)
-      );
+      const userCreated = await this.userRepository.createDoc(params);
 
       return userCreated;
     } catch (error) {
