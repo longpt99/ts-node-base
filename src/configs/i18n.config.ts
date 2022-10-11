@@ -8,6 +8,7 @@ i18n.configure({
   directory: path.join(__dirname, './locales'),
   syncFiles: false,
   autoReload: true,
+  updateFiles: false,
 });
 
 export default i18n;

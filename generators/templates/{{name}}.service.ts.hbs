@@ -13,14 +13,14 @@ import { {{pascalCase name}}Repository } from './{{name}}.repository';
 
 export class {{pascalCase name}}Service {
   private static instance: {{pascalCase name}}Service;
-  private {{name}}Repository: {{pascalCase name}}Repository;
+  private {{camelCase name}}Repository: {{pascalCase name}}Repository;
 
   constructor() {
     if ({{pascalCase name}}Service.instance) {
       return {{pascalCase name}}Service.instance;
     }
 
-    this.{{name}}Repository = getCustomRepository({{pascalCase name}}Repository);
+    this.{{camelCase name}}Repository = getCustomRepository({{pascalCase name}}Repository);
     {{pascalCase name}}Service.instance = this;
   }
 

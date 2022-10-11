@@ -1,7 +1,10 @@
 // import { Document, Model } from 'mongoose';
 import { Not, ObjectLiteral, Repository, UpdateQueryBuilder } from 'typeorm';
 import { AppObject } from '../../common/consts';
-import { ParamsCommonList } from '../../common/interfaces';
+import {
+  ParamsCommonList,
+  ParamsUpdateCommonList,
+} from '../../common/interfaces';
 
 // export class MongooseRepository<TModel extends Document> {
 //   public TSchema: Model<TModel>;
@@ -63,7 +66,7 @@ export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
     }) as Promise<T>;
   }
 
-  async updateByConditions(params: ParamsCommonList) {
+  async updateByConditions(params: ParamsUpdateCommonList) {
     if (params.overwriteConditions) {
       Object.assign(params.conditions, params.overwriteConditions);
     } else {

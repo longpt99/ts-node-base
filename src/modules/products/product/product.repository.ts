@@ -1,5 +1,5 @@
 import { EntityRepository } from 'typeorm';
-import { BaseRepository } from '../../libs/extensions';
+import { BaseRepository } from '../../../libs/extensions';
 import { Product } from './product.entity';
 
 @EntityRepository(Product)

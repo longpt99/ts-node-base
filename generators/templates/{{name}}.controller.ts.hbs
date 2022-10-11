@@ -10,14 +10,14 @@ import { {{pascalCase name}}Model } from './{{name}}.model';
 import { {{pascalCase name}}Service } from './{{name}}.service';
 
 export default class {{pascalCase name}}Controller {
-  private readonly {{name}}Service: {{pascalCase name}}Service;
+  private readonly {{camelCase name}}Service: {{pascalCase name}}Service;
   private readonly adminPath = '/admin/{{name}}';
   private readonly userPath = '/{{name}}';
   private readonly router = RouteConfig;
 
   constructor() {
     this._initializeRoutes();
-    this.{{name}}Service = new {{pascalCase name}}Service();
+    this.{{camelCase name}}Service = new {{pascalCase name}}Service();
   }
 
   private _initializeRoutes() {
@@ -33,7 +33,7 @@ export default class {{pascalCase name}}Controller {
    * @description Get list
    */
   async list(req: Request, res: Response) {
-    return res.handler(this.{{name}}Service.list());
+    return res.handler(this.{{camelCase name}}Service.list());
   }
 
   /**
@@ -41,7 +41,7 @@ export default class {{pascalCase name}}Controller {
    * @description Create new {{name}}
    */
   async create(req: Request, res: Response) {
-    return res.handler(this.{{name}}Service.create());
+    return res.handler(this.{{camelCase name}}Service.create());
   }
 
   /**
@@ -50,7 +50,7 @@ export default class {{pascalCase name}}Controller {
    * @param params {id}
    */
   async getById(req: Request, res: Response) {
-    return res.handler(this.{{name}}Service.getById());
+    return res.handler(this.{{camelCase name}}Service.getById());
   }
 
   /**
@@ -59,7 +59,7 @@ export default class {{pascalCase name}}Controller {
    * @param params {id}
    */
   async updateById(req: Request, res: Response): Promise<{{pascalCase name}}Model> {
-    return res.handler(this.{{name}}Service.updateById());
+    return res.handler(this.{{camelCase name}}Service.updateById());
   }
 
   /**
@@ -68,6 +68,6 @@ export default class {{pascalCase name}}Controller {
    * @param params {id}
    */
   async deleteById(req: Request, res: Response): Promise<{{pascalCase name}}Model[]> {
-    return res.handler(this.{{name}}Service.deleteById());
+    return res.handler(this.{{camelCase name}}Service.deleteById());
   }
 }

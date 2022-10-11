@@ -10,6 +10,7 @@ import { UserModel, VerifyAccount } from '../user/user.interface';
 import { UserRepository } from '../user/user.repository';
 import { UserService } from '../user/user.service';
 import {
+  AdminLoginParams,
   FacebookData,
   LoginParams,
   RegisterParams,
@@ -18,6 +19,8 @@ import {
 } from './auth.interface';
 import qs from 'query-string';
 import { Response } from 'express';
+import { AdminModel } from '../admin/admin.model';
+import { AdminService } from '../admin/admin.service';
 
 export class AuthService {
   private static instance: AuthService;
@@ -25,6 +28,7 @@ export class AuthService {
   private tokenUtil: TokenUtil;
   private userRepository: UserRepository;
   private cacheManager: CacheManagerUtil;
+  private adminService: AdminService;
 
   constructor() {
     if (AuthService.instance) {
@@ -32,6 +36,7 @@ export class AuthService {
     }
 
     this.userService = new UserService();
+    this.adminService = new AdminService();
     this.tokenUtil = new TokenUtil();
     this.userRepository = getCustomRepository(UserRepository);
     this.cacheManager = new CacheManagerUtil(RedisConfig.client);
@@ -98,6 +103,13 @@ export class AuthService {
     return this._signToken({ id: userFound.id });
   }
 
+  async adminLogin(params: {
+    body: AdminLoginParams;
+  }): Promise<SignTokenResponse> {
+    const admin: AdminModel = await this.adminService.login(params.body);
+    return this._signToken({ id: admin.id });
+  }
+
   async resendOtp(params: { body: VerifyAccount }): Promise<any> {
     const userFound = await this.userService.detailByConditions({
       conditions: { email: params.body.email },
@@ -108,7 +120,7 @@ export class AuthService {
       throw new ErrorHandler({ message: 'userNotFound' });
     }
 
-    if (userFound.status !== AppObject.COMMON_STATUS.UNVERIFIED) {
+    if (userFound.status !== AppObject.USER_STATUS.UNVERIFIED) {
       throw new ErrorHandler({ message: 'accountVerified' });
     }
 
@@ -125,7 +137,7 @@ export class AuthService {
     await this.cacheManager.setKey({
       key: `caches:users:${userFound.id}:verify-account`,
       value: JSON.stringify({
-        otp: StringUtil.randomNumber(),
+        otp: StringUtil.randomNumber(6),
         times: times + 1,
       }),
       exp: 3 * 60,
@@ -144,7 +156,7 @@ export class AuthService {
       throw new ErrorHandler({ message: 'userNotFound' });
     }
 
-    if (userFound.status !== AppObject.COMMON_STATUS.UNVERIFIED) {
+    if (userFound.status !== AppObject.USER_STATUS.UNVERIFIED) {
       throw new ErrorHandler({ message: 'accountVerified' });
     }
 
@@ -168,7 +180,7 @@ export class AuthService {
     const user = await this.userService.create(params);
     await this.cacheManager.setKey({
       key: `caches:users:${user.id}:verify-account`,
-      value: JSON.stringify({ otp: StringUtil.randomNumber(), times: 1 }),
+      value: JSON.stringify({ otp: StringUtil.randomNumber(6), times: 1 }),
       exp: 3 * 60,
     });
 

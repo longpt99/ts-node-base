@@ -27,5 +27,11 @@ export interface ParamsCommonList {
   conditions: any;
   overwriteConditions?: any;
   select?: string[];
-  data?: any;
+}
+
+export interface ParamsUpdateCommonList {
+  conditions: any;
+  overwriteConditions?: any;
+  select?: string[];
+  data: any;
 }

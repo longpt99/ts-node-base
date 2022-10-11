@@ -1,4 +1,4 @@
-export interface {{pascalCase name}}Model {
+export interface ProductAttributeModel {
   id: string;
   status: string;
   createdAt: Date;

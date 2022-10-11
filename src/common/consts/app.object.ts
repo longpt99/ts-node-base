@@ -12,6 +12,13 @@ export class AppObject {
     ADMIN: 'Admin',
   };
 
+  static readonly ROLES = {
+    SUPER_ADMIN: 'super_admin',
+    ADMIN: 'admin',
+    SUPERVISOR: 'supervisor',
+    STAFF: 'staff',
+  };
+
   static readonly ENVIRONMENTS = {
     DEV: 'dev',
     LOCAL: 'local',
@@ -22,7 +29,16 @@ export class AppObject {
     ACTIVE: 'active',
     INACTIVE: 'inactive',
     DELETED: 'deleted',
+  };
+
+  static readonly USER_STATUS = {
+    ...AppObject.COMMON_STATUS,
     UNVERIFIED: 'unverified',
+  };
+
+  static readonly PRODUCT_STATUS = {
+    ...AppObject.COMMON_STATUS,
+    SOLD_OUT: 'sold_out',
   };
 
   static readonly REQUEST_OBJECT = {

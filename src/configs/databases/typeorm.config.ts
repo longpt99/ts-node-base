@@ -11,7 +11,7 @@ const databaseConfig: ConnectionOptions = {
   password: APP_CONFIG.ENV.DATABASE.POSTGRES.PASSWORD,
   database: APP_CONFIG.ENV.DATABASE.POSTGRES.NAME,
   entities: ['src/modules/**/*.entity.{js,ts}'],
-  synchronize: false,
+  synchronize: true,
   // migrations: [path.join(__dirname, '../../migrations/*.{js,ts}')],
   // migrationsRun: true,
   // logging: true,

@@ -5,7 +5,7 @@
  */
 
 import { Request, Response } from 'express';
-import { RouteConfig } from '../../libs';
+import { RouteConfig } from '../../../libs';
 import { ProductModel } from './product.model';
 import { ProductService } from './product.service';
 

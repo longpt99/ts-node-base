@@ -18,6 +18,11 @@ export interface LoginParams {
   email?: string;
 }
 
+export interface AdminLoginParams {
+  email: string;
+  password: string;
+}
+
 export interface RegisterParams {
   mobilePhone?: PhoneNumberProperties;
   firstName: string;

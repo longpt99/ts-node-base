@@ -5,11 +5,13 @@
  */
 
 import { getCustomRepository } from 'typeorm';
+import { ProductAttributeService } from '../product-attribute/product-attribute.service';
 import { ProductRepository } from './product.repository';
 
 export class ProductService {
   private static instance: ProductService;
   private productRepository: ProductRepository;
+  private productAttributeService: ProductAttributeService;
 
   constructor() {
     if (ProductService.instance) {
@@ -17,6 +19,8 @@ export class ProductService {
     }
 
     this.productRepository = getCustomRepository(ProductRepository);
+    this.productAttributeService = new ProductAttributeService();
+
     ProductService.instance = this;
   }
 

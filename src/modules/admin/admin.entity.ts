@@ -3,21 +3,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { AppObject } from '../../common/consts';
-import APP_CONFIG from '../../configs/app.config';
 import { StringUtil } from '../../utils';
-import { PhoneNumberProperties } from './user.interface';
+import APP_CONFIG from '../../configs/app.config';
 
 @Entity()
-@Index('idx_unique_email', ['email'], {
-  unique: true,
-  where: `"status" != 'deleted' AND "facebookId" IS NULL AND "googleId" IS NULL`,
-})
-export class User {
+export class Admin {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
@@ -27,33 +21,21 @@ export class User {
   @Column({ type: 'varchar', length: 50 })
   public lastName: string;
 
-  @Column({ type: 'date', nullable: true })
-  public dateOfBirth: Date;
-
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  public gender: string;
-
-  @Column({ type: 'varchar', length: 50, nullable: true })
+  @Column({ type: 'varchar', length: 100 })
   public email: string;
 
-  @Column({ type: 'jsonb', nullable: true })
-  public mobilePhone: PhoneNumberProperties;
+  @Column({ type: 'varchar', length: 255 })
+  public password: string;
+
+  @Column({ type: 'enum', enum: AppObject.ROLES })
+  public role: string;
 
   @Column({
     type: 'enum',
     enum: Object.values(AppObject.USER_STATUS),
-    default: AppObject.USER_STATUS.UNVERIFIED,
+    default: AppObject.USER_STATUS.ACTIVE,
   })
   public status: string;
-
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  public facebookId: string;
-
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  public googleId: string;
-
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  public password: string;
 
   @CreateDateColumn()
   public createdAt: Date;

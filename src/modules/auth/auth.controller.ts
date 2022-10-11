@@ -17,6 +17,8 @@ export default class AuthController {
 
   private _initializeRoutes() {
     //#region Admin section
+    this.router.post(`${this.adminPath}/login`, [this.adminLogin.bind(this)]);
+    //#endregion Admin section
 
     //#region User section
     this.router.get(`${this.userPath}/login/socials/:social`, [
@@ -48,7 +50,9 @@ export default class AuthController {
   }
 
   //#region Admin section
-
+  async adminLogin(req: Request, res: Response): Promise<SignTokenResponse> {
+    return res.handler(this.authService.adminLogin({ body: req.body }));
+  }
   //#endregion Admin section
 
   //#region User section

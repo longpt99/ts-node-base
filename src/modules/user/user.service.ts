@@ -34,11 +34,11 @@ export class UserService {
       throw new ErrorHandler({ message: 'userNotFound' });
     }
 
-    if (userFound.status === AppObject.COMMON_STATUS.UNVERIFIED) {
+    if (userFound.status === AppObject.USER_STATUS.UNVERIFIED) {
       throw new ErrorHandler({ message: 'accountUnverified' });
     }
 
-    if (userFound.status === AppObject.COMMON_STATUS.INACTIVE) {
+    if (userFound.status === AppObject.USER_STATUS.INACTIVE) {
       throw new ErrorHandler({ message: 'accountInactive' });
     }
 
@@ -57,7 +57,7 @@ export class UserService {
           facebookId: data.id,
           firstName: data.first_name,
           lastName: data.last_name,
-          status: AppObject.COMMON_STATUS.ACTIVE,
+          status: AppObject.USER_STATUS.ACTIVE,
         })
       );
     }
