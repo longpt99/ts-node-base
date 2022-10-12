@@ -19,13 +19,16 @@ export class Admin {
   @Column({ type: 'varchar', length: 50 })
   public firstName: string;
 
+  @Column({ type: 'int', default: 1 })
+  public old: number;
+
   @Column({ type: 'varchar', length: 50 })
   public lastName: string;
 
   @Column({ type: 'varchar', length: 100 })
   public email: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, select: false })
   public password: string;
 
   @Column({

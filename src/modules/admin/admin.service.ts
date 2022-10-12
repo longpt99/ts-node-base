@@ -29,8 +29,26 @@ export class AdminService {
     });
   }
 
-  async list() {
-    return this.adminRepository.find();
+  async list(params) {
+    const alias = 'admin';
+    const queryBuilder = this.adminRepository
+      .createQueryBuilder(alias)
+      .select();
+
+    if (params.search) {
+      queryBuilder.andWhere(
+        `(${alias}.firstName ILIKE :name OR ${alias}.lastName ILIKE :name)`,
+        {
+          name: `%${params.search}%`,
+        }
+      );
+    }
+
+    return this.adminRepository.list({
+      conditions: queryBuilder,
+      paginate: params,
+      alias: alias,
+    });
   }
 
   async login(params: AdminLoginParams) {
@@ -51,10 +69,9 @@ export class AdminService {
   }
 
   async detailById(id: string) {
-    const data = await this.adminRepository.detailByConditions({
+    return this.adminRepository.detailByConditions({
       conditions: { id: id },
     });
-    return data;
   }
 
   async deleteById(id: string) {
@@ -66,7 +83,6 @@ export class AdminService {
   }
 
   async create(params: CreateAdminParams) {
-    const created = await this.adminRepository.createDoc(params);
-    return created;
+    return this.adminRepository.createDoc(params);
   }
 }

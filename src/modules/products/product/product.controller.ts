@@ -9,7 +9,7 @@ import { RouteConfig } from '../../../libs';
 import { ProductModel } from './product.model';
 import { ProductService } from './product.service';
 
-export default class ProductController {
+class ProductController {
   private readonly productService: ProductService;
   private readonly adminPath = '/admin/product';
   private readonly userPath = '/product';
@@ -47,7 +47,8 @@ export default class ProductController {
   /**
    * @method getById
    * @description Get detail by id
-   * @param params {id}
+   * @param req
+   * @param res
    */
   async getById(req: Request, res: Response) {
     return res.handler(this.productService.getById());
@@ -71,3 +72,5 @@ export default class ProductController {
     return res.handler(this.productService.deleteById());
   }
 }
+
+export default ProductController;

@@ -23,8 +23,21 @@ export interface ListParams {
   [key: string]: any;
 }
 
+export interface ParamsCommonGetDetail<T> {
+  conditions: any;
+  overwriteConditions?: any;
+  select?: (keyof T)[];
+  unselect?: string[];
+}
+
 export interface ParamsCommonList<T> {
   conditions: any;
+  alias: string;
+  paginate: {
+    page: number;
+    pageSize: number;
+    sort: string;
+  };
   overwriteConditions?: any;
   select?: (keyof T)[];
   unselect?: string[];

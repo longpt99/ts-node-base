@@ -23,7 +23,7 @@ export interface ListParams {
   [key: string]: any;
 }
 
-export interface ParamsCommonList {
+export interface ParamsCommonGetDetail {
   conditions: {
     [key: string]: string;
   };

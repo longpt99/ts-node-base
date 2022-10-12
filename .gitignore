@@ -2,5 +2,6 @@ node_modules
 dist
 newrelic_agent.log
 .vscode
+.idea
 coverage
 logs

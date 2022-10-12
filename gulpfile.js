@@ -2,7 +2,7 @@ const gulp = require('gulp');
 const shell = require('gulp-shell');
 const uglify = require('gulp-uglify');
 const htmlmin = require('gulp-htmlmin');
-const argv = require('yargs')['argv'];
+const argv = require('argv');
 
 function minifyHTML() {
   return gulp

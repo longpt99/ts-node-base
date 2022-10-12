@@ -6,8 +6,9 @@ import {
   Repository,
   UpdateQueryBuilder,
 } from 'typeorm';
-import { AppObject } from '../../common/consts';
+import { AppConst, AppObject } from '../../common/consts';
 import {
+  ParamsCommonGetDetail,
   ParamsCommonList,
   ParamsUpdateCommonList,
 } from '../../common/interfaces';
@@ -57,7 +58,7 @@ import {
 // }
 
 export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
-  async detailByConditions(params: ParamsCommonList<T>): Promise<T> {
+  async detailByConditions(params: ParamsCommonGetDetail<T>): Promise<T> {
     if (params.overwriteConditions) {
       Object.assign(params.conditions, params.overwriteConditions);
     } else {
@@ -89,5 +90,26 @@ export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
 
   async createDoc(params: DeepPartial<T>) {
     return this.save(this.create(params) as DeepPartial<T>);
+  }
+
+  async list(params: ParamsCommonList<T>) {
+    const PAGE = +params.paginate.page || AppConst.PAGE;
+    const PAGE_SIZE = +params.paginate.pageSize || AppConst.PAGE_SIZE;
+
+    if (params.paginate.sort) {
+      const sortValues: string[] = params.paginate.sort.split(';');
+      sortValues.forEach((sv: string) => {
+        const value: string[] = sv.split(':');
+        params.conditions.addOrderBy(
+          `${params.alias}.${value[0]}`,
+          +value[1] === 1 ? 'ASC' : 'DESC'
+        );
+      });
+    }
+
+    return params.conditions
+      .limit(PAGE_SIZE)
+      .offset((PAGE - 1) * PAGE_SIZE)
+      .getMany();
   }
 }

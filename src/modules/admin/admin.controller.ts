@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { validate } from '../../common';
 import { UUIDValidation } from '../../common/validations/uuid.validation';
-import { RouteConfig } from '../../libs';
 import { AdminService } from './admin.service';
 import { AdminValidation } from './admin.validation';
+import { RouteConfig } from '../../libs';
 
 export default class AdminController {
   private readonly router = RouteConfig;
@@ -35,7 +35,7 @@ export default class AdminController {
   }
 
   async list(req: Request, res: Response) {
-    return res.handler(this.adminService.list());
+    return res.handler(this.adminService.list(req.query));
   }
 
   async create(req: Request, res: Response) {

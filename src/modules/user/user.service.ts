@@ -1,6 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import { AppObject } from '../../common/consts';
-import { ParamsCommonList } from '../../common/interfaces';
+import { ParamsCommonGetDetail } from '../../common/interfaces';
 import RedisConfig from '../../configs/databases/redis.config';
 import { ErrorHandler } from '../../libs/errors';
 import { CacheManagerUtil } from '../../utils/cache-manager.util';
@@ -25,13 +25,13 @@ export class UserService {
   }
 
   async detailByConditions(
-    params: ParamsCommonList<UserModel>
+    params: ParamsCommonGetDetail<UserModel>
   ): Promise<UserModel> {
     return this.userRepository.detailByConditions(params);
   }
 
   async getUserByConditions(
-    params: ParamsCommonList<UserModel>
+    params: ParamsCommonGetDetail<UserModel>
   ): Promise<UserModel> {
     const userFound = await this.detailByConditions(params);
     if (!userFound) {
