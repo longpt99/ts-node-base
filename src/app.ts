@@ -10,7 +10,7 @@ import { RouteConfig } from './libs';
 import logger from './utils/logger';
 
 export default class Server implements IServer {
-  private app: Application;
+  private readonly app: Application;
 
   constructor() {
     this.app = express();

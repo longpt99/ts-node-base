@@ -3,14 +3,14 @@ import globSync from 'glob/sync';
 import { join } from 'path';
 import swaggerUi from 'swagger-ui-express';
 import { NotFoundError } from '../libs/errors/not-found.error';
-import { RouteConfig } from '../libs/router';
+import { RouteConfig } from '../libs';
 import logger from '../utils/logger';
 
-export const routeConfig = async (app: Application): Promise<void> => {
+export const routeConfig = (app: Application): void => {
   app.use(
     '/api-docs',
     swaggerUi.serve,
-    swaggerUi.setup(await import(join(process.cwd(), './doc/swagger.json')), {
+    swaggerUi.setup(require(join(process.cwd(), './doc/swagger.json')), {
       explorer: true,
     })
   );

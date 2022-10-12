@@ -24,6 +24,7 @@ export const UserValidation = {
           password: 'passwordIsRequired',
         },
       },
-    } as JSONSchemaType<RegisterAccount>,
+    },
+    //  as JSONSchemaType<RegisterAccount>,
   },
 };

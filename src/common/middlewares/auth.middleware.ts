@@ -1,14 +1,14 @@
 import { NextFunction, Request } from 'express';
-import { client } from '../../configs/databases/database';
 import { TokenModel } from '../../libs';
 import { ErrorHandler } from '../../libs/errors';
 import { TokenUtil } from '../../utils';
 import { CacheManagerUtil } from '../../utils/cache-manager.util';
 import StatusCodes from '../../utils/status-code';
 import { AppConst } from '../consts';
+import RedisConfig from '../../configs/databases/redis.config';
 
 const tokenUtil = new TokenUtil();
-const cacheManagerUtil = new CacheManagerUtil(client);
+const cacheManagerUtil = new CacheManagerUtil(RedisConfig.client);
 
 export async function authMiddleware(
   req: Request,

@@ -1,7 +1,5 @@
 import { getCustomRepository } from 'typeorm';
-import { ErrorHandler, UnauthorizedError } from '../../libs/errors';
-import StatusCodes from '../../utils/status-code';
-import { LoyaltyModel } from './loyalty.model';
+import { UnauthorizedError } from '../../libs/errors';
 import { LoyaltyRepository } from './loyalty.repository';
 
 export class LoyaltyService {

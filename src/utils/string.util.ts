@@ -51,7 +51,8 @@ export class StringUtil {
 
   /**
    * @method snakeCase
-   * @param {string} name value param
+   * @param {number} name
+   * @returns Promise<boolean>
    */
   static snakeCase(name: string) {
     return name
