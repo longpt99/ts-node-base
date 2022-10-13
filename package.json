@@ -22,6 +22,7 @@
     "generate": "plop --plopfile generators/index.ts"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^8.4.0",
     "ajv": "^8.6.2",
     "ajv-errors": "^3.0.0",
     "ajv-formats": "^2.1.1",
@@ -31,6 +32,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
+    "elastic-apm-node": "^3.38.0",
     "express": "^4.18.1",
     "glob": "7.2.3",
     "got": "^11.8.5",
@@ -38,7 +40,7 @@
     "i18n": "^0.14.2",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
-    "newrelic": "^9.0.3",
+    "newrelic": "^9.2.0",
     "nodemailer": "^6.7.8",
     "pg": "^8.7.3",
     "query-string": "^7.1.1",

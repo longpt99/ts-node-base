@@ -52,4 +52,32 @@ export class AppObject {
     FACEBOOK: 'facebook',
     GOOGLE: 'google',
   };
+
+  static readonly INDEX_COMPLEX = {
+    settings: {
+      analysis: {
+        analyzer: {
+          my_analyzer: {
+            tokenizer: 'my_custom_analyzer',
+          },
+        },
+        tokenizer: {
+          my_custom_analyzer: {
+            type: 'standard',
+            tokenizer: 'english',
+            char_filter: ['html_strip'],
+            filter: ['lowercase', 'asciifolding'],
+          },
+        },
+      },
+    },
+    mappings: {
+      products: {
+        properties: {
+          name: { type: 'string', analyzer: 'my_analyzer' },
+          description: { type: 'string' },
+        },
+      },
+    },
+  };
 }

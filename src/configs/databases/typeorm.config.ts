@@ -1,6 +1,5 @@
 import { ConnectionOptions } from 'typeorm';
 import APP_CONFIG from '../app.config';
-import path from 'path';
 import logger from '../../utils/logger';
 
 const databaseConfig: ConnectionOptions = {
@@ -21,9 +20,9 @@ const databaseConfig: ConnectionOptions = {
   poolErrorHandler: (err) => {
     logger.error('Connection pool error', err);
   },
-  cli: {
-    migrationsDir: 'src/migrations',
-  },
+  // cli: {
+  //   migrationsDir: 'src/migrations',
+  // },
 };
 
 export default databaseConfig;

@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
+
 import { validate } from '../../common';
 import { UUIDValidation } from '../../common/validations/uuid.validation';
+import { RouteConfig } from '../../libs';
 import { AdminService } from './admin.service';
 import { AdminValidation } from './admin.validation';
-import { RouteConfig } from '../../libs';
 
 export default class AdminController {
   private readonly router = RouteConfig;

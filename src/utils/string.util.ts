@@ -51,10 +51,10 @@ export class StringUtil {
 
   /**
    * @method snakeCase
-   * @param {number} name
-   * @returns Promise<boolean>
+   * @param {string} name
+   * @returns {string}
    */
-  static snakeCase(name: string) {
+  static snakeCase(name: string): string {
     return name
       .split(' ')
       .map((item) => item.charAt(0).toUpperCase() + item.slice(1).toLowerCase())
