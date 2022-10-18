@@ -16,7 +16,7 @@ export const AdminValidation = {
         password: { type: 'string' },
         firstName: { type: 'string' },
         lastName: { type: 'string' },
-        role: { type: 'string', enum: Object.values(AppObject.ROLES) },
+        role: { type: 'string', enum: Object.values(AppObject.ADMIN_ROLES) },
         mobilePhone: {
           type: 'object',
           properties: {

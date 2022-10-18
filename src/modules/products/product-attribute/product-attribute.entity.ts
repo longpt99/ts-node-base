@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { AppObject } from '../../../common/consts';
+import { Product } from '../product/product.entity';
 
 @Entity()
 export class ProductAttribute {
@@ -28,9 +30,12 @@ export class ProductAttribute {
   })
   public status: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   public createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   public updatedAt: Date;
+
+  @ManyToOne(() => Product, (product) => product.productAttributes)
+  product: Product;
 }

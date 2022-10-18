@@ -1,4 +1,5 @@
 import express from 'express';
+import { authMiddleware } from '../../common/middlewares/auth.middleware';
 import { RouteOptions } from './router.interface';
 
 export const expressRouter = express.Router();
@@ -41,9 +42,8 @@ export class RouteConfig {
         // fn.unshift('token');
       } else {
         if (options.roles) {
-          console.log('Role');
+          fn.unshift(authMiddleware(options.roles));
         }
-        // fn.unshift('token');
       }
     }
 

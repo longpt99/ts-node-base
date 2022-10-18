@@ -53,9 +53,22 @@ export class CacheManagerUtil {
     });
   }
 
-  async getKey(key: string): Promise<string | null> {
+  async getKey(
+    key: string
+  ): Promise<{ [key: string]: string | number } | null> {
     return new Promise((resolve, reject) => {
       this.client.get(key, (err, val) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(val ? JSON.parse(val) : val);
+      });
+    });
+  }
+
+  async getKeys(key: string): Promise<string[] | null> {
+    return new Promise((resolve, reject) => {
+      this.client.keys(key, (err, val) => {
         if (err) {
           return reject(err);
         }

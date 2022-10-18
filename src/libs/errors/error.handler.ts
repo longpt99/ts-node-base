@@ -8,7 +8,6 @@ export class ErrorHandler extends Error {
 
   constructor(params?: BaseOptionError) {
     super();
-
     this.status = params?.status ?? 400;
     this.message =
       params?.message ?? StatusCodes.getReasonPhraseCode(this.status);

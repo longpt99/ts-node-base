@@ -12,12 +12,14 @@ export class AppObject {
     ADMIN: 'Admin',
   };
 
-  static readonly ROLES = {
+  static readonly ADMIN_ROLES = {
     SUPER_ADMIN: 'super_admin',
     ADMIN: 'admin',
     SUPERVISOR: 'supervisor',
     STAFF: 'staff',
   };
+
+  static readonly CUSTOMER = 'customer';
 
   static readonly ENVIRONMENTS = {
     DEV: 'dev',

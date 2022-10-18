@@ -24,8 +24,8 @@ export interface ListParams {
 }
 
 export interface ParamsCommonGetDetail<T> {
-  conditions: any;
-  overwriteConditions?: any;
+  conditions: Partial<T>;
+  overwriteConditions?: Partial<T>;
   select?: (keyof T)[];
   unselect?: string[];
 }
@@ -44,8 +44,8 @@ export interface ParamsCommonList<T> {
 }
 
 export interface ParamsUpdateCommonList<T> {
-  conditions: any;
-  overwriteConditions?: any;
+  conditions: Partial<T>;
+  overwriteConditions?: Partial<T>;
   select?: (keyof T)[];
-  data: any;
+  data: Partial<T>;
 }

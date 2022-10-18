@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import { validate } from '../../common';
+import { AppObject } from '../../common/consts';
 import { UUIDValidation } from '../../common/validations/uuid.validation';
 import { RouteConfig } from '../../libs';
 import { AdminService } from './admin.service';
@@ -24,10 +25,12 @@ export default class AdminController {
       this.create.bind(this),
     ]);
 
-    this.router.get(`${this.path}/:id`, [
-      validate(UUIDValidation),
-      this.detailById.bind(this),
-    ]);
+    this.router.get(
+      `${this.path}/:id`,
+      [validate(UUIDValidation), this.detailById.bind(this)],
+      // { roles: Object.values(AppObject.ADMIN_ROLES) }
+      { roles: [AppObject.ADMIN_ROLES.ADMIN] }
+    );
 
     this.router.delete(`${this.path}/:id`, [
       validate(UUIDValidation),

@@ -21,6 +21,7 @@ import qs from 'query-string';
 import { Response } from 'express';
 import { AdminModel } from '../admin/admin.model';
 import { AdminService } from '../admin/admin.service';
+import APP_CONFIG from '../../configs/app.config';
 
 export class AuthService {
   private static instance: AuthService;
@@ -93,21 +94,21 @@ export class AuthService {
           select: ['id', 'password', 'status'],
         });
 
-        if (!(await userFound.comparePassword(params.body.password))) {
+        if (!userFound.comparePassword(params.body.password)) {
           throw new ErrorHandler({ message: 'wrongPassword' });
         }
         break;
       }
     }
 
-    return this._signToken({ id: userFound.id });
+    return this._signToken({ id: userFound.id, isCustomer: true });
   }
 
   async adminLogin(params: {
     body: AdminLoginParams;
   }): Promise<SignTokenResponse> {
     const admin: AdminModel = await this.adminService.login(params.body);
-    return this._signToken({ id: admin.id });
+    return this._signToken({ id: admin.id }, true);
   }
 
   async resendOtp(params: { body: VerifyAccount }): Promise<any> {
@@ -128,7 +129,7 @@ export class AuthService {
       `caches:users:${userFound.id}:verify-account`
     );
 
-    const times: number = otpDoc ? JSON.parse(otpDoc).times : 0;
+    const times: number = otpDoc ? (otpDoc.times as number) : 0;
 
     if (times + 1 > 5) {
       throw new ErrorHandler({ message: 'limitResendOtp' });
@@ -164,7 +165,7 @@ export class AuthService {
       `caches:users:${userFound.id}:verify-account`
     );
 
-    if (!otpDoc || JSON.parse(otpDoc).otp !== params.body.otp) {
+    if (!otpDoc || otpDoc.otp !== params.body.otp) {
       throw new ErrorHandler({ message: 'otpInvalid' });
     }
 
@@ -254,10 +255,24 @@ export class AuthService {
     });
   }
 
-  private _signToken(payload: TokenPayload): SignTokenResponse {
+  private _signToken(
+    payload: TokenPayload,
+    isAdmin = false
+  ): SignTokenResponse {
+    if (isAdmin) {
+      this.adminService
+        .detailByConditions({ conditions: { id: payload.id } })
+        .then((data) => {
+          this.cacheManager.setKey({
+            key: `caches:profiles:${payload.id}`,
+            value: JSON.stringify(data),
+            exp: APP_CONFIG.ENV.SECURE.JWT_ACCESS_TOKEN.EXPIRED_TIME,
+          });
+        });
+    }
     return {
-      accessToken: this.tokenUtil.signToken(payload),
-      refreshToken: this.tokenUtil.signRefreshToken(payload),
+      accessToken: this.tokenUtil.signToken(payload, isAdmin),
+      refreshToken: this.tokenUtil.signRefreshToken(payload, isAdmin),
       tokenType: AppObject.TOKEN_TYPES.BEARER,
     };
   }

@@ -55,10 +55,10 @@ export class User {
   @Column({ type: 'varchar', length: 255, nullable: true })
   public password: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   public createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   public updatedAt: Date;
 
   @BeforeInsert()

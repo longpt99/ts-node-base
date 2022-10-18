@@ -19,9 +19,6 @@ export class Admin {
   @Column({ type: 'varchar', length: 50 })
   public firstName: string;
 
-  @Column({ type: 'int', default: 1 })
-  public old: number;
-
   @Column({ type: 'varchar', length: 50 })
   public lastName: string;
 
@@ -33,8 +30,8 @@ export class Admin {
 
   @Column({
     type: 'enum',
-    enum: AppObject.ROLES,
-    default: AppObject.ROLES.STAFF,
+    enum: AppObject.ADMIN_ROLES,
+    default: AppObject.ADMIN_ROLES.STAFF,
   })
   public role: string;
 
@@ -48,10 +45,13 @@ export class Admin {
   @Column({ type: 'jsonb', nullable: true })
   public mobilePhone: PhoneNumberProperties;
 
-  @CreateDateColumn()
+  @Column({ type: 'timestamptz', nullable: true })
+  public lastLogin: Date;
+
+  @CreateDateColumn({ type: 'timestamptz' })
   public createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   public updatedAt: Date;
 
   @BeforeInsert()

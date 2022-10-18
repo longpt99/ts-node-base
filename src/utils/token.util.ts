@@ -1,5 +1,5 @@
 import { CookieOptions, Response } from 'express';
-import { sign, verify } from 'jsonwebtoken';
+import { sign, verify, decode } from 'jsonwebtoken';
 import APP_CONFIG from '../configs/app.config';
 import RedisConfig from '../configs/databases/redis.config';
 import { TokenPayload } from '../modules/auth/auth.interface';
@@ -19,9 +19,8 @@ export class TokenUtil {
     this.cacheManagerUtil = new CacheManagerUtil(RedisConfig.client);
   }
 
-  async decodeToken() {}
-
-  public signToken(payload: TokenPayload): string {
+  public signToken(payload: TokenPayload, isAdmin = false): string {
+    const typeCache = isAdmin ? 'admins' : 'users';
     const accessToken = sign(
       payload,
       APP_CONFIG.ENV.SECURE.JWT_ACCESS_TOKEN.SECRET_KEY,
@@ -29,7 +28,7 @@ export class TokenUtil {
     );
 
     this.cacheManagerUtil.setKey({
-      key: `caches:users:${payload.id}:accessTokens:${
+      key: `caches:${typeCache}:${payload.id}:accessTokens:${
         accessToken.split('.')[2]
       }`,
       value: accessToken.split('.')[2],
@@ -39,7 +38,8 @@ export class TokenUtil {
     return accessToken;
   }
 
-  public signRefreshToken(payload: TokenPayload): string {
+  public signRefreshToken(payload: TokenPayload, isAdmin = false): string {
+    const typeCache = isAdmin ? 'admins' : 'users';
     const token = sign(
       { id: payload.id },
       APP_CONFIG.ENV.SECURE.JWT_REFRESH_TOKEN.SECRET_KEY,
@@ -47,7 +47,9 @@ export class TokenUtil {
     );
 
     this.cacheManagerUtil.setKey({
-      key: `caches:users:${payload.id}:refreshTokens:${token.split('.')[2]}`,
+      key: `caches:${typeCache}:${payload.id}:refreshTokens:${
+        token.split('.')[2]
+      }`,
       value: token.split('.')[2],
       exp: APP_CONFIG.ENV.SECURE.JWT_REFRESH_TOKEN.EXPIRED_TIME,
     });
@@ -67,6 +69,10 @@ export class TokenUtil {
       token,
       APP_CONFIG.ENV.SECURE.JWT_REFRESH_TOKEN.SECRET_KEY
     ) as TokenPayload;
+  }
+
+  public decodeToken(token: string) {
+    return decode(token) as TokenPayload;
   }
 
   public clearTokens(res: Response, signedKey: string): void {

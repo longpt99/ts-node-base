@@ -1,7 +1,9 @@
 import { getCustomRepository } from 'typeorm';
 import { AppObject } from '../../common/consts';
+import { ParamsCommonGetDetail } from '../../common/interfaces';
 import { ErrorHandler } from '../../libs/errors';
 import { AdminLoginParams } from '../auth/auth.interface';
+import { Admin } from './admin.entity';
 import { CreateAdminParams } from './admin.model';
 import { AdminRepository } from './admin.repository';
 
@@ -19,13 +21,17 @@ export class AdminService {
     AdminService.instance = this;
   }
 
+  async detailByConditions(params: ParamsCommonGetDetail<Admin>) {
+    return this.adminRepository.detailByConditions(params);
+  }
+
   async init() {
     return this.adminRepository.createDoc({
       email: 'admin@anamcoffee.com',
       password: 'adminA#@123456',
       firstName: 'Super',
       lastName: 'Admin',
-      role: AppObject.ROLES.SUPER_ADMIN,
+      role: AppObject.ADMIN_ROLES.SUPER_ADMIN,
     });
   }
 
@@ -64,6 +70,11 @@ export class AdminService {
     if (!adminFound.comparePassword(params.password)) {
       throw new ErrorHandler({ message: 'wrongPassword' });
     }
+
+    this.adminRepository.updateByConditions({
+      conditions: { id: adminFound.id },
+      data: { lastLogin: new Date() },
+    });
 
     return adminFound;
   }

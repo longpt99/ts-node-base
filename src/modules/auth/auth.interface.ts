@@ -34,7 +34,7 @@ export interface RegisterParams {
 
 export interface TokenPayload {
   id: string;
-  [key: string]: string;
+  [key: string]: string | boolean | number;
 }
 
 export interface SignTokenResponse {
