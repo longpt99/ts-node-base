@@ -13,7 +13,7 @@ const databaseConfig: ConnectionOptions = {
   synchronize: true,
   // migrations: [path.join(__dirname, '../../migrations/*.{js,ts}')],
   // migrationsRun: true,
-  logging: true,
+  // logging: true,
   // connectTimeoutMS: 20000,
   // maxQueryExecutionTime: 20000,
   // logNotifications: true,

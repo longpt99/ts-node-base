@@ -1,6 +1,10 @@
-export interface ProductAttributeModel {
-  id: string;
-  status: string;
-  createdAt: Date;
-  updatedAt: Date;
+import { ProductAttribute } from './product-attribute.entity';
+
+export type ProductAttributeModel = ProductAttribute;
+
+export interface CreateProductAttributeParams {
+  quantity?: number;
+  price?: number;
+  key: string;
+  value: string;
 }

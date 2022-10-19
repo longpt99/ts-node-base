@@ -4,7 +4,8 @@
  * @description Config controller
  */
 
-import { getCustomRepository } from 'typeorm';
+import { EntityManager, getCustomRepository } from 'typeorm';
+import { CreateProductAttributeParams } from './product-attribute.model';
 
 import { ProductAttributeRepository } from './product-attribute.repository';
 
@@ -27,8 +28,13 @@ export class ProductAttributeService {
    * @method create
    * @description Create new product-attribute
    */
-  async create() {
-    return;
+  async create(
+    params: CreateProductAttributeParams[],
+    transactionManager: EntityManager
+  ) {
+    return transactionManager.save(
+      this.productAttributeRepository.create(params)
+    );
   }
 
   /**

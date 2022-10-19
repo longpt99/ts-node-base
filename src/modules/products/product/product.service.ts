@@ -4,8 +4,10 @@
  * @description Config controller
  */
 
-import { getCustomRepository } from 'typeorm';
+import { getConnection, getCustomRepository } from 'typeorm';
+import { ErrorHandler } from '../../../libs/errors';
 import { ProductAttributeService } from '../product-attribute/product-attribute.service';
+import { CreateProductParams } from './product.model';
 import { ProductRepository } from './product.repository';
 
 export class ProductService {
@@ -28,15 +30,23 @@ export class ProductService {
    * @method create
    * @description Create new product
    */
-  async create() {
-    return;
+  async create(params: CreateProductParams) {
+    return this.productRepository.manager.transaction(async (manager) => {
+      console.time('productAttributeCreated');
+      params.productAttributes = await this.productAttributeService.create(
+        params.productAttributes,
+        manager
+      );
+      console.timeEnd('productAttributeCreated');
+      return manager.save(this.productRepository.create(params));
+    });
   }
 
   /**
    * @method list
    * @description Get list
    */
-  async list() {
+  async list(params) {
     return;
   }
 

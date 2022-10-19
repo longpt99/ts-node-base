@@ -5,14 +5,17 @@
  */
 
 import { Request, Response } from 'express';
+import { validate } from '../../../common';
+import { AppObject } from '../../../common/consts';
 import { RouteConfig } from '../../../libs';
 import { ProductModel } from './product.model';
 import { ProductService } from './product.service';
+import { ProductValidation } from './product.validation';
 
 class ProductController {
   private readonly productService: ProductService;
-  private readonly adminPath = '/admin/product';
-  private readonly userPath = '/product';
+  private readonly adminPath = '/admin/products';
+  private readonly userPath = '/products';
   private readonly router = RouteConfig;
 
   constructor() {
@@ -21,11 +24,19 @@ class ProductController {
   }
 
   private _initializeRoutes() {
+    //#region Admin section
     this.router.get(`${this.adminPath}`, [this.list.bind(this)]);
-    this.router.post(`${this.adminPath}`, [this.create.bind(this)]);
+    this.router.post(
+      `${this.adminPath}`,
+      [validate(ProductValidation.create), this.create.bind(this)],
+      {
+        roles: Object.values(AppObject.ADMIN_ROLES),
+      }
+    );
     this.router.get(`${this.adminPath}/:id`, [this.getById.bind(this)]);
     this.router.patch(`${this.adminPath}/:id`, [this.updateById.bind(this)]);
     this.router.delete(`${this.adminPath}/:id`, [this.deleteById.bind(this)]);
+    //#endregion Admin section
   }
 
   /**
@@ -33,7 +44,7 @@ class ProductController {
    * @description Get list
    */
   async list(req: Request, res: Response) {
-    return res.handler(this.productService.list());
+    return res.handler(this.productService.list(req.query));
   }
 
   /**
@@ -41,7 +52,7 @@ class ProductController {
    * @description Create new product
    */
   async create(req: Request, res: Response) {
-    return res.handler(this.productService.create());
+    return res.handler(this.productService.create(req.body));
   }
 
   /**

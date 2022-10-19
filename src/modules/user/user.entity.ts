@@ -15,7 +15,7 @@ import { PhoneNumberProperties } from './user.interface';
 @Entity()
 @Index('idx_unique_email', ['email'], {
   unique: true,
-  where: `"status" != 'deleted' AND "facebookId" IS NULL AND "googleId" IS NULL`,
+  where: `"isDeleted" IS FALSE AND "facebookId" IS NULL AND "googleId" IS NULL`,
 })
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -45,6 +45,9 @@ export class User {
     default: AppObject.USER_STATUS.UNVERIFIED,
   })
   public status: string;
+
+  @Column({ type: 'boolean', default: false })
+  public isDeleted: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   public facebookId: string;

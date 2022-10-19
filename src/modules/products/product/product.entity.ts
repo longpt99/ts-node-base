@@ -23,7 +23,7 @@ export class Product {
   @Column({ type: 'numeric' })
   public price: number;
 
-  @Column({ type: 'numeric' })
+  @Column({ type: 'numeric', default: 0 })
   public discountPrice: number;
 
   @Column({ type: 'int' })
@@ -36,6 +36,9 @@ export class Product {
   })
   public status: string;
 
+  @Column({ type: 'boolean', default: false })
+  public isDeleted: string;
+
   @CreateDateColumn({ type: 'timestamptz' })
   public createdAt: Date;
 
@@ -46,5 +49,5 @@ export class Product {
     () => ProductAttribute,
     (productAttributes) => productAttributes.product
   )
-  productAttributes: ProductAttribute[];
+  public productAttributes: ProductAttribute[];
 }

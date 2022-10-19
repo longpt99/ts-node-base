@@ -26,7 +26,7 @@ export class AdminService {
   }
 
   // async init() {
-  //   return this.adminRepository.createDoc({
+  //   return this.adminRepository.save({
   //     email: 'admin@anamcoffee.com',
   //     password: 'adminA#@123456',
   //     firstName: 'Super',
@@ -160,6 +160,6 @@ export class AdminService {
   }
 
   async create(params: CreateAdminParams) {
-    return this.adminRepository.createDoc(params);
+    return this.adminRepository.save(params);
   }
 }

@@ -14,14 +14,17 @@ export class ProductAttribute {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   public quantity: number;
 
-  @Column({ type: 'varchar', length: 50 })
-  public key: number;
+  @Column({ type: 'numeric', nullable: true })
+  public price: number;
 
   @Column({ type: 'varchar', length: 50 })
-  public value: number;
+  public key: string;
+
+  @Column({ type: 'varchar', length: 50 })
+  public value: string;
 
   @Column({
     type: 'enum',
@@ -30,12 +33,15 @@ export class ProductAttribute {
   })
   public status: string;
 
+  @Column({ type: 'boolean', default: false })
+  public isDeleted: string;
+
   @CreateDateColumn({ type: 'timestamptz' })
   public createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz' })
   public updatedAt: Date;
 
-  @ManyToOne(() => Product, (product) => product.productAttributes)
+  @ManyToOne(() => Product, (product) => product.productAttributes, {})
   product: Product;
 }
