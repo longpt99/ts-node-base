@@ -10,7 +10,6 @@
   "unauthorized": "unauthorized",
   "Not Found": "Not Found",
   "Error roi nhe": "Error roi nhe",
-  "test": "test",
   "Get message error": "Get message error",
   "Hello error": "Hello error",
   "Message": "Message",
@@ -32,5 +31,6 @@
   "limitResendOtp": "limitResendOtp",
   "accountVerified": "accountVerified",
   "wrongPassword": "wrongPassword",
-  "accountNotFound": "Account Not Found"
+  "accountNotFound": "Account Not Found",
+  "deleteSuperAdmin": "You can not delete Super Admin"
 }

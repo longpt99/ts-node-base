@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { validate } from '../../common';
+import { AppObject } from '../../common/consts';
 import { RouteConfig } from '../../libs';
 import { SignTokenResponse } from './auth.interface';
 import { AuthService } from './auth.service';
@@ -21,6 +22,10 @@ export default class AuthController {
       validate(AuthValidation.adminLogin),
       this.adminLogin.bind(this),
     ]);
+
+    this.router.post(`${this.adminPath}/logout`, [this.logout.bind(this)], {
+      roles: Object.values(AppObject.ADMIN_ROLES),
+    });
     //#endregion Admin section
 
     //#region User section
@@ -49,7 +54,9 @@ export default class AuthController {
       this.refreshToken.bind(this),
     ]);
 
-    this.router.post(`${this.userPath}/logout`, [this.logout.bind(this)]);
+    this.router.post(`${this.userPath}/logout`, [this.logout.bind(this)], {
+      allowAnonymous: false,
+    });
   }
 
   //#region Admin section
@@ -84,7 +91,7 @@ export default class AuthController {
   }
 
   async logout(req: Request, res: Response) {
-    return res.handler(this.authService.logout(req.user.id));
+    return res.handler(this.authService.logout(req.user));
   }
   //#endregion User section
 }

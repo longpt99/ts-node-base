@@ -19,7 +19,12 @@ export class AppObject {
     STAFF: 'staff',
   };
 
-  static readonly CUSTOMER = 'customer';
+  static readonly CUSTOMER_ROLES = { CUSTOMER: 'customer' };
+
+  static readonly ALL_ROLES = Object.assign(
+    this.ADMIN_ROLES,
+    this.CUSTOMER_ROLES
+  );
 
   static readonly ENVIRONMENTS = {
     DEV: 'dev',

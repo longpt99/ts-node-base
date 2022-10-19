@@ -35,5 +35,6 @@ export interface ParamsCommonGetDetail {
 
 export interface TokenModel {
   id: string;
+  role: string;
   [key: string]: any;
 }

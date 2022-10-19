@@ -41,4 +41,5 @@ export interface SignTokenResponse {
   accessToken: string;
   refreshToken: string;
   tokenType: string;
+  expiredTime: number;
 }

@@ -1,5 +1,6 @@
 import { CookieOptions, Response } from 'express';
 import { sign, verify, decode } from 'jsonwebtoken';
+import { AppConst } from '../common/consts';
 import APP_CONFIG from '../configs/app.config';
 import RedisConfig from '../configs/databases/redis.config';
 import { TokenPayload } from '../modules/auth/auth.interface';
@@ -17,6 +18,40 @@ export class TokenUtil {
 
   constructor() {
     this.cacheManagerUtil = new CacheManagerUtil(RedisConfig.client);
+  }
+
+  public sign(payload: TokenPayload, isAdmin = false) {
+    const typeCache = isAdmin ? 'admins' : 'users';
+    const accessToken = sign(
+      payload,
+      APP_CONFIG.ENV.SECURE.JWT_ACCESS_TOKEN.SECRET_KEY,
+      { expiresIn: APP_CONFIG.ENV.SECURE.JWT_ACCESS_TOKEN.EXPIRED_TIME }
+    );
+    const signedKey = accessToken.split('.')[2];
+    const refreshToken = sign(
+      Object.assign(payload, { signedKey: signedKey }),
+      APP_CONFIG.ENV.SECURE.JWT_REFRESH_TOKEN.SECRET_KEY,
+      { expiresIn: APP_CONFIG.ENV.SECURE.JWT_REFRESH_TOKEN.EXPIRED_TIME }
+    );
+
+    this.cacheManagerUtil.setKey({
+      key: `caches:${typeCache}:${payload.id}:accessTokens:${signedKey}`,
+      value: signedKey,
+      exp: APP_CONFIG.ENV.SECURE.JWT_ACCESS_TOKEN.EXPIRED_TIME,
+    });
+
+    this.cacheManagerUtil.setKey({
+      key: `caches:${typeCache}:${payload.id}:refreshTokens:${signedKey}`,
+      value: refreshToken,
+      exp: APP_CONFIG.ENV.SECURE.JWT_REFRESH_TOKEN.EXPIRED_TIME,
+    });
+
+    return {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      expiredTime: APP_CONFIG.ENV.SECURE.JWT_ACCESS_TOKEN.EXPIRED_TIME,
+      tokenType: AppConst.TOKEN_TYPE,
+    };
   }
 
   public signToken(payload: TokenPayload, isAdmin = false): string {

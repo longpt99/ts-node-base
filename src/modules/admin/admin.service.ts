@@ -25,14 +25,18 @@ export class AdminService {
     return this.adminRepository.detailByConditions(params);
   }
 
-  async init() {
-    return this.adminRepository.createDoc({
-      email: 'admin@anamcoffee.com',
-      password: 'adminA#@123456',
-      firstName: 'Super',
-      lastName: 'Admin',
-      role: AppObject.ADMIN_ROLES.SUPER_ADMIN,
-    });
+  // async init() {
+  //   return this.adminRepository.createDoc({
+  //     email: 'admin@anamcoffee.com',
+  //     password: 'adminA#@123456',
+  //     firstName: 'Super',
+  //     lastName: 'Admin',
+  //     role: AppObject.ADMIN_ROLES.SUPER_ADMIN,
+  //   });
+  // }
+
+  async myProfile(id: string) {
+    return this.detailByConditions({ conditions: { id: id } });
   }
 
   async list(params) {
@@ -50,6 +54,12 @@ export class AdminService {
       );
     }
 
+    if (params.status) {
+      queryBuilder.andWhere(`(${alias}.status = :status)`, {
+        status: params.status,
+      });
+    }
+
     return this.adminRepository.list({
       conditions: queryBuilder,
       paginate: params,
@@ -58,7 +68,7 @@ export class AdminService {
   }
 
   async login(params: AdminLoginParams) {
-    const adminFound = await this.adminRepository.detailByConditions({
+    const adminFound = await this.detailByConditions({
       conditions: { email: params.email, status: AppObject.USER_STATUS.ACTIVE },
       select: ['id', 'password'],
     });
@@ -80,17 +90,73 @@ export class AdminService {
   }
 
   async detailById(id: string) {
-    return this.adminRepository.detailByConditions({
-      conditions: { id: id },
-    });
+    return this.detailByConditions({ conditions: { id: id } });
   }
 
-  async deleteById(id: string) {
-    await this.adminRepository.updateByConditions({
+  async updateStatusById(id: string, status: string) {
+    const admin = await this.detailByConditions({
+      conditions: { id: id },
+      select: ['id', 'status'],
+    });
+
+    if (!admin) {
+      throw new ErrorHandler({ message: 'accountNotFound' });
+    }
+
+    if (admin.role === AppObject.ADMIN_ROLES.SUPER_ADMIN) {
+      throw new ErrorHandler({ message: 'updateSuperAdmin' });
+    }
+
+    this.adminRepository.updateByConditions({
+      conditions: { id: id },
+      data: { status: status },
+    });
+
+    return { succeed: true };
+  }
+
+  async updateById(id: string) {
+    const admin = await this.detailByConditions({
+      conditions: { id: id },
+      select: ['id', 'status'],
+    });
+
+    if (!admin) {
+      throw new ErrorHandler({ message: 'accountNotFound' });
+    }
+
+    if (admin.role === AppObject.ADMIN_ROLES.SUPER_ADMIN) {
+      throw new ErrorHandler({ message: 'deleteSuperAdmin' });
+    }
+
+    this.adminRepository.updateByConditions({
       conditions: { id: id },
       data: { status: AppObject.USER_STATUS.DELETED },
     });
-    return;
+
+    return { succeed: true };
+  }
+
+  async deleteById(id: string) {
+    const admin = await this.detailByConditions({
+      conditions: { id: id },
+      select: ['id', 'role'],
+    });
+
+    if (!admin) {
+      throw new ErrorHandler({ message: 'accountNotFound' });
+    }
+
+    if (admin.role === AppObject.ADMIN_ROLES.SUPER_ADMIN) {
+      throw new ErrorHandler({ message: 'deleteSuperAdmin' });
+    }
+
+    this.adminRepository.updateByConditions({
+      conditions: { id: id },
+      data: { status: AppObject.USER_STATUS.DELETED },
+    });
+
+    return { succeed: true };
   }
 
   async create(params: CreateAdminParams) {

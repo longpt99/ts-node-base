@@ -22,6 +22,7 @@ import { Response } from 'express';
 import { AdminModel } from '../admin/admin.model';
 import { AdminService } from '../admin/admin.service';
 import APP_CONFIG from '../../configs/app.config';
+import { TokenModel } from '../../libs';
 
 export class AuthService {
   private static instance: AuthService;
@@ -101,7 +102,7 @@ export class AuthService {
       }
     }
 
-    return this._signToken({ id: userFound.id, isCustomer: true });
+    return this._signToken({ id: userFound.id });
   }
 
   async adminLogin(params: {
@@ -239,20 +240,30 @@ export class AuthService {
   async refreshToken(token: string) {
     const payload = this.tokenUtil.verifyRefreshToken(token);
     const tokenKey = await this.cacheManager.getKey(
-      `caches:users:${payload.id}:refreshTokens:${token.split('.')[2]}`
+      `caches:users:${payload.id}:refreshTokens:${payload.signedKey}`
     );
 
-    if (!tokenKey && token.split('.')[2] !== tokenKey) {
+    if (!tokenKey) {
       throw new UnauthorizedError();
     }
 
     return this._signToken(payload);
   }
 
-  async logout(userId: string): Promise<void> {
-    this.cacheManager.client.keys(`caches:users:${userId}:*`, (err, data) => {
-      this.cacheManager.delKey(data);
-    });
+  async logout(user: TokenModel) {
+    this.cacheManager.client.keys(
+      `caches:${
+        user.role === AppObject.CUSTOMER_ROLES.CUSTOMER ? 'users' : 'admins'
+      }:${user.id}:*`,
+      (err, data) => {
+        console.log(data);
+        if (data.length > 0) {
+          this.cacheManager.delKey(data);
+        }
+      }
+    );
+
+    return { succeed: true };
   }
 
   private _signToken(
@@ -270,10 +281,6 @@ export class AuthService {
           });
         });
     }
-    return {
-      accessToken: this.tokenUtil.signToken(payload, isAdmin),
-      refreshToken: this.tokenUtil.signRefreshToken(payload, isAdmin),
-      tokenType: AppObject.TOKEN_TYPES.BEARER,
-    };
+    return this.tokenUtil.sign(payload, isAdmin);
   }
 }

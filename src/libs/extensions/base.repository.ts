@@ -96,6 +96,10 @@ export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
     const PAGE = +params.paginate.page || AppConst.PAGE;
     const PAGE_SIZE = +params.paginate.pageSize || AppConst.PAGE_SIZE;
 
+    params.conditions.andWhere(`(${params.alias}.status <> :deleteStatus)`, {
+      deleteStatus: AppObject.USER_STATUS.DELETED,
+    });
+
     if (params.paginate.sort) {
       const sortValues: string[] = params.paginate.sort.split(';');
       sortValues.forEach((sv: string) => {
