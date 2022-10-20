@@ -26,8 +26,16 @@ export const AdminValidation = {
           required: ['dialCode', 'phone'],
           nullable: true,
         },
+        gender: { type: 'string', enum: Object.values(AppObject.GENDER) },
       },
-      required: ['email', 'firstName', 'lastName', 'role', 'password'],
+      required: [
+        'email',
+        'firstName',
+        'lastName',
+        'role',
+        'password',
+        'gender',
+      ],
       additionalProperties: false,
       errorMessage: {
         // required: {

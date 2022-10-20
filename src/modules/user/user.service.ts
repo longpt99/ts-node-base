@@ -69,8 +69,7 @@ export class UserService {
 
   async create(params: RegisterParams) {
     try {
-      const userCreated = await this.userRepository.save(params);
-
+      const userCreated = await this.userRepository.createDoc(params);
       return userCreated;
     } catch (error) {
       if (error.code === AppObject.ERR_CODE_DB.UNIQUE) {
@@ -84,7 +83,7 @@ export class UserService {
 
   async list() {}
 
-  async getProfile(userId) {
+  async getProfile(userId: string) {
     return this.getUserByConditions({ conditions: { id: userId } });
   }
 }

@@ -19,26 +19,17 @@ export class CacheManagerUtil {
     exp?: number;
   }): Promise<string | null> {
     return new Promise((resolve, reject) => {
-      if (params.exp) {
-        return this.client.setex(
-          params.key,
-          params.exp,
-          params.value,
-          (err, val) => {
-            if (err) {
-              return reject(err);
-            }
-            return resolve(val);
+      return this.client.setex(
+        params.key,
+        params.exp ?? -1,
+        params.value,
+        (err, val) => {
+          if (err) {
+            reject(err);
           }
-        );
-      }
-
-      return this.client.set(params.key, params.value, (err, val) => {
-        if (err) {
-          return reject(err);
+          resolve(val);
         }
-        return resolve(val);
-      });
+      );
     });
   }
 
@@ -46,9 +37,9 @@ export class CacheManagerUtil {
     return new Promise((resolve, reject) => {
       this.client.del(key, (err, val) => {
         if (err) {
-          return reject(err);
+          reject(err);
         }
-        return resolve(val);
+        resolve(val);
       });
     });
   }
@@ -59,9 +50,9 @@ export class CacheManagerUtil {
     return new Promise((resolve, reject) => {
       this.client.get(key, (err, val) => {
         if (err) {
-          return reject(err);
+          reject(err);
         }
-        return resolve(val ? JSON.parse(val) : val);
+        resolve(val ? JSON.parse(val) : val);
       });
     });
   }
@@ -70,9 +61,9 @@ export class CacheManagerUtil {
     return new Promise((resolve, reject) => {
       this.client.keys(key, (err, val) => {
         if (err) {
-          return reject(err);
+          reject(err);
         }
-        return resolve(val);
+        resolve(val);
       });
     });
   }
@@ -81,9 +72,9 @@ export class CacheManagerUtil {
     return new Promise((resolve, reject) => {
       this.client.hset(key, field, value, (err, val) => {
         if (err) {
-          return reject(err);
+          reject(err);
         }
-        return resolve(val);
+        resolve(val);
       });
     });
   }
@@ -92,9 +83,9 @@ export class CacheManagerUtil {
     return new Promise((resolve, reject) => {
       this.client.hget(key, field, (err, val) => {
         if (err) {
-          return reject(err);
+          reject(err);
         }
-        return resolve(val);
+        resolve(val);
       });
     });
   }
@@ -103,9 +94,9 @@ export class CacheManagerUtil {
     return new Promise((resolve, reject) => {
       this.client.hgetall(key, (err, val) => {
         if (err) {
-          return reject(err);
+          reject(err);
         }
-        return resolve(val);
+        resolve(val);
       });
     });
   }
@@ -114,9 +105,9 @@ export class CacheManagerUtil {
     return new Promise((resolve, reject) => {
       this.client.hdel(key, field, (err, val) => {
         if (err) {
-          return reject(err);
+          reject(err);
         }
-        return resolve(val);
+        resolve(val);
       });
     });
   }
@@ -129,9 +120,9 @@ export class CacheManagerUtil {
     return new Promise((resolve, reject) => {
       this.client.rpush(queue, msgArr, (err, val) => {
         if (err) {
-          return reject(err);
+          reject(err);
         }
-        return resolve(val);
+        resolve(val);
       });
     });
   }

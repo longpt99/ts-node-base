@@ -1,5 +1,5 @@
 export interface SendMailParams {
-  from: string;
+  // from: string;
   to: string[];
   content: string;
   subject: string;

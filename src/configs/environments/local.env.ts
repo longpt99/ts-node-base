@@ -9,11 +9,11 @@ export const ENV: AppEnvironment = {
     COOKIE_SECRET_KEY: 'local-cookie#123456a@A',
     PASSWORD_SECRET_KEY: 'passwordsecretkey#123456a@A',
     JWT_ACCESS_TOKEN: {
-      EXPIRED_TIME: 30 * 60,
+      EXPIRED_TIME: 24 * 60 * 60,
       SECRET_KEY: 'local-access-token#123456a@A',
     },
     JWT_REFRESH_TOKEN: {
-      EXPIRED_TIME: 30 * 60,
+      EXPIRED_TIME: 10 * 24 * 60 * 60,
       SECRET_KEY: 'local-refresh-token#123456a@A',
     },
   },
@@ -51,11 +51,11 @@ export const ENV: AppEnvironment = {
   MAIL_CONFIG: {
     SMTP_CONFIG: {
       HOST: 'smtp.gmail.com',
-      PORT: 456,
+      PORT: 465,
       SECURE: true,
       AUTH: {
         USER: 'longpt99.it@gmail.com',
-        PASS: 'fuydxbuzmvfkuezz',
+        PASS: 'fvjgkfykxpdiienx',
       },
     },
   },

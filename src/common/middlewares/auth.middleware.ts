@@ -35,7 +35,9 @@ export function authMiddleware(roles: string[]) {
       ) {
         throw new UnauthorizedError();
       }
-      userData.role = (userData.role as string) ?? AppObject.CUSTOMER_ROLES;
+      userData.role =
+        (userData.role as string) ?? AppObject.CUSTOMER_ROLES.CUSTOMER;
+
       if (!roles.includes(userData.role)) {
         throw new ForbiddenError();
       }

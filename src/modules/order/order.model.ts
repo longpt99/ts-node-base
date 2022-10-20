@@ -1,6 +1,3 @@
-export interface OrderModel {
-  id: string;
-  status: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { Order } from './order.entity';
+
+export type OrderModel = Order;

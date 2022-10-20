@@ -10,4 +10,5 @@ export interface CreateAdminParams {
   email: string;
   password: string;
   mobilePhone?: PhoneNumberProperties;
+  gender: string;
 }

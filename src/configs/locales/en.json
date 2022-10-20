@@ -21,16 +21,13 @@
   "Conflict": "Conflict",
   "I'm a Teapot": "I'm a Teapot",
   "Payment Required": "Payment Required",
-  "must NOT have additional properties": "must NOT have additional properties",
-  "must match format \"email\"": "must match format \"email\"",
-  "must have required property 'lastName'": "must have required property 'lastName'",
   "firstNameIsRequired": "firstNameIsRequired",
   "lastNameIsRequired": "lastNameIsRequired",
   "otpInvalid": "otpInvalid",
-  "must have required property 'otp'": "must have required property 'otp'",
   "limitResendOtp": "limitResendOtp",
   "accountVerified": "accountVerified",
   "wrongPassword": "wrongPassword",
   "accountNotFound": "Account Not Found",
-  "deleteSuperAdmin": "You can not delete Super Admin"
+  "deleteSuperAdmin": "You can not delete Super Admin",
+  "productExists": "Product have been exists"
 }

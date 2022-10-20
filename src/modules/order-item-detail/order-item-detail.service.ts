@@ -1,6 +1,6 @@
 /**
- * Order Service
- * @module Order Controller
+ * OrderItemDetail Service
+ * @module OrderItemDetail Controller
  * @description Config controller
  */
 
@@ -8,27 +8,29 @@ import { getCustomRepository } from 'typeorm';
 
 import { ErrorHandler, UnauthorizedError } from '../../libs/errors';
 import StatusCodes from '../../utils/status-code';
-import { OrderModel } from './order.model';
-import { OrderRepository } from './order.repository';
+import { OrderItemDetailModel } from './order-item-detail.model';
+import { OrderItemDetailRepository } from './order-item-detail.repository';
 
-export class OrderService {
-  private static instance: OrderService;
-  private orderRepository: OrderRepository;
+export class OrderItemDetailService {
+  private static instance: OrderItemDetailService;
+  private orderItemDetailRepository: OrderItemDetailRepository;
 
   constructor() {
-    if (OrderService.instance) {
-      return OrderService.instance;
+    if (OrderItemDetailService.instance) {
+      return OrderItemDetailService.instance;
     }
 
-    this.orderRepository = getCustomRepository(OrderRepository);
-    OrderService.instance = this;
+    this.orderItemDetailRepository = getCustomRepository(
+      OrderItemDetailRepository
+    );
+    OrderItemDetailService.instance = this;
   }
 
   /**
    * @method create
-   * @description Create new order
+   * @description Create new order-item-detail
    */
-  async create(params) {
+  async create() {
     return;
   }
 

@@ -1,6 +1,6 @@
 /**
- * Order Service
- * @module Order Controller
+ * Category Service
+ * @module Category Controller
  * @description Config controller
  */
 
@@ -8,27 +8,27 @@ import { getCustomRepository } from 'typeorm';
 
 import { ErrorHandler, UnauthorizedError } from '../../libs/errors';
 import StatusCodes from '../../utils/status-code';
-import { OrderModel } from './order.model';
-import { OrderRepository } from './order.repository';
+import { CategoryModel } from './category.model';
+import { CategoryRepository } from './category.repository';
 
-export class OrderService {
-  private static instance: OrderService;
-  private orderRepository: OrderRepository;
+export class CategoryService {
+  private static instance: CategoryService;
+  private categoryRepository: CategoryRepository;
 
   constructor() {
-    if (OrderService.instance) {
-      return OrderService.instance;
+    if (CategoryService.instance) {
+      return CategoryService.instance;
     }
 
-    this.orderRepository = getCustomRepository(OrderRepository);
-    OrderService.instance = this;
+    this.categoryRepository = getCustomRepository(CategoryRepository);
+    CategoryService.instance = this;
   }
 
   /**
    * @method create
-   * @description Create new order
+   * @description Create new category
    */
-  async create(params) {
+  async create() {
     return;
   }
 

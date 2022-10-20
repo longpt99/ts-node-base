@@ -7,6 +7,16 @@ export class AppObject {
     UNIQUE: '23505',
   };
 
+  static readonly INDEX_DB = {
+    UNIQUE_EMAIL: 'idx_unique_email',
+    UNIQUE_PRODUCT: 'idx_unique_product',
+  };
+
+  static readonly GENDER = {
+    MALE: 'male',
+    FEMALE: 'female',
+  };
+
   static readonly MODULES = {
     USER: 'User',
     ADMIN: 'Admin',

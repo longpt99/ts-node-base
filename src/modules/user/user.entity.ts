@@ -4,12 +4,14 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { AppObject } from '../../common/consts';
 import APP_CONFIG from '../../configs/app.config';
 import { StringUtil } from '../../utils';
+import { Order } from '../order/order.entity';
 import { PhoneNumberProperties } from './user.interface';
 
 @Entity()
@@ -63,6 +65,9 @@ export class User {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   public updatedAt: Date;
+
+  @OneToMany(() => Order, (orders) => orders.user)
+  public orders: Order[];
 
   @BeforeInsert()
   async beforeInsert() {

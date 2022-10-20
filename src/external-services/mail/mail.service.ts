@@ -1,6 +1,6 @@
-import { SendMailParams } from './mail.interface';
 import nodemailer from 'nodemailer';
 import APP_CONFIG from '../../configs/app.config';
+import { SendMailParams } from './mail.interface';
 
 export default class MailService {
   private static instance: MailService;
@@ -31,7 +31,7 @@ export default class MailService {
           from: '"Anam Coffee" <youremail@gmail.com>', // sender address
           to: params.to, // list of receivers
           subject: params.subject, // Subject line
-          html: "<b>There is a new article. It's about sending emails, check it out!</b>", // html body
+          html: params.content, // html body
         })
         .then((info) => {
           resolve(info);

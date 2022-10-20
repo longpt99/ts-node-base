@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -10,6 +11,10 @@ import { AppObject } from '../../../common/consts';
 import { ProductAttribute } from '../product-attribute/product-attribute.entity';
 
 @Entity()
+@Index(AppObject.INDEX_DB.UNIQUE_PRODUCT, ['name'], {
+  unique: true,
+  where: `"isDeleted" IS FALSE`,
+})
 export class Product {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
@@ -37,7 +42,7 @@ export class Product {
   public status: string;
 
   @Column({ type: 'boolean', default: false })
-  public isDeleted: string;
+  public isDeleted: boolean;
 
   @CreateDateColumn({ type: 'timestamptz' })
   public createdAt: Date;

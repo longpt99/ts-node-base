@@ -30,6 +30,12 @@ export class Admin {
 
   @Column({
     type: 'enum',
+    enum: AppObject.GENDER,
+  })
+  public gender: string;
+
+  @Column({
+    type: 'enum',
     enum: AppObject.ADMIN_ROLES,
     default: AppObject.ADMIN_ROLES.STAFF,
   })
@@ -47,6 +53,9 @@ export class Admin {
 
   @Column({ type: 'timestamptz', nullable: true })
   public lastLogin: Date;
+
+  @Column({ type: 'boolean', default: false })
+  public isDeleted: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
   public createdAt: Date;

@@ -23,6 +23,7 @@ import { AdminModel } from '../admin/admin.model';
 import { AdminService } from '../admin/admin.service';
 import APP_CONFIG from '../../configs/app.config';
 import { TokenModel } from '../../libs';
+import MailService from '../../external-services/mail/mail.service';
 
 export class AuthService {
   private static instance: AuthService;
@@ -31,6 +32,7 @@ export class AuthService {
   private userRepository: UserRepository;
   private cacheManager: CacheManagerUtil;
   private adminService: AdminService;
+  private mailService: MailService;
 
   constructor() {
     if (AuthService.instance) {
@@ -39,6 +41,7 @@ export class AuthService {
 
     this.userService = new UserService();
     this.adminService = new AdminService();
+    this.mailService = new MailService();
     this.tokenUtil = new TokenUtil();
     this.userRepository = getCustomRepository(UserRepository);
     this.cacheManager = new CacheManagerUtil(RedisConfig.client);
@@ -94,6 +97,7 @@ export class AuthService {
           conditions: { email: params.body.email },
           select: ['id', 'password', 'status'],
         });
+        console.log(userFound);
 
         if (!userFound.comparePassword(params.body.password)) {
           throw new ErrorHandler({ message: 'wrongPassword' });
@@ -180,13 +184,20 @@ export class AuthService {
 
   async register(params: RegisterParams) {
     const user = await this.userService.create(params);
+    const otp = StringUtil.randomNumber(6);
     await this.cacheManager.setKey({
       key: `caches:users:${user.id}:verify-account`,
-      value: JSON.stringify({ otp: StringUtil.randomNumber(6), times: 1 }),
+      value: JSON.stringify({ otp: otp, times: 1 }),
       exp: 3 * 60,
     });
 
-    return;
+    await this.mailService.send({
+      subject: 'Verify your account',
+      to: [params.email],
+      content: `Your OTP code is: ${otp}`,
+    });
+
+    return { succeed: true };
   }
 
   async loginGoogle(params) {
@@ -272,6 +283,16 @@ export class AuthService {
   ): SignTokenResponse {
     if (isAdmin) {
       this.adminService
+        .detailByConditions({ conditions: { id: payload.id } })
+        .then((data) => {
+          this.cacheManager.setKey({
+            key: `caches:profiles:${payload.id}`,
+            value: JSON.stringify(data),
+            exp: APP_CONFIG.ENV.SECURE.JWT_ACCESS_TOKEN.EXPIRED_TIME,
+          });
+        });
+    } else {
+      this.userService
         .detailByConditions({ conditions: { id: payload.id } })
         .then((data) => {
           this.cacheManager.setKey({

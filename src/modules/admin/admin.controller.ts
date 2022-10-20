@@ -9,7 +9,7 @@ import { AdminValidation } from './admin.validation';
 
 export default class AdminController {
   private readonly router = RouteConfig;
-  private readonly adminPrefix = '/admin';
+  private readonly adminPrefix = '/admins';
   private readonly adminService: AdminService;
 
   constructor() {

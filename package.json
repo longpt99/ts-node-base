@@ -41,7 +41,7 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "newrelic": "^9.2.0",
-    "nodemailer": "^6.7.8",
+    "nodemailer": "6.7.8",
     "pg": "^8.7.3",
     "query-string": "^7.1.1",
     "redis": "3.1.2",
