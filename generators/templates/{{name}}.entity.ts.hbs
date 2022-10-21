@@ -8,11 +8,11 @@ import {
 @Entity()
 export class {{pascalCase name}} {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  public id: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz' })
-  updatedAt: Date;
+  public updatedAt: Date;
 }

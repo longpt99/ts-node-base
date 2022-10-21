@@ -18,7 +18,6 @@
     "checkJs": true /* Enable error reporting in type-checked JavaScript files. */,
     "outDir": "dist" /* Specify an output folder for all emitted files. */,
     "removeComments": true /* Disable emitting comments. */,
-    "newLine": "lf" /* Set the newline character for emitting files. */,
     "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */,
     /* Type Checking */
     "strict": false /* Enable all strict type-checking options. */,

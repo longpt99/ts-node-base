@@ -1,23 +1,23 @@
 /**
  * Controller
- * @module OrderItemDetail Controller
+ * @module OrderItemAttribute Controller
  * @description Config controller
  */
 
 import { Request, Response } from 'express';
 import { RouteConfig } from '../../libs';
-import { OrderItemDetailModel } from './order-item-detail.model';
-import { OrderItemDetailService } from './order-item-detail.service';
+import { OrderItemAttributeModel } from './order-item-attribute.model';
+import { OrderItemAttributeService } from './order-item-attribute.service';
 
-export default class OrderItemDetailController {
-  private readonly orderItemDetailService: OrderItemDetailService;
-  private readonly adminPath = '/admin/order-item-detail';
-  private readonly userPath = '/order-item-detail';
+export default class OrderItemAttributeController {
+  private readonly orderItemAttributeService: OrderItemAttributeService;
+  private readonly adminPath = '/admin/order-item-attribute';
+  private readonly userPath = '/order-item-attribute';
   private readonly router = RouteConfig;
 
   constructor() {
     this._initializeRoutes();
-    this.orderItemDetailService = new OrderItemDetailService();
+    this.orderItemAttributeService = new OrderItemAttributeService();
   }
 
   private _initializeRoutes() {
@@ -33,15 +33,15 @@ export default class OrderItemDetailController {
    * @description Get list
    */
   async list(req: Request, res: Response) {
-    return res.handler(this.orderItemDetailService.list());
+    return res.handler(this.orderItemAttributeService.list());
   }
 
   /**
    * @method create
-   * @description Create new order-item-detail
+   * @description Create new order-item-attribute
    */
   async create(req: Request, res: Response) {
-    return res.handler(this.orderItemDetailService.create());
+    return res.handler(this.orderItemAttributeService.create());
   }
 
   /**
@@ -50,7 +50,7 @@ export default class OrderItemDetailController {
    * @param params {id}
    */
   async getById(req: Request, res: Response) {
-    return res.handler(this.orderItemDetailService.getById());
+    return res.handler(this.orderItemAttributeService.getById());
   }
 
   /**
@@ -58,8 +58,11 @@ export default class OrderItemDetailController {
    * @description Update by id
    * @param params {id}
    */
-  async updateById(req: Request, res: Response): Promise<OrderItemDetailModel> {
-    return res.handler(this.orderItemDetailService.updateById());
+  async updateById(
+    req: Request,
+    res: Response
+  ): Promise<OrderItemAttributeModel> {
+    return res.handler(this.orderItemAttributeService.updateById());
   }
 
   /**
@@ -70,7 +73,7 @@ export default class OrderItemDetailController {
   async deleteById(
     req: Request,
     res: Response
-  ): Promise<OrderItemDetailModel[]> {
-    return res.handler(this.orderItemDetailService.deleteById());
+  ): Promise<OrderItemAttributeModel[]> {
+    return res.handler(this.orderItemAttributeService.deleteById());
   }
 }

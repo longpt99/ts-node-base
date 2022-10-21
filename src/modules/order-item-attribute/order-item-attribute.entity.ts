@@ -2,14 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { OrderItemAttribute } from '../order-item-attribute/order-item-attribute.entity';
+import { OrderItem } from '../order-item/order-item.entity';
 
 @Entity()
-export class OrderItem {
+export class OrderItemAttribute {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
@@ -25,9 +25,6 @@ export class OrderItem {
   @UpdateDateColumn({ type: 'timestamptz' })
   public updatedAt: Date;
 
-  @OneToMany(
-    () => OrderItemAttribute,
-    (orderItemAttribute) => orderItemAttribute.orderItem
-  )
-  public orderItemAttributes: OrderItemAttribute[];
+  @ManyToOne(() => OrderItem, (orderItem) => orderItem.orderItemAttributes)
+  public orderItem: OrderItem;
 }

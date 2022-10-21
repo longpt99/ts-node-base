@@ -1,3 +1,5 @@
+import { exec } from 'child_process';
+
 const isNotEmpty = (value: string) => {
   if (value.trim().length === 0) return 'Name is required';
   return true;
@@ -21,6 +23,14 @@ export default function (plop) {
         templateFiles: './templates/*.hbs',
         skipIfExists: true,
       },
+      { type: 'prettify' },
     ],
+  });
+  plop.setActionType('prettify', (answers: { name: string }) => {
+    exec(
+      `prettier --config .prettierrc ${process.cwd()}/src/modules/${
+        answers.name
+      } --write`
+    );
   });
 }
