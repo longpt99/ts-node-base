@@ -1,5 +1,4 @@
 import { getCustomRepository } from 'typeorm';
-import { UnauthorizedError } from '../../libs/errors';
 import { LoyaltyRepository } from './loyalty.repository';
 
 export class LoyaltyService {
@@ -16,11 +15,11 @@ export class LoyaltyService {
   }
 
   async create(params) {
-    throw new UnauthorizedError();
+    return params;
   }
 
-  async getById(params?) {
-    console.log(params.error.b);
+  async getById() {
+    return;
   }
 
   async list() {}

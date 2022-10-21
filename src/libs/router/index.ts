@@ -4,36 +4,56 @@ import { RouteOptions } from './router.interface';
 
 export const expressRouter = express.Router();
 
+type DynamcArray = any[];
+
 export class RouteConfig {
   static globalPrefix: string;
   static readonly expressRouter = express.Router();
 
-  constructor() {}
-
-  static get(path: string, fn: any[], options?: RouteOptions): RouteConfig {
+  static get(
+    path: string,
+    fn: DynamcArray,
+    options?: RouteOptions
+  ): RouteConfig {
     return RouteConfig.router('get', path, fn, options);
   }
 
-  static post(path: string, fn: any[], options?: RouteOptions): RouteConfig {
+  static post(
+    path: string,
+    fn: DynamcArray,
+    options?: RouteOptions
+  ): RouteConfig {
     return RouteConfig.router('post', path, fn, options);
   }
 
-  static put(path: string, fn: any[], options?: RouteOptions): RouteConfig {
+  static put(
+    path: string,
+    fn: DynamcArray,
+    options?: RouteOptions
+  ): RouteConfig {
     return RouteConfig.router('put', path, fn, options);
   }
 
-  static patch(path: string, fn: any[], options?: RouteOptions): RouteConfig {
+  static patch(
+    path: string,
+    fn: DynamcArray,
+    options?: RouteOptions
+  ): RouteConfig {
     return RouteConfig.router('patch', path, fn, options);
   }
 
-  static delete(path: string, fn: any[], options?: RouteOptions): RouteConfig {
+  static delete(
+    path: string,
+    fn: DynamcArray,
+    options?: RouteOptions
+  ): RouteConfig {
     return RouteConfig.router('delete', path, fn, options);
   }
 
   static router(
     method: 'get' | 'post' | 'put' | 'delete' | 'patch',
     path: string,
-    fn: any[],
+    fn: DynamcArray,
     options?: RouteOptions
   ): RouteConfig {
     if (options) {

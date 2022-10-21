@@ -1,8 +1,7 @@
-import { Server } from 'http';
 import logger from '../utils/logger';
 import newrelic from 'newrelic';
 
-export default function (server: Server): void {
+export default function (): void {
   const others = [
     'SIGINT',
     'SIGTERM',

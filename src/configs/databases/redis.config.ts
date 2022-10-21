@@ -10,8 +10,6 @@ export default class RedisConfig {
     db: APP_CONFIG.ENV.DATABASE.REDIS.DATABASE,
   });
 
-  constructor() {}
-
   async connectRedis() {
     RedisConfig.client.ping(() => {
       logger.info(`[Database][Redis] Database has connected successfully!`);

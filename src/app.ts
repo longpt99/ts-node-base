@@ -23,7 +23,7 @@ export default class Server implements IServer {
     bootstrapConfig();
     expressConfig(this.app);
     routeConfig(this.app);
-    serverConfig(server);
+    serverConfig();
 
     server.listen(APP_CONFIG.ENV.APP.PORT, () => {
       logger.info(`[System] Server is running at ${APP_CONFIG.ENV.APP.PORT}!`);

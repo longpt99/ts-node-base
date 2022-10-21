@@ -33,7 +33,7 @@ export default class LoyaltyController {
    * @apiSuccess {String} firstname Firstname of the User.
    * @apiSuccess {String} lastname  Lastname of the User.
    */
-  async create(req: Request, res: Response): Promise<any> {
+  async create(req: Request, res: Response) {
     return res.handler(this.loyaltyService.create(req.body));
   }
 

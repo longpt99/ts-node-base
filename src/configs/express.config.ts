@@ -14,6 +14,6 @@ export const expressConfig = (app: Application): void => {
   app.use(express.urlencoded({ extended: true }));
   app.use(i18n.init);
   if (process.env.NODE_ENV !== AppObject.ENVIRONMENTS.PRODUCTION) {
-    app.use(morgan('tiny'));
+    app.use(morgan('dev'));
   }
 };

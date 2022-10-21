@@ -27,11 +27,11 @@ export default class UserController {
   }
 
   //#region Admin section
-  private async create(req: Request, res: Response): Promise<any> {
+  private async create(req: Request, res: Response) {
     return res.handler(this.userService.create(req.body));
   }
 
-  private async list(req: Request, res: Response): Promise<any[]> {
+  private async list(req: Request, res: Response) {
     return res.handler(this.userService.list());
   }
 
@@ -39,20 +39,20 @@ export default class UserController {
     return res.handler(this.userService.getById());
   }
 
-  private async updateById(req: Request, res: Response): Promise<any> {
+  private async updateById(req: Request, res: Response) {
     return res.handler(this.userService.getById());
   }
 
-  private async deleteById(req: Request, res: Response): Promise<any[]> {
+  private async deleteById(req: Request, res: Response) {
     return res.handler(this.userService.list());
   }
   //#endregion Admin section
 
-  private async getProfile(req: Request, res: Response): Promise<any[]> {
+  private async getProfile(req: Request, res: Response) {
     return res.handler(this.userService.getProfile(req.user.id));
   }
 
-  private async updateProfile(req: Request, res: Response): Promise<any[]> {
+  private async updateProfile(req: Request, res: Response) {
     return res.handler(this.userService.getProfile(req.user.id));
   }
 

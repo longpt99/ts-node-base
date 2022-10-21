@@ -15,9 +15,7 @@ export default class UploadController {
   }
 
   //#region Admin section
-  async upload(req: Request, res: Response): Promise<any> {
-    console.log(123);
-
+  async upload(req: Request, res: Response) {
     return this.uploadService.upload(req, res);
   }
 }

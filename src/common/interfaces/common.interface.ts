@@ -18,8 +18,6 @@ export interface ListParams {
   startTime?: string;
   endTime?: string;
   sort?: string;
-
-  //Match any key if fields are not defined
   [key: string]: any;
 }
 
@@ -31,14 +29,14 @@ export interface ParamsCommonGetDetail<T> {
 }
 
 export interface ParamsCommonList<T> {
-  conditions: any;
+  conditions;
   alias: string;
   paginate: {
     page: number;
     pageSize: number;
     sort: string;
   };
-  overwriteConditions?: any;
+  overwriteConditions?;
   select?: (keyof T)[];
   unselect?: string[];
 }
@@ -48,4 +46,8 @@ export interface ParamsUpdateCommonList<T> {
   overwriteConditions?: Partial<T>;
   select?: (keyof T)[];
   data: Partial<T>;
+}
+
+export interface DynamicObject {
+  [key: string]: any;
 }

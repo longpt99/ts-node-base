@@ -97,8 +97,6 @@ export class AuthService {
           conditions: { email: params.body.email },
           select: ['id', 'password', 'status'],
         });
-        console.log(userFound);
-
         if (!userFound.comparePassword(params.body.password)) {
           throw new ErrorHandler({ message: 'wrongPassword' });
         }
@@ -116,7 +114,7 @@ export class AuthService {
     return this._signToken({ id: admin.id }, true);
   }
 
-  async resendOtp(params: { body: VerifyAccount }): Promise<any> {
+  async resendOtp(params: { body: VerifyAccount }) {
     const userFound = await this.userService.detailByConditions({
       conditions: { email: params.body.email },
       select: ['status', 'id'],
@@ -152,7 +150,7 @@ export class AuthService {
     return { isSuccess: 1 };
   }
 
-  async verify(params: { body: VerifyAccount }): Promise<any> {
+  async verify(params: { body: VerifyAccount }) {
     const userFound = await this.userService.detailByConditions({
       conditions: { email: params.body.email },
       select: ['id', 'status'],
@@ -201,51 +199,49 @@ export class AuthService {
   }
 
   async loginGoogle(params) {
-    const data: any = await got('https://oauth2.googleapis.com/token', {
-      method: 'POST',
-      searchParams: {
-        client_id:
-          '820557249269-70q12aui903ueojbceujgdc7tameru42.apps.googleusercontent.com',
-        client_secret: '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',
-        redirect_uri: 'http://localhost:8080/api/v1/auth/google',
-        grant_type: 'authorization_code',
-        code: params.code,
-      },
-    }).json();
-    console.log('GG data: ', data);
-
-    const googleData: any = await got(
-      'https://www.googleapis.com/oauth2/v2/userinfo',
-      {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${data.access_token}` },
-      }
-    ).json();
-
-    try {
-      const googleData2: any = await got(
-        `https://oauth2.googleapis.com/tokeninfo?id_token=${data.id_token}`,
-        {
-          method: 'POST',
-          // headers: {
-          //   Authorization: `Bearer ${data.access_token}`,
-          // },
-        }
-      ).json();
-
-      // const t = await got(
-      //   `https://people.googleapis.com/v1/people/${googleData.id}`,
-      //   {
-      //     method: 'GET',
-      //     searchParams: { personFields: ['birthdays', 'genders'].join(',') },
-      //     headers: { Authorization: `Bearer ${data.access_token}` },
-      //   }
-      // );
-
-      return googleData2;
-    } catch (error) {
-      console.log(error);
-    }
+    // const data: { access_token: string } = await got(
+    //   'https://oauth2.googleapis.com/token',
+    //   {
+    //     method: 'POST',
+    //     searchParams: {
+    //       client_id:
+    //         '820557249269-70q12aui903ueojbceujgdc7tameru42.apps.googleusercontent.com',
+    //       client_secret: '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',
+    //       redirect_uri: 'http://localhost:8080/api/v1/auth/google',
+    //       grant_type: 'authorization_code',
+    //       code: params.code,
+    //     },
+    //   }
+    // ).json();
+    // const googleData = await got(
+    //   'https://www.googleapis.com/oauth2/v2/userinfo',
+    //   {
+    //     method: 'GET',
+    //     headers: { Authorization: `Bearer ${data.access_token}` },
+    //   }
+    // ).json();
+    // try {
+    //   const googleData2: any = await got(
+    //     `https://oauth2.googleapis.com/tokeninfo?id_token=${data.id_token}`,
+    //     {
+    //       method: 'POST',
+    //       // headers: {
+    //       //   Authorization: `Bearer ${data.access_token}`,
+    //       // },
+    //     }
+    //   ).json();
+    //   // const t = await got(
+    //   //   `https://people.googleapis.com/v1/people/${googleData.id}`,
+    //   //   {
+    //   //     method: 'GET',
+    //   //     searchParams: { personFields: ['birthdays', 'genders'].join(',') },
+    //   //     headers: { Authorization: `Bearer ${data.access_token}` },
+    //   //   }
+    //   // );
+    //   return googleData2;
+    // } catch (error) {
+    //   console.log(error);
+    // }
   }
 
   async refreshToken(token: string) {
@@ -266,8 +262,7 @@ export class AuthService {
       `caches:${
         user.role === AppObject.CUSTOMER_ROLES.CUSTOMER ? 'users' : 'admins'
       }:${user.id}:*`,
-      (err, data) => {
-        console.log(data);
+      (_err, data) => {
         if (data.length > 0) {
           this.cacheManager.delKey(data);
         }

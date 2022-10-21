@@ -1,9 +1,7 @@
-import { LoyaltyRepository } from './upload.repository';
 import busboy from 'busboy';
 
 export default class UploadService {
   private static instance: UploadService;
-  private loyaltyRepository: LoyaltyRepository;
 
   constructor() {
     if (UploadService.instance) {

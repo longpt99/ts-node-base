@@ -5,10 +5,6 @@
  */
 
 import { getCustomRepository } from 'typeorm';
-
-import { ErrorHandler, UnauthorizedError } from '../../libs/errors';
-import StatusCodes from '../../utils/status-code';
-import { CategoryModel } from './category.model';
 import { CategoryRepository } from './category.repository';
 
 export class CategoryService {

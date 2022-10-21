@@ -3,12 +3,7 @@
  * @module Order Controller
  * @description Config controller
  */
-
 import { getCustomRepository } from 'typeorm';
-
-import { ErrorHandler, UnauthorizedError } from '../../libs/errors';
-import StatusCodes from '../../utils/status-code';
-import { OrderModel } from './order.model';
 import { OrderRepository } from './order.repository';
 
 export class OrderService {
@@ -29,7 +24,7 @@ export class OrderService {
    * @description Create new order
    */
   async create(params) {
-    return;
+    return params;
   }
 
   /**

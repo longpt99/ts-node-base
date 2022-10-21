@@ -6,5 +6,4 @@
 
 import { JSONSchemaType } from 'ajv';
 
-export class CategoryValidation {
-}
+export class CategoryValidation {}
