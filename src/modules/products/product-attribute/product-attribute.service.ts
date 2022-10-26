@@ -5,7 +5,10 @@
  */
 
 import { EntityManager, getCustomRepository } from 'typeorm';
-import { CreateProductAttributeParams } from './product-attribute.model';
+import {
+  CreateProductAttributeParams,
+  UpdateProductAttributeParams,
+} from './product-attribute.model';
 
 import { ProductAttributeRepository } from './product-attribute.repository';
 
@@ -38,40 +41,28 @@ export class ProductAttributeService {
   }
 
   /**
-   * @method list
-   * @description Get list
-   */
-  async list() {
-    return;
-  }
-
-  /**
-   * @async
-   * @method getById
-   * @description Get detail by id
-   * @param params {id}
-   */
-  async getById() {
-    return;
-  }
-
-  /**
-   * @async
-   * @method updateById
+   * @method updateByProductId
    * @description Update by id
-   * @param params {id}
    */
-  async updateById() {
-    return;
-  }
+  async updateByProductId(params: {
+    productId: string;
+    attributes: UpdateProductAttributeParams[];
+    manager: EntityManager;
+  }) {
+    const attributeIds = params.attributes.map((item) => item.id);
 
-  /**
-   * @async
-   * @method deleteById
-   * @description Delete by id
-   * @param params {id}
-   */
-  async deleteById() {
-    return;
+    await this.productAttributeRepository
+      .createQueryBuilder()
+      .update({
+        isDeleted: true,
+        onwerId: params.productId,
+      })
+      .where('product = :productId', {
+        productId: params.productId,
+      })
+      .andWhere('isDeleted IS FALSE')
+      .execute();
+
+    return params.attributes;
   }
 }

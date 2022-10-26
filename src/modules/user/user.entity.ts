@@ -15,7 +15,7 @@ import { Order } from '../order/order.entity';
 import { PhoneNumberProperties } from './user.interface';
 
 @Entity()
-@Index('idx_unique_email', ['email'], {
+@Index(AppObject.INDEX_DB.UNIQUE_EMAIL, ['email'], {
   unique: true,
   where: `"isDeleted" IS FALSE AND "facebookId" IS NULL AND "googleId" IS NULL`,
 })
@@ -66,9 +66,6 @@ export class User {
   @UpdateDateColumn({ type: 'timestamptz' })
   public updatedAt: Date;
 
-  @OneToMany(() => Order, (orders) => orders.user)
-  public orders: Order[];
-
   @BeforeInsert()
   async beforeInsert() {
     this.password = StringUtil.encrypt(
@@ -88,4 +85,8 @@ export class User {
       )
     );
   }
+
+  // Relationship Section
+  @OneToMany(() => Order, (orders) => orders.user)
+  public orders: Order[];
 }

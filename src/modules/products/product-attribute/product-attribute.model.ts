@@ -8,3 +8,11 @@ export interface CreateProductAttributeParams {
   key: string;
   value: string;
 }
+
+export interface UpdateProductAttributeParams {
+  id: string;
+  quantity?: number;
+  price?: number;
+  key: string;
+  value: string;
+}

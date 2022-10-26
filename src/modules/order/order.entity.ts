@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { OrderItem } from '../order-item/order-item.entity';
 import { User } from '../user/user.entity';
 
 @Entity()
@@ -28,6 +30,13 @@ export class Order {
   @UpdateDateColumn({ type: 'timestamptz' })
   public updatedAt: Date;
 
+  @Column({ type: 'boolean', default: false })
+  public isDeleted: string;
+
+  // Relationship Section
   @ManyToOne(() => User, (user) => user.orders)
   public user: User;
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
+  public orderItems: OrderItem[];
 }

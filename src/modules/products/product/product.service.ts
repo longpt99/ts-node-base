@@ -8,7 +8,11 @@ import { AppObject } from '../../../common/consts';
 import { ParamsCommonGetDetail } from '../../../common/interfaces';
 import { ErrorHandler } from '../../../libs/errors';
 import { ProductAttributeService } from '../product-attribute/product-attribute.service';
-import { CreateProductParams, ProductModel } from './product.model';
+import {
+  CreateProductParams,
+  ProductModel,
+  UpdateProductParams,
+} from './product.model';
 import { ProductRepository } from './product.repository';
 
 export class ProductService {
@@ -30,6 +34,24 @@ export class ProductService {
   async detailByConditions(params: ParamsCommonGetDetail<ProductModel>) {
     return this.productRepository.detailByConditions(params);
   }
+
+  //#region Admin Section\
+  /**
+   * @async
+   * @method getByIdByAdmin
+   * @description Get detail by id
+   * @param params {id}
+   */
+  async getByIdByAdmin(id: string) {
+    const product = await this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.productAttributes', 'productAttribute')
+      .where('product.id = :productId', { productId: id })
+      .andWhere('productAttribute.isDeleted IS FALSE')
+      .getOne();
+    return product;
+  }
+  //#endregion Admin Section
 
   /**
    * @method create
@@ -118,38 +140,58 @@ export class ProductService {
   }
 
   /**
-   * @async
    * @method getById
    * @description Get detail by id
-   * @param params {id}
    */
   async getById(id: string) {
-    return this.detailByConditions({ conditions: { id: id } });
+    const product = await this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.productAttributes', 'productAttribute')
+      .where('product.id = :productId', { productId: id })
+      .andWhere('product.status <> :notStatus', {
+        notStatus: AppObject.COMMON_STATUS.INACTIVE,
+      })
+      .andWhere('productAttribute.isDeleted IS FALSE')
+      .getOne();
+
+    if (!product) {
+      throw new ErrorHandler({ message: 'productNotFound' });
+    }
+
+    return product;
   }
 
   /**
-   * @async
-   * @method getById
-   * @description Get detail by id
-   * @param params {id}
-   */
-  async publicDetail(id: string) {
-    return this.detailByConditions({
-      conditions: {
-        id: id,
-        status: Not(AppObject.COMMON_STATUS.INACTIVE) as any,
-      },
-    });
-  }
-
-  /**
-   * @async
    * @method updateById
    * @description Update by id
-   * @param params {id}
    */
-  async updateById() {
-    return;
+  async updateById(params: { id: string; body: UpdateProductParams }) {
+    return this.productRepository.manager.transaction(async (manager) => {
+      try {
+        const product = await this.detailByConditions({
+          conditions: { id: params.id },
+        });
+
+        if (!product) {
+          throw new ErrorHandler({ message: 'productNotFound' });
+        }
+
+        this.productAttributeService.updateByProductId({
+          productId: params.id,
+          attributes: params.body.productAttributes,
+          manager: manager,
+        });
+
+        Object.assign(product, params.body);
+        const productUpdated = await manager.save(product);
+        return productUpdated;
+      } catch (error) {
+        if (error.code === AppObject.ERR_CODE_DB.UNIQUE) {
+          throw new ErrorHandler({ message: 'productExists' });
+        }
+        throw error;
+      }
+    });
   }
 
   /**

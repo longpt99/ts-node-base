@@ -32,14 +32,17 @@ class ProductController {
       [validate(ProductValidation.create), this.create.bind(this)],
       { roles: Object.values(AppObject.ADMIN_ROLES) }
     );
+
     this.router.get(`${this.adminPath}/:id`, [
       validate(UUIDValidation),
-      this.getById.bind(this),
+      this.getByIdByAdmin.bind(this),
     ]);
+
     this.router.patch(`${this.adminPath}/:id`, [
       validate(UUIDValidation),
       this.updateById.bind(this),
     ]);
+
     this.router.delete(`${this.adminPath}/:id`, [
       validate(UUIDValidation),
       this.deleteById.bind(this),
@@ -50,7 +53,7 @@ class ProductController {
     this.router.get(`${this.prefix}`, [this.publicList.bind(this)]);
     this.router.get(`${this.prefix}/:id`, [
       validate(UUIDValidation),
-      this.publicDetail.bind(this),
+      this.getById.bind(this),
     ]);
     //#endregion User section
   }
@@ -72,28 +75,27 @@ class ProductController {
   }
 
   /**
-   * @method getById
+   * @method getByIdByAdmin
    * @description Get detail by id
-   * @param req
-   * @param res
    */
-  async getById(req: Request, res: Response) {
-    return res.handler(this.productService.getById(req.params.id));
+  async getByIdByAdmin(req: Request, res: Response) {
+    return res.handler(this.productService.getByIdByAdmin(req.params.id));
   }
 
   /**
    * @method updateById
    * @description Update by id
-   * @param params {id}
    */
   async updateById(req: Request, res: Response): Promise<ProductModel> {
-    return res.handler(this.productService.updateById());
+    return res.handler(
+      this.productService.updateById({ id: req.params.id, body: req.body })
+    );
   }
 
   /**
    * @method deleteById
    * @description Delete by id
-   * @param params {id}
+   * @param {id} req
    */
   async deleteById(req: Request, res: Response): Promise<ProductModel> {
     return res.handler(this.productService.deleteById(req.params.id));
@@ -103,7 +105,7 @@ class ProductController {
   /**
    * @method updateById
    * @description Update by id
-   * @param params {id}
+   * @param {id} req
    */
   async publicList(req: Request, res: Response): Promise<ProductModel> {
     return res.handler(this.productService.publicList(req.query));
@@ -112,10 +114,10 @@ class ProductController {
   /**
    * @method deleteById
    * @description Delete by id
-   * @param params {id}
+   * @param {id} req
    */
-  async publicDetail(req: Request, res: Response): Promise<ProductModel> {
-    return res.handler(this.productService.publicDetail(req.params.id));
+  async getById(req: Request, res: Response): Promise<ProductModel> {
+    return res.handler(this.productService.getById(req.params.id));
   }
   //#endregion User section
 }

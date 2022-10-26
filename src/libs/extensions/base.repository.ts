@@ -1,12 +1,6 @@
 // import { Document, Model } from 'mongoose';
-import {
-  DeepPartial,
-  Not,
-  ObjectLiteral,
-  Repository,
-  UpdateQueryBuilder,
-} from 'typeorm';
-import { AppConst, AppObject } from '../../common/consts';
+import { DeepPartial, ObjectLiteral, Repository } from 'typeorm';
+import { AppConst } from '../../common/consts';
 import {
   ParamsCommonGetDetail,
   ParamsCommonList,
@@ -62,9 +56,7 @@ export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
     if (params.overwriteConditions) {
       Object.assign(params.conditions, params.overwriteConditions);
     } else {
-      Object.assign(params.conditions, {
-        status: Not(AppObject.COMMON_STATUS.DELETED),
-      });
+      Object.assign(params.conditions, { isDeleted: false });
     }
 
     return this.findOne({
@@ -77,9 +69,7 @@ export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
     if (params.overwriteConditions) {
       Object.assign(params.conditions, params.overwriteConditions);
     } else {
-      Object.assign(params.conditions, {
-        status: Not(AppObject.COMMON_STATUS.DELETED),
-      });
+      Object.assign(params.conditions, { isDeleted: false });
     }
 
     return this.createQueryBuilder()

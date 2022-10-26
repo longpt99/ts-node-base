@@ -34,7 +34,10 @@ export class ProductAttribute {
   public status: string;
 
   @Column({ type: 'boolean', default: false })
-  public isDeleted: string;
+  public isDeleted: boolean;
+
+  @Column({ type: 'uuid', nullable: true })
+  public onwerId: string | null;
 
   @CreateDateColumn({ type: 'timestamptz' })
   public createdAt: Date;
@@ -42,6 +45,7 @@ export class ProductAttribute {
   @UpdateDateColumn({ type: 'timestamptz' })
   public updatedAt: Date;
 
+  // Relationship Section
   @ManyToOne(() => Product, (product) => product.productAttributes, {})
-  product: Product;
+  public product: Product;
 }

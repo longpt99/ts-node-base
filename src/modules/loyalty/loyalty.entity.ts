@@ -2,21 +2,32 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from '../user/user.entity';
 
 @Entity()
 export class Loyalty {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  public id: string;
 
   @Column({ type: 'int' })
-  point: number;
+  public point: number;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz' })
-  updatedAt: Date;
+  public updatedAt: Date;
+
+  @Column({ type: 'boolean', default: false })
+  public isDeleted: string;
+
+  // Relationship Section
+  @OneToOne(() => User)
+  @JoinColumn()
+  public user: User;
 }

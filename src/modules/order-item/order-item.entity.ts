@@ -2,11 +2,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { OrderItemAttribute } from '../order-item-attribute/order-item-attribute.entity';
+import { Order } from '../order/order.entity';
+import { Product } from '../products/product/product.entity';
 
 @Entity()
 export class OrderItem {
@@ -25,9 +30,20 @@ export class OrderItem {
   @UpdateDateColumn({ type: 'timestamptz' })
   public updatedAt: Date;
 
+  @Column({ type: 'boolean', default: false })
+  public isDeleted: string;
+
+  // Relationship Section
   @OneToMany(
     () => OrderItemAttribute,
     (orderItemAttribute) => orderItemAttribute.orderItem
   )
   public orderItemAttributes: OrderItemAttribute[];
+
+  @ManyToOne(() => Order, (order) => order.orderItems)
+  public order: Order;
+
+  @OneToOne(() => Product)
+  @JoinColumn()
+  public product: Product;
 }
