@@ -5,10 +5,6 @@
  */
 
 import { getCustomRepository } from 'typeorm';
-
-import { ErrorHandler, UnauthorizedError } from '../../libs/errors';
-import StatusCodes from '../../utils/status-code';
-import { OrderItemAttributeModel } from './order-item-attribute.model';
 import { OrderItemAttributeRepository } from './order-item-attribute.repository';
 
 export class OrderItemAttributeService {
@@ -43,30 +39,24 @@ export class OrderItemAttributeService {
   }
 
   /**
-   * @async
    * @method getById
    * @description Get detail by id
-   * @param params {id}
    */
   async getById() {
     return;
   }
 
   /**
-   * @async
    * @method updateById
    * @description Update by id
-   * @param params {id}
    */
   async updateById() {
     return;
   }
 
   /**
-   * @async
    * @method deleteById
    * @description Delete by id
-   * @param params {id}
    */
   async deleteById() {
     return;

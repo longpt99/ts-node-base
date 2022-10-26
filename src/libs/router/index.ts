@@ -4,7 +4,7 @@ import { RouteOptions } from './router.interface';
 
 export const expressRouter = express.Router();
 
-type DynamcArray = any[];
+type DynamicArray = any[];
 
 export class RouteConfig {
   static globalPrefix: string;
@@ -12,7 +12,7 @@ export class RouteConfig {
 
   static get(
     path: string,
-    fn: DynamcArray,
+    fn: DynamicArray,
     options?: RouteOptions
   ): RouteConfig {
     return RouteConfig.router('get', path, fn, options);
@@ -20,7 +20,7 @@ export class RouteConfig {
 
   static post(
     path: string,
-    fn: DynamcArray,
+    fn: DynamicArray,
     options?: RouteOptions
   ): RouteConfig {
     return RouteConfig.router('post', path, fn, options);
@@ -28,7 +28,7 @@ export class RouteConfig {
 
   static put(
     path: string,
-    fn: DynamcArray,
+    fn: DynamicArray,
     options?: RouteOptions
   ): RouteConfig {
     return RouteConfig.router('put', path, fn, options);
@@ -36,7 +36,7 @@ export class RouteConfig {
 
   static patch(
     path: string,
-    fn: DynamcArray,
+    fn: DynamicArray,
     options?: RouteOptions
   ): RouteConfig {
     return RouteConfig.router('patch', path, fn, options);
@@ -44,7 +44,7 @@ export class RouteConfig {
 
   static delete(
     path: string,
-    fn: DynamcArray,
+    fn: DynamicArray,
     options?: RouteOptions
   ): RouteConfig {
     return RouteConfig.router('delete', path, fn, options);
@@ -53,7 +53,7 @@ export class RouteConfig {
   static router(
     method: 'get' | 'post' | 'put' | 'delete' | 'patch',
     path: string,
-    fn: DynamcArray,
+    fn: DynamicArray,
     options?: RouteOptions
   ): RouteConfig {
     if (options) {

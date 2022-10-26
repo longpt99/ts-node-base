@@ -20,7 +20,7 @@ export interface ListParams {
   sort?: string;
 
   //Match any key if fields are not defined
-  [key: string]: any;
+  [key: string]: string | number | undefined;
 }
 
 export interface ParamsCommonGetDetail {

@@ -45,8 +45,6 @@ export class ProductAttributeService {
     attributes: UpdateProductAttributeParams[];
     manager: EntityManager;
   }) {
-    const attributeIds = params.attributes.map((item) => item.id);
-
     await params.manager.update(
       ProductAttribute,
       { product: params.productId, isDeleted: false },

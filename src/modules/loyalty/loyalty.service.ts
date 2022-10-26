@@ -22,5 +22,7 @@ export class LoyaltyService {
     return;
   }
 
-  async list() {}
+  async list() {
+    return;
+  }
 }

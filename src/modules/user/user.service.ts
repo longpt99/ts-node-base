@@ -78,8 +78,6 @@ export class UserService {
     }
   }
 
-  async getById() {}
-
   async list(params) {
     const alias = 'user';
     const queryBuilder = this.userRepository.createQueryBuilder(alias).select();

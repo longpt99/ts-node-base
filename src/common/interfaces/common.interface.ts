@@ -18,6 +18,7 @@ export interface ListParams {
   startTime?: string;
   endTime?: string;
   sort?: string;
+
   [key: string]: any;
 }
 
@@ -49,5 +50,5 @@ export interface ParamsUpdateCommonList<T> {
 }
 
 export interface DynamicObject {
-  [key: string]: any;
+  [key: string]: string | number;
 }

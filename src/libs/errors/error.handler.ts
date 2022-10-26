@@ -3,7 +3,7 @@ import { BaseOptionError } from '../interfaces';
 
 export class ErrorHandler extends Error {
   status: number;
-  error: any;
+  error;
   code: string | undefined;
 
   constructor(params?: BaseOptionError) {

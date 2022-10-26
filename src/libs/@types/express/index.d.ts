@@ -6,8 +6,8 @@ declare module 'express' {
   }
 
   interface Response {
-    success: any;
-    error: any;
-    handler: any;
+    success;
+    error;
+    handler;
   }
 }

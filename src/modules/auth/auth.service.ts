@@ -242,6 +242,7 @@ export class AuthService {
     // } catch (error) {
     //   console.log(error);
     // }
+    return params;
   }
 
   async refreshToken(token: string) {

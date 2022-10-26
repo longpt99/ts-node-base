@@ -3,5 +3,5 @@ export interface BaseOptionError {
   code?: string;
   status?: number;
   message?: string;
-  error?: any;
+  error?;
 }

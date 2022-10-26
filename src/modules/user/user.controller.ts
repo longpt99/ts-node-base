@@ -66,10 +66,6 @@ export default class UserController {
     return res.handler(this.userService.getProfile(req.params.id));
   }
 
-  private async updateById(req: Request, res: Response) {
-    return res.handler(this.userService.getById());
-  }
-
   private async deleteById(req: Request, res: Response) {
     return res.handler(this.userService.deleteById(req.params.id));
   }

@@ -3,7 +3,7 @@
  * @module Product Controller
  * @description Config controller
  */
-import { getCustomRepository, Not } from 'typeorm';
+import { getCustomRepository } from 'typeorm';
 import { AppObject } from '../../../common/consts';
 import { ParamsCommonGetDetail } from '../../../common/interfaces';
 import { ErrorHandler } from '../../../libs/errors';
