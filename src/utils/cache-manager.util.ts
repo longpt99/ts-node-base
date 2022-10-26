@@ -5,11 +5,11 @@ export class CacheManagerUtil {
   public client: RedisClient;
 
   constructor(client: RedisClient) {
-    // if (CacheManagerUtil.instance) {
-    //   return CacheManagerUtil.instance;
-    // }
+    if (CacheManagerUtil.instance) {
+      return CacheManagerUtil.instance;
+    }
 
-    // CacheManagerUtil.instance = this;
+    CacheManagerUtil.instance = this;
     this.client = client;
   }
 

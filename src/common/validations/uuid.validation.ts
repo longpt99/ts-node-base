@@ -9,7 +9,7 @@ export const UUIDValidation = {
     required: ['id'],
     additionalProperties: false,
     errorMessage: {
-      required: {
+      properties: {
         id: 'idInvalid',
       },
     },

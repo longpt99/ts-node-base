@@ -43,10 +43,11 @@ class ProductController {
       this.updateById.bind(this),
     ]);
 
-    this.router.delete(`${this.adminPath}/:id`, [
-      validate(UUIDValidation),
-      this.deleteById.bind(this),
-    ]);
+    this.router.delete(
+      `${this.adminPath}/:id`,
+      [validate(UUIDValidation), this.deleteById.bind(this)],
+      { roles: [AppObject.ADMIN_ROLES.SUPER_ADMIN] }
+    );
     //#endregion Admin section
 
     //#region User section

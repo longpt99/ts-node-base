@@ -30,5 +30,6 @@
   "accountNotFound": "Account Not Found",
   "deleteSuperAdmin": "You can not delete Super Admin",
   "productExists": "Product have been exists",
-  "productNotFound": "Product not found"
+  "productNotFound": "Product not found",
+  "idInvalid": "Invalid ID"
 }

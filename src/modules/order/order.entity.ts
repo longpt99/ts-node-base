@@ -31,7 +31,7 @@ export class Order {
   public updatedAt: Date;
 
   @Column({ type: 'boolean', default: false })
-  public isDeleted: string;
+  public isDeleted: boolean;
 
   // Relationship Section
   @ManyToOne(() => User, (user) => user.orders)

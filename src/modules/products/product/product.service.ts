@@ -201,10 +201,24 @@ export class ProductService {
    * @param params {id}
    */
   async deleteById(id: string) {
-    await this.productRepository.updateByConditions({
-      conditions: { id: id },
-      data: { isDeleted: true },
+    return this.productRepository.manager.transaction(async (manager) => {
+      const [product] = await Promise.all([
+        this.detailByConditions({
+          conditions: { id: id, isDeleted: false },
+          select: ['id'],
+        }),
+        this.productAttributeService.deleteByProductId({
+          productId: id,
+          manager: manager,
+        }),
+      ]);
+
+      if (!product) {
+        throw new ErrorHandler({ message: 'productNotFound' });
+      }
+      product.isDeleted = true;
+      await manager.save(product);
+      return { success: true };
     });
-    return { success: true };
   }
 }

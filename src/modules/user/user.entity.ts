@@ -49,7 +49,7 @@ export class User {
   public status: string;
 
   @Column({ type: 'boolean', default: false })
-  public isDeleted: string;
+  public isDeleted: boolean;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   public facebookId: string;

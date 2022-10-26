@@ -29,7 +29,7 @@ export class OrderItemAttribute {
   public updatedAt: Date;
 
   @Column({ type: 'boolean', default: false })
-  public isDeleted: string;
+  public isDeleted: boolean;
 
   // Relationship Section
   @ManyToOne(() => OrderItem, (orderItem) => orderItem.orderItemAttributes)

@@ -55,7 +55,7 @@ export class Admin {
   public lastLogin: Date;
 
   @Column({ type: 'boolean', default: false })
-  public isDeleted: string;
+  public isDeleted: boolean;
 
   @CreateDateColumn({ type: 'timestamptz' })
   public createdAt: Date;

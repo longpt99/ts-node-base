@@ -1,7 +1,9 @@
 import { getCustomRepository } from 'typeorm';
 import { AppObject } from '../../common/consts';
 import { ParamsCommonGetDetail } from '../../common/interfaces';
+import RedisConfig from '../../configs/databases/redis.config';
 import { ErrorHandler } from '../../libs/errors';
+import { CacheManagerUtil } from '../../utils/cache-manager.util';
 import { FacebookData, RegisterParams } from '../auth/auth.interface';
 import { UserModel } from './user.interface';
 import { UserRepository } from './user.repository';
@@ -9,6 +11,7 @@ import { UserRepository } from './user.repository';
 export class UserService {
   private static instance: UserService;
   private userRepository: UserRepository;
+  private cacheManager: CacheManagerUtil;
 
   constructor() {
     if (UserService.instance) {
@@ -16,6 +19,7 @@ export class UserService {
     }
 
     this.userRepository = getCustomRepository(UserRepository);
+    this.cacheManager = new CacheManagerUtil(RedisConfig.client);
     UserService.instance = this;
   }
 
@@ -76,9 +80,42 @@ export class UserService {
 
   async getById() {}
 
-  async list() {}
+  async list(params) {
+    const alias = 'user';
+    const queryBuilder = this.userRepository.createQueryBuilder(alias).select();
+
+    if (params.search) {
+      queryBuilder.andWhere(`(${alias}.name ILIKE :name)`, {
+        name: `%${params.search}%`,
+      });
+    }
+
+    if (params.status) {
+      queryBuilder.andWhere(`(${alias}.status = :status)`, {
+        status: params.status,
+      });
+    }
+
+    return this.userRepository.list({
+      conditions: queryBuilder,
+      paginate: params,
+      alias: alias,
+    });
+  }
 
   async getProfile(userId: string) {
     return this.getUserByConditions({ conditions: { id: userId } });
+  }
+
+  async deleteById(userId: string) {
+    await this.userRepository.updateByConditions({
+      conditions: { id: userId },
+      data: { isDeleted: true },
+    });
+    this.cacheManager.client.keys(`caches:users:${userId}:*`, (_err, data) => {
+      data.push(`caches:profiles:${userId}`);
+      this.cacheManager.delKey(data);
+    });
+    return { succeed: true };
   }
 }
