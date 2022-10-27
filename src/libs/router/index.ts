@@ -58,7 +58,6 @@ export class RouteConfig {
   ): RouteConfig {
     if (options) {
       if (options.allowAnonymous) {
-        console.log('Verify token base');
         // fn.unshift('token');
       } else {
         if (options.roles) {

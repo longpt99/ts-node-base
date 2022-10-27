@@ -9,15 +9,19 @@ const ajv = new Ajv({ allErrors: true });
 ajvErrors(ajv);
 addFormats(ajv);
 
-export function validate(dto: SchemaObject) {
+export function validate(...dto: SchemaObject[]) {
+  const data = dto.reduce((result, nextData) => {
+    Object.assign(result, nextData);
+    return result;
+  }, {});
+
   return (req: Request, res: Response, next: NextFunction): void => {
     let isValidRequest = false;
     for (let i = 0, len = REQUEST_PARAMS.length; i < len; i++) {
-      if (!dto[REQUEST_PARAMS[i]]) {
+      if (!data[REQUEST_PARAMS[i]]) {
         continue;
       }
-
-      const validate = ajv.compile(dto[REQUEST_PARAMS[i]]);
+      const validate = ajv.compile(data[REQUEST_PARAMS[i]]);
       if (!validate(req[REQUEST_PARAMS[i]])) {
         const validateErrors = validate.errors ?? [];
         const errors: string[] = [];

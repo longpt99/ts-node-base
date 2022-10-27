@@ -33,15 +33,29 @@ class ProductController {
       { roles: Object.values(AppObject.ADMIN_ROLES) }
     );
 
-    this.router.get(`${this.adminPath}/:id`, [
-      validate(UUIDValidation),
-      this.getByIdByAdmin.bind(this),
-    ]);
+    this.router.get(
+      `${this.adminPath}/:id`,
+      [validate(UUIDValidation), this.getByIdByAdmin.bind(this)],
+      { roles: Object.values(AppObject.ADMIN_ROLES) }
+    );
 
-    this.router.patch(`${this.adminPath}/:id`, [
-      validate(Object.assign(UUIDValidation, ProductValidation.update)),
-      this.updateById.bind(this),
-    ]);
+    this.router.patch(
+      `${this.adminPath}/:id/status`,
+      [
+        validate(UUIDValidation, ProductValidation.updateStatus),
+        this.updateStatusById.bind(this),
+      ],
+      { roles: [AppObject.ADMIN_ROLES.SUPER_ADMIN] }
+    );
+
+    this.router.patch(
+      `${this.adminPath}/:id`,
+      [
+        validate(UUIDValidation, ProductValidation.update),
+        this.updateById.bind(this),
+      ],
+      { roles: [AppObject.ADMIN_ROLES.SUPER_ADMIN] }
+    );
 
     this.router.delete(
       `${this.adminPath}/:id`,
@@ -81,6 +95,19 @@ class ProductController {
    */
   async getByIdByAdmin(req: Request, res: Response) {
     return res.handler(this.productService.getByIdByAdmin(req.params.id));
+  }
+
+  /**
+   * @method updateStatusById
+   * @description Update status by id
+   */
+  async updateStatusById(req: Request, res: Response): Promise<ProductModel> {
+    return res.handler(
+      this.productService.updateStatusById({
+        id: req.params.id,
+        status: req.body.status,
+      })
+    );
   }
 
   /**

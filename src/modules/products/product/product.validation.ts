@@ -64,4 +64,18 @@ export const ProductValidation = {
       errorMessage: {},
     } as JSONSchemaType<UpdateProductParams>,
   },
+  updateStatus: {
+    body: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'string',
+          enum: Object.values(AppObject.PRODUCT_STATUS),
+        },
+      },
+      required: ['status'],
+      additionalProperties: false,
+      errorMessage: {},
+    } as JSONSchemaType<{ status: string }>,
+  },
 };

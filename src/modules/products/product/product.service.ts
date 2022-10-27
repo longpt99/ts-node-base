@@ -7,6 +7,7 @@ import { getCustomRepository } from 'typeorm';
 import { AppObject } from '../../../common/consts';
 import { ParamsCommonGetDetail } from '../../../common/interfaces';
 import { ErrorHandler } from '../../../libs/errors';
+import { ProductAttribute } from '../product-attribute/product-attribute.entity';
 import { ProductAttributeService } from '../product-attribute/product-attribute.service';
 import {
   CreateProductParams,
@@ -47,7 +48,7 @@ export class ProductService {
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.productAttributes', 'productAttribute')
       .where('product.id = :productId', { productId: id })
-      .andWhere('productAttribute.isDeleted IS FALSE')
+      .andWhere('product.isDeleted IS FALSE')
       .getOne();
     return product;
   }
@@ -146,12 +147,18 @@ export class ProductService {
   async getById(id: string) {
     const product = await this.productRepository
       .createQueryBuilder('product')
-      .leftJoinAndSelect('product.productAttributes', 'productAttribute')
+      .leftJoinAndMapMany(
+        'product.productAttributes',
+        'product.productAttributes',
+        'attribute',
+        'product.id = attribute.productId AND attribute.status = :attributeStatus',
+        { attributeStatus: AppObject.PRODUCT_STATUS.ACTIVE }
+      )
+      .select()
       .where('product.id = :productId', { productId: id })
       .andWhere('product.status <> :notStatus', {
         notStatus: AppObject.COMMON_STATUS.INACTIVE,
       })
-      .andWhere('productAttribute.isDeleted IS FALSE')
       .getOne();
 
     if (!product) {
@@ -194,6 +201,27 @@ export class ProductService {
         throw error;
       }
     });
+  }
+
+  /**
+   * @method updateStatusById
+   * @description Update by id
+   */
+  async updateStatusById(params: { id: string; status: string }) {
+    const product = await this.detailByConditions({
+      conditions: { id: params.id },
+      select: ['id'],
+    });
+
+    if (!product) {
+      throw new ErrorHandler({ message: 'productNotFound' });
+    }
+
+    await this.productRepository.updateByConditions({
+      conditions: { id: product.id },
+      data: { status: params.status },
+    });
+    return { succeed: true };
   }
 
   /**

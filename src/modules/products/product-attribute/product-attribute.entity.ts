@@ -46,6 +46,6 @@ export class ProductAttribute {
   public updatedAt: Date;
 
   // Relationship Section
-  @ManyToOne(() => Product, (product) => product.productAttributes, {})
+  @ManyToOne(() => Product, (product) => product.productAttributes)
   public product: Product;
 }
