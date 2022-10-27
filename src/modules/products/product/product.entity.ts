@@ -36,6 +36,13 @@ export class Product {
 
   @Column({
     type: 'enum',
+    enum: AppObject.PRODUCT_CATEGORY,
+    default: AppObject.PRODUCT_CATEGORY.COFFEE,
+  })
+  public category: string;
+
+  @Column({
+    type: 'enum',
     enum: AppObject.PRODUCT_STATUS,
     default: AppObject.PRODUCT_STATUS.INACTIVE,
   })

@@ -9,6 +9,13 @@ export interface FacebookData {
   birthday: string;
 }
 
+export interface GoogleData {
+  id: string;
+  name: string;
+  given_name: string;
+  family_name: string;
+}
+
 export interface LoginParams {
   grantType: string;
   username: string;

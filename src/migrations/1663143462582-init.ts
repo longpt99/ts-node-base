@@ -26,5 +26,7 @@ export class init1663143462582 implements MigrationInterface {
     );
   }
 
-  public async down(): Promise<void> {}
+  public async down(): Promise<void> {
+    //
+  }
 }

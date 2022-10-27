@@ -39,7 +39,7 @@ class ProductController {
     ]);
 
     this.router.patch(`${this.adminPath}/:id`, [
-      validate(UUIDValidation),
+      validate(Object.assign(UUIDValidation, ProductValidation.update)),
       this.updateById.bind(this),
     ]);
 

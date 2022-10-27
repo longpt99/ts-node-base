@@ -12,6 +12,7 @@ import { UserService } from '../user/user.service';
 import {
   AdminLoginParams,
   FacebookData,
+  GoogleData,
   LoginParams,
   RegisterParams,
   SignTokenResponse,
@@ -51,10 +52,26 @@ export class AuthService {
   async socialLink(res: Response, social: string) {
     let link: string;
     switch (social) {
+      case AppObject.GRANT_TYPES.GOOGLE:
+        link = `https://accounts.google.com/o/oauth2/auth?${qs.stringify({
+          client_id:
+            APP_CONFIG.ENV.OAUTH2[AppObject.GRANT_TYPES.GOOGLE.toUpperCase()]
+              .CLIENT_ID,
+          redirect_uri: 'http://localhost:5173/',
+          scope: [
+            'https://www.googleapis.com/auth/userinfo.profile',
+            // 'https://www.googleapis.com/auth/userinfo.email',
+          ].join(' '),
+          response_type: 'code',
+          access_type: 'offline',
+        })}`;
+        break;
       case AppObject.GRANT_TYPES.FACEBOOK:
       default:
         link = `https://www.facebook.com/v15.0/dialog/oauth?${qs.stringify({
-          client_id: '2959728634319670',
+          client_id:
+            APP_CONFIG.ENV.OAUTH2[AppObject.GRANT_TYPES.FACEBOOK.toUpperCase()]
+              .CLIENT_ID,
           redirect_uri: 'http://localhost:5173/',
           scope: ['public_profile'].join(','),
           response_type: 'code',
@@ -100,9 +117,37 @@ export class AuthService {
         userFound = await this.userService.getUserByFacebookId(facebookData);
         break;
       }
-      // case AppObject.GRANT_TYPES.GOOGLE: {
-      //   break;
-      // }
+      case AppObject.GRANT_TYPES.GOOGLE: {
+        const data: { access_token: string } = await got(
+          'https://oauth2.googleapis.com/token',
+          {
+            method: 'POST',
+            searchParams: {
+              client_id:
+                APP_CONFIG.ENV.OAUTH2[
+                  AppObject.GRANT_TYPES.GOOGLE.toUpperCase()
+                ].CLIENT_ID,
+              client_secret:
+                APP_CONFIG.ENV.OAUTH2[
+                  AppObject.GRANT_TYPES.GOOGLE.toUpperCase()
+                ].CLIENT_SECRET,
+              redirect_uri: 'http://localhost:5173/',
+              grant_type: 'authorization_code',
+              code: params.body.code,
+            },
+          }
+        ).json();
+        const googleData: GoogleData = await got(
+          'https://www.googleapis.com/oauth2/v2/userinfo',
+          {
+            method: 'GET',
+            headers: { Authorization: `Bearer ${data.access_token}` },
+          }
+        ).json();
+
+        userFound = await this.userService.getUserByGoogleId(googleData);
+        break;
+      }
       default: {
         userFound = await this.userService.getUserByConditions({
           conditions: { email: params.body.email },

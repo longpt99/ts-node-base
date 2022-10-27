@@ -7,7 +7,11 @@ import {
 import RedisConfig from '../../configs/databases/redis.config';
 import { ErrorHandler } from '../../libs/errors';
 import { CacheManagerUtil } from '../../utils/cache-manager.util';
-import { FacebookData, RegisterParams } from '../auth/auth.interface';
+import {
+  FacebookData,
+  GoogleData,
+  RegisterParams,
+} from '../auth/auth.interface';
 import { UserModel } from './user.interface';
 import { UserRepository } from './user.repository';
 
@@ -66,6 +70,24 @@ export class UserService {
         facebookId: data.id,
         firstName: data.first_name,
         lastName: data.last_name,
+        status: AppObject.USER_STATUS.ACTIVE,
+      });
+    }
+
+    return userFound;
+  }
+
+  async getUserByGoogleId(data: GoogleData): Promise<UserModel> {
+    let userFound = await this.detailByConditions({
+      conditions: { googleId: data.id },
+      select: ['id'],
+    });
+
+    if (!userFound) {
+      userFound = await this.userRepository.save({
+        googleId: data.id,
+        firstName: data.given_name,
+        lastName: data.family_name,
         status: AppObject.USER_STATUS.ACTIVE,
       });
     }

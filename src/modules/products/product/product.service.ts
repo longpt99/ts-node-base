@@ -176,11 +176,13 @@ export class ProductService {
           throw new ErrorHandler({ message: 'productNotFound' });
         }
 
-        this.productAttributeService.updateByProductId({
-          productId: params.id,
-          attributes: params.body.productAttributes,
-          manager: manager,
-        });
+        if (params.body.productAttributes) {
+          this.productAttributeService.updateByProductId({
+            productId: params.id,
+            attributes: params.body.productAttributes,
+            manager: manager,
+          });
+        }
 
         Object.assign(product, params.body);
         const productUpdated = await manager.save(product);

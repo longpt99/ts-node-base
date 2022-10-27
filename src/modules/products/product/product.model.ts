@@ -12,11 +12,12 @@ export interface CreateProductParams {
   status: string;
   price: number;
   quantity: number;
+  category: string;
   productAttributes: CreateProductAttributeParams[];
 }
 
 export type UpdateProductParams = Partial<
   Omit<CreateProductParams, 'status' | 'productAttributes'>
 > & {
-  productAttributes: UpdateProductAttributeParams[];
+  productAttributes?: UpdateProductAttributeParams[];
 };

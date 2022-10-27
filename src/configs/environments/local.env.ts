@@ -44,8 +44,8 @@ export const ENV: AppEnvironment = {
   OAUTH2: {
     GOOGLE: {
       CLIENT_ID:
-        '873379095237-sq8rsuemift9rl903frqmn82gr2q4l22.apps.googleusercontent.com',
-      CLIENT_SECRET: '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',
+        '1094050979580-lopmm47mdpllck2lsk8nb0ro7jo851jg.apps.googleusercontent.com',
+      CLIENT_SECRET: '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',
     },
     FACEBOOK: {
       CLIENT_ID: '2959728634319670',

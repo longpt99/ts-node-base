@@ -58,6 +58,12 @@ export class AppObject {
     SOLD_OUT: 'sold_out',
   };
 
+  static readonly PRODUCT_CATEGORY = {
+    COFFEE: 'coffee',
+    TEE: 'tee',
+    ACCESSORY: 'accessory',
+  };
+
   static readonly REQUEST_OBJECT = {
     BODY: 'body',
     PARAMS: 'params',
