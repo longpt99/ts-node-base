@@ -67,7 +67,7 @@ export default class AuthController {
 
   //#region User section
   async socialLink(req: Request, res: Response) {
-    return this.authService.socialLink(res, req.params.social);
+    return res.handler(this.authService.socialLink(res, req.params.social));
   }
 
   async login(req: Request, res: Response): Promise<SignTokenResponse> {

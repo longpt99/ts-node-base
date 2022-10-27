@@ -13,7 +13,7 @@ export interface LoginParams {
   grantType: string;
   username: string;
   password: string;
-  token?: string;
+  code?: string;
   mobilePhone?: PhoneNumberProperties;
   email?: string;
 }

@@ -66,6 +66,9 @@ export class User {
   @UpdateDateColumn({ type: 'timestamptz' })
   public updatedAt: Date;
 
+  @Column({ type: 'timestamptz', nullable: true })
+  public lastLogin: Date;
+
   @BeforeInsert()
   async beforeInsert() {
     this.password = StringUtil.encrypt(

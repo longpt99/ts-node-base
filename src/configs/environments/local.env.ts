@@ -48,9 +48,8 @@ export const ENV: AppEnvironment = {
       CLIENT_SECRET: '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',
     },
     FACEBOOK: {
-      CLIENT_ID:
-        '873379095237-sq8rsuemift9rl903frqmn82gr2q4l22.apps.googleusercontent.com',
-      CLIENT_SECRET: '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',
+      CLIENT_ID: '2959728634319670',
+      CLIENT_SECRET: '1aac188502dffc783a16d7b16e353a13',
     },
   },
   MAIL_CONFIG: {

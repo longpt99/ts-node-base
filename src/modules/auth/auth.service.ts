@@ -55,34 +55,45 @@ export class AuthService {
       default:
         link = `https://www.facebook.com/v15.0/dialog/oauth?${qs.stringify({
           client_id: '2959728634319670',
-          redirect_uri: 'http://localhost:5173/?grantType=facebook',
+          redirect_uri: 'http://localhost:5173/',
           scope: ['public_profile'].join(','),
           response_type: 'code',
         })}`;
         break;
     }
-    return res.redirect(link);
+    return { link };
   }
 
-  async login(params: { body: LoginParams }): Promise<SignTokenResponse> {
+  async login(params: { body: LoginParams }) {
     let userFound: UserModel;
 
     switch (params.body.grantType) {
       case AppObject.GRANT_TYPES.FACEBOOK: {
+        const fbAccessToken: { access_token: string } = await got(
+          'https://graph.facebook.com/v15.0/oauth/access_token',
+          {
+            method: 'GET',
+            searchParams: {
+              client_id:
+                APP_CONFIG.ENV.OAUTH2[
+                  AppObject.GRANT_TYPES.FACEBOOK.toUpperCase()
+                ].CLIENT_ID,
+              client_secret:
+                APP_CONFIG.ENV.OAUTH2[
+                  AppObject.GRANT_TYPES.FACEBOOK.toUpperCase()
+                ].CLIENT_SECRET,
+              redirect_uri: 'http://localhost:5173/',
+              code: params.body.code,
+            },
+          }
+        ).json();
         const facebookData: FacebookData = await got(
           'https://graph.facebook.com/me',
           {
             method: 'GET',
             searchParams: {
-              fields: [
-                'id',
-                'email',
-                'first_name',
-                'last_name',
-                'gender',
-                'birthday',
-              ].join(','),
-              access_token: params.body.token,
+              fields: ['id', 'first_name', 'last_name'].join(','),
+              access_token: fbAccessToken.access_token,
             },
           }
         ).json();
@@ -297,6 +308,10 @@ export class AuthService {
             exp: APP_CONFIG.ENV.SECURE.JWT_ACCESS_TOKEN.EXPIRED_TIME,
           });
         });
+      this.userService.updateByConditions({
+        conditions: { id: payload.id },
+        data: { lastLogin: new Date() },
+      });
     }
     return this.tokenUtil.sign(payload, isAdmin);
   }
