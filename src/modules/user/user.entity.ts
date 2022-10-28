@@ -12,6 +12,7 @@ import { AppObject } from '../../common/consts';
 import APP_CONFIG from '../../configs/app.config';
 import { StringUtil } from '../../utils';
 import { Order } from '../order/order.entity';
+import { UserAddress } from './entities/user-address.entity';
 import { PhoneNumberProperties } from './user.interface';
 
 @Entity()
@@ -92,4 +93,7 @@ export class User {
   // Relationship Section
   @OneToMany(() => Order, (orders) => orders.user)
   public orders: Order[];
+
+  @OneToMany(() => Order, (addresses) => addresses.user)
+  public addresses: UserAddress[];
 }
