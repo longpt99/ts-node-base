@@ -23,7 +23,6 @@ import { Response } from 'express';
 import { AdminModel } from '../admin/admin.model';
 import { AdminService } from '../admin/admin.service';
 import APP_CONFIG from '../../configs/app.config';
-import { TokenModel } from '../../libs';
 import MailService from '../../external-services/mail/mail.service';
 
 export class AuthService {
@@ -314,7 +313,7 @@ export class AuthService {
     return this._signToken(payload);
   }
 
-  async logout(user: TokenModel) {
+  async logout(user: Express.TokenModel) {
     this.cacheManager.client.keys(
       `caches:${
         user.role === AppObject.CUSTOMER_ROLES.CUSTOMER ? 'users' : 'admins'

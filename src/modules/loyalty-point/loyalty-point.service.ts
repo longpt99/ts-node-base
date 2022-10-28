@@ -5,12 +5,7 @@
  */
 
 import { getCustomRepository } from 'typeorm';
-import { TokenModel } from '../../libs';
 
-import { ErrorHandler, UnauthorizedError } from '../../libs/errors';
-import StatusCodes from '../../utils/status-code';
-import { UserModel } from '../user/user.interface';
-import { LoyaltyPointModel } from './loyalty-point.model';
 import { LoyaltyPointRepository } from './loyalty-point.repository';
 
 export class LoyaltyPointService {

@@ -1,6 +1,5 @@
 import { NextFunction, Request } from 'express';
 import RedisConfig from '../../configs/databases/redis.config';
-import { TokenModel } from '../../libs';
 import { UnauthorizedError } from '../../libs/errors';
 import { ForbiddenError } from '../../libs/errors/forbidden.error';
 import { TokenUtil } from '../../utils';
@@ -41,7 +40,7 @@ export function authMiddleware(roles: string[]) {
       if (!roles.includes(userData.role)) {
         throw new ForbiddenError();
       }
-      req.user = userData as TokenModel;
+      req.user = userData as Express.TokenModel;
       return next();
     } catch (error) {
       if (error.name === 'TokenExpiredError') {
