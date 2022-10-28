@@ -75,6 +75,7 @@ export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
     return this.createQueryBuilder()
       .update(params.data)
       .where(params.conditions)
+      .returning('*')
       .execute();
   }
 

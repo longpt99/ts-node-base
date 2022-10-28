@@ -44,3 +44,7 @@ export interface UserLoginParams {
   password?: string;
   grantType: string;
 }
+
+export type UpdateUserProfileParams = Partial<
+  Pick<UserModel, 'firstName' | 'lastName' | 'dateOfBirth' | 'mobilePhone'>
+>;

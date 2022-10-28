@@ -7,7 +7,6 @@ import { getCustomRepository } from 'typeorm';
 import { AppObject } from '../../../common/consts';
 import { ParamsCommonGetDetail } from '../../../common/interfaces';
 import { ErrorHandler } from '../../../libs/errors';
-import { ProductAttribute } from '../product-attribute/product-attribute.entity';
 import { ProductAttributeService } from '../product-attribute/product-attribute.service';
 import {
   CreateProductParams,
@@ -228,7 +227,7 @@ export class ProductService {
    * @async
    * @method deleteById
    * @description Delete by id
-   * @param params {id}
+   * @param {id} id
    */
   async deleteById(id: string) {
     return this.productRepository.manager.transaction(async (manager) => {

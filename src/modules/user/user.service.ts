@@ -134,6 +134,14 @@ export class UserService {
     return this.getUserByConditions({ conditions: { id: userId } });
   }
 
+  async updateProfile(params: { userId: string; body }) {
+    const updated = await this.userRepository.updateByConditions({
+      conditions: { id: params.userId },
+      data: params.body,
+    });
+    return { succeed: true };
+  }
+
   async deleteById(userId: string) {
     await this.userRepository.updateByConditions({
       conditions: { id: userId },

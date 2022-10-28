@@ -4,6 +4,7 @@ import { AppObject } from '../../common/consts';
 import { UUIDValidation } from '../../common/validations/uuid.validation';
 import { RouteConfig } from '../../libs';
 import { UserService } from './user.service';
+import { UserValidation } from './user.validation';
 
 export default class UserController {
   private userService: UserService;
@@ -47,7 +48,7 @@ export default class UserController {
 
     this.router.patch(
       `${this.userPath}/profile`,
-      [this.updateProfile.bind(this)],
+      [validate(UserValidation.updateProfile), this.updateProfile.bind(this)],
       { roles: [AppObject.CUSTOMER_ROLES.CUSTOMER] }
     );
     //#endregion User section
@@ -76,7 +77,9 @@ export default class UserController {
   }
 
   private async updateProfile(req: Request, res: Response) {
-    return res.handler(this.userService.getProfile(req.user.id));
+    return res.handler(
+      this.userService.updateProfile({ userId: req.user.id, body: req.body })
+    );
   }
 
   //#region User section
