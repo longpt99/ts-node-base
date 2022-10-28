@@ -7,22 +7,22 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Loyalty {
+export class Upload {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  public id: string;
 
   @Column({ type: 'text' })
-  name: string;
+  public name: string;
 
   @Column({ type: 'text' })
-  mimetype: string;
+  public mimetype: string;
 
   @Column({ type: 'int' })
-  size: number;
+  public size: number;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz' })
-  updatedAt: Date;
+  public updatedAt: Date;
 }
