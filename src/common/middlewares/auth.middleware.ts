@@ -19,6 +19,11 @@ export function authMiddleware(roles: string[]) {
       // Check token from header
       const token = req.headers['authorization'] || '';
       const [tokenType, accessToken] = token.split(' ');
+
+      if (tokenType !== AppConst.TOKEN_TYPE) {
+        throw new UnauthorizedError();
+      }
+
       const user = tokenUtil.verifyToken(accessToken);
       const [userData, userSession] = await Promise.all([
         cacheManagerUtil.getKey(`caches:profiles:${user.id}`),
@@ -27,11 +32,7 @@ export function authMiddleware(roles: string[]) {
         ),
       ]);
 
-      if (
-        tokenType !== AppConst.TOKEN_TYPE ||
-        userSession?.length === 0 ||
-        !userData
-      ) {
+      if (userSession?.length === 0 || !userData) {
         throw new UnauthorizedError();
       }
       userData.role =

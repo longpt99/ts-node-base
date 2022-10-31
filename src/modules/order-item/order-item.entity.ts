@@ -18,6 +18,9 @@ export class OrderItem {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
+  @Column({ type: 'varchar', length: 255 })
+  public name: string;
+
   @Column({ type: 'int' })
   public quantity: number;
 

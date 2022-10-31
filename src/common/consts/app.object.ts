@@ -7,6 +7,13 @@ export class AppObject {
     UNIQUE: '23505',
   };
 
+  static readonly ORDER_STATES = {
+    SHIPPING: 'shipping',
+    PENDING: 'pending',
+    SUCCESS: 'success',
+    REJECT: 'reject',
+  };
+
   static readonly INDEX_DB = {
     UNIQUE_EMAIL: 'idx_unique_email',
     UNIQUE_PRODUCT: 'idx_unique_product',

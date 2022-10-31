@@ -17,7 +17,7 @@ export class ProductAttribute {
   @Column({ type: 'int', nullable: true })
   public quantity: number;
 
-  @Column({ type: 'numeric', nullable: true })
+  @Column({ type: 'numeric', default: 0 })
   public price: number;
 
   @Column({ type: 'varchar', length: 50 })

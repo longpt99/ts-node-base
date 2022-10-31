@@ -5,14 +5,13 @@
  */
 
 import { Request, Response } from 'express';
+import { AppObject } from '../../common/consts';
 import { RouteConfig } from '../../libs';
 import { OrderModel } from './order.model';
 import { OrderService } from './order.service';
 
 export default class OrderController {
   private readonly orderService: OrderService;
-  private readonly adminPath = '/admin/orders';
-  private readonly userPath = '/orders';
   private readonly router = RouteConfig;
 
   constructor() {
@@ -21,18 +20,19 @@ export default class OrderController {
   }
 
   private _initializeRoutes() {
-    this.router.get(`${this.adminPath}`, [this.list.bind(this)]);
-    this.router.post(`${this.adminPath}`, [this.create.bind(this)]);
-    this.router.get(`${this.adminPath}/:id`, [this.getById.bind(this)]);
-    this.router.patch(`${this.adminPath}/:id`, [this.updateById.bind(this)]);
-    this.router.delete(`${this.adminPath}/:id`, [this.deleteById.bind(this)]);
+    const adminPath = '/admin/orders';
+    this.router.get(`${adminPath}`, [this.list.bind(this)]);
+    this.router.post(`${adminPath}`, [this.create.bind(this)]);
+    this.router.get(`${adminPath}/:id`, [this.getById.bind(this)]);
+    this.router.patch(`${adminPath}/:id`, [this.updateById.bind(this)]);
+    this.router.delete(`${adminPath}/:id`, [this.deleteById.bind(this)]);
 
     //#region User section
-    this.router.get(`${this.userPath}`, [this.list.bind(this)]);
-    this.router.post(`${this.userPath}`, [this.create.bind(this)]);
-    this.router.get(`${this.userPath}/:id`, [this.getById.bind(this)]);
-    this.router.patch(`${this.userPath}/:id`, [this.updateById.bind(this)]);
-    this.router.delete(`${this.userPath}/:id`, [this.deleteById.bind(this)]);
+    const userPath = '/orders';
+    this.router.post(`${userPath}`, [this.create.bind(this)], {
+      roles: [AppObject.CUSTOMER_ROLES.CUSTOMER],
+    });
+
     //#endregion User section
   }
 
@@ -49,7 +49,9 @@ export default class OrderController {
    * @description Create new order
    */
   async create(req: Request, res: Response) {
-    return res.handler(this.orderService.create(req.body));
+    return res.handler(
+      this.orderService.create({ user: req.user, body: req.body })
+    );
   }
 
   /**
