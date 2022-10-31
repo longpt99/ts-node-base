@@ -26,7 +26,9 @@ class ProductController {
 
   private _initializeRoutes() {
     //#region Admin section
-    this.router.get(`${this.adminPath}`, [this.list.bind(this)]);
+    this.router.get(`${this.adminPath}`, [this.list.bind(this)], {
+      roles: Object.values(AppObject.ADMIN_ROLES),
+    });
     this.router.post(
       `${this.adminPath}`,
       [validate(ProductValidation.create), this.create.bind(this)],

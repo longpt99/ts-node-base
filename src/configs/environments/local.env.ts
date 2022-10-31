@@ -19,16 +19,16 @@ export const ENV: AppEnvironment = {
   },
   DATABASE: {
     POSTGRES: {
-      USERNAME: 'postgres',
-      PASSWORD: 'postgres',
-      HOST: 'localhost',
-      PORT: 5432,
-      NAME: 'postgres',
       // USERNAME: 'postgres',
-      // PASSWORD: 'postgres@123',
-      // HOST: 'db.lbzallnzxudagdmrjtru.supabase.co',
+      // PASSWORD: 'postgres',
+      // HOST: 'localhost',
       // PORT: 5432,
       // NAME: 'postgres',
+      USERNAME: 'postgres',
+      PASSWORD: 'postgres@123',
+      HOST: 'db.lbzallnzxudagdmrjtru.supabase.co',
+      PORT: 5432,
+      NAME: 'postgres',
     },
     REDIS: {
       HOST: 'redis-12778.c252.ap-southeast-1-1.ec2.cloud.redislabs.com',
