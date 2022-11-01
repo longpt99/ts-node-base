@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { AppObject } from '../../../common/consts';
+import { OrderItem } from '../../order-item/order-item.entity';
 import { ProductAttribute } from '../product-attribute/product-attribute.entity';
 
 @Entity()
@@ -62,4 +63,7 @@ export class Product {
     (productAttributes) => productAttributes.product
   )
   public productAttributes: ProductAttribute[];
+
+  @OneToMany(() => OrderItem, (orderItems) => orderItems.product)
+  public orderItems: OrderItem[];
 }

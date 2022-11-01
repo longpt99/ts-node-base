@@ -35,7 +35,6 @@ export class OrderItemAttribute {
   @ManyToOne(() => OrderItem, (orderItem) => orderItem.orderItemAttributes)
   public orderItem: OrderItem;
 
-  @OneToOne(() => ProductAttribute)
-  @JoinColumn()
+  @ManyToOne(() => ProductAttribute, (productAttribute) => productAttribute)
   public productAttribute: ProductAttribute;
 }

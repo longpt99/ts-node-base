@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { AppObject } from '../../../common/consts';
+import { OrderItemAttribute } from '../../order-item-attribute/order-item-attribute.entity';
 import { Product } from '../product/product.entity';
 
 @Entity()
@@ -48,4 +50,10 @@ export class ProductAttribute {
   // Relationship Section
   @ManyToOne(() => Product, (product) => product.productAttributes)
   public product: Product;
+
+  @OneToMany(
+    () => OrderItemAttribute,
+    (orderItemAttributes) => orderItemAttributes.productAttribute
+  )
+  public orderItemAttributes: OrderItemAttribute[];
 }

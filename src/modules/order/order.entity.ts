@@ -16,6 +16,9 @@ export class Order {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
+  @Column({ type: 'varchar', length: 255 })
+  public fullName: string;
+
   @Column({
     type: 'enum',
     enum: Object.values(AppObject.ORDER_STATES),

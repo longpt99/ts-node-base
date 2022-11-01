@@ -4,7 +4,8 @@
  * @description Config controller
  */
 
-import { getCustomRepository } from 'typeorm';
+import { EntityManager, getCustomRepository } from 'typeorm';
+import { OrderItemAttribute } from './order-item-attribute.entity';
 import { OrderItemAttributeRepository } from './order-item-attribute.repository';
 
 export class OrderItemAttributeService {
@@ -26,8 +27,13 @@ export class OrderItemAttributeService {
    * @method create
    * @description Create new order-item-attribute
    */
-  async create() {
-    return;
+  async create(params: {
+    manager: EntityManager;
+    body;
+  }): Promise<OrderItemAttribute[]> {
+    return params.manager.save(
+      this.orderItemAttributeRepository.create(params.body)
+    );
   }
 
   /**

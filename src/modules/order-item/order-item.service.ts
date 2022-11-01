@@ -4,7 +4,7 @@
  * @description Config controller
  */
 
-import { getCustomRepository } from 'typeorm';
+import { EntityManager, getCustomRepository } from 'typeorm';
 import { OrderItemRepository } from './order-item.repository';
 
 export class OrderItemService {
@@ -24,8 +24,8 @@ export class OrderItemService {
    * @method create
    * @description Create new order-item
    */
-  async create() {
-    return;
+  async create(params: { manager: EntityManager; body }) {
+    return params.manager.save(this.orderItemRepository.create(params.body));
   }
 
   /**
