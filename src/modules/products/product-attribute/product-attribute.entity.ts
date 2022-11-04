@@ -19,6 +19,12 @@ export class ProductAttribute {
   @Column({ type: 'int', nullable: true })
   public quantity: number;
 
+  @Column({ type: 'boolean', default: false })
+  public isDefault: boolean;
+
+  @Column({ type: 'int', default: 0 })
+  public priority: number;
+
   @Column({ type: 'numeric', default: 0 })
   public price: number;
 

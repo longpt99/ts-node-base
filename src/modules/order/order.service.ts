@@ -159,55 +159,6 @@ export class OrderService {
         manager: manager,
       });
 
-      // for (let i = 0, total = products.length; i < total; i++) {
-      //   const element = products[i];
-      //   const orderItemAttributes: any = [];
-      //   let totalQuantities = 0;
-      //   let totalPrices = 0;
-      //   for (const attribute of element.productAttributes) {
-      //     const attributeMap = productsMap.get(attribute.id);
-      //     const quantity = attributeMap.quantity;
-      //     if (
-      //       attribute.quantity &&
-      //       (attribute.quantity === 0 || quantity > attribute.quantity)
-      //     ) {
-      //       throw new ErrorHandler({ message: 'productNotEnough' });
-      //     }
-      //     const price = +element.price + +attribute.price;
-      //     const orderItemAttributeCreated =
-      //       this.orderItemAttributeService.create({
-      //         manager: manager,
-      //         body: {
-      //           quantity: quantity,
-      //           price: price,
-      //           productAttribute: attribute.id,
-      //         },
-      //       });
-      //     orderItemAttributes.push(orderItemAttributeCreated);
-      //     totalPrices += price * quantity;
-      //     totalQuantities += quantity;
-      //   }
-      //   orderParams.orderItems.push(
-      //     this.orderItemService.create({
-      //       manager: manager,
-      //       body: {
-      //         quantity: totalQuantities,
-      //         price: totalPrices,
-      //         name: element.name,
-      //         orderItemAttributes: orderItemAttributes,
-      //         product: element.id,
-      //       },
-      //     })
-      //   );
-      //   orderParams.quantity += totalQuantities;
-      //   orderParams.price += totalPrices;
-      // }
-      // orderParams.orderItems = await Promise.all(
-      //   orderParams.orderItems.map(async (obj) => {
-      //     obj.orderItemAttributes = await Promise.all(obj.orderItemAttributes);
-      //     return obj;
-      //   })
-      // );
       return manager.save(this.orderRepository.create(orderParams));
     });
   }
